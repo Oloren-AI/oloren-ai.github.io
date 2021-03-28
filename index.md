@@ -7,6 +7,6 @@ intro_image_absolute: true
 intro_image_hide_on_mobile: true
 ---
 
-# Serif - A Jekyll Business Theme.
+# Oloren AI - Consulting in AI for Drug Discovery
 
-Serif contains content types for a typical business website. The theme is fully responsive, blazing fast and artfully illustrated.
+Using our proprietary machine learning methods, we analyze compounds, peptides, and more for our clients.

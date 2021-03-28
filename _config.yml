@@ -1,6 +1,6 @@
 baseurl: '/'
 permalink: pretty
-title: 'Jekyll Serif'
+title: 'Oloren AI'
 
 google_analytics_id: ""
 
@@ -13,17 +13,17 @@ logo:
   desktop_height: "36px"
 
 footer:
-  copyright_text: 'Free Jekyll theme by <a class="zerostatic" href="https://www.zerostatic.io">www.zerostatic.io</a>'
+  copyright_text: 'Oloren AI'
 
 seo:
-  meta_og_title: "Jekyll Serif Theme"
+  meta_og_title: "Oloren AI"
   meta_og_type: "website"
-  meta_og_url: "https://jekyll-serif.netlify.app"
+  meta_og_url: "oloren.ai"
   meta_og_image: "https://raw.githubusercontent.com/zerostaticthemes/jekyll-serif-theme/master/screenshots/tn.png"
-  meta_og_description: "Jekyll Serif is a modern business theme for Hugo. It contains content types for the archetypical business website. The theme is fully responsive, blazing fast and artfully illustrated."
+  meta_og_description: "Oloren AI is a AI consulting service for pharmaceutical companies. We analyze heterogeneous data sources with our proprietary methods to perform all kinds of analysis, from peptide parsing to de-novo small molecule design."
   meta_twitter_card: "summary"
-  meta_twitter_site: "@zerostaticio"
-  meta_twitter_creator: "@zerostaticio"
+  # meta_twitter_site: "@zerostaticio"
+  # meta_twitter_creator: "@zerostaticio"
 
 collections:
   services:

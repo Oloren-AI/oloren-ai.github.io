@@ -3,7 +3,7 @@ title: Oloren AI
 layout: home
 description: Oloren AI uses proprietary machine learning technology.
 intro_image: "images/illustrations/pointing.svg"
-intro_image_absolute: true
+intro_image_absolute: false
 intro_image_hide_on_mobile: true
 ---
 

@@ -6,6 +6,6 @@ image: 'https://media-exp1.licdn.com/dms/image/C4E03AQEFnDMAq5ZhYA/profile-displ
 jobtitle: 'Data Engineer'
 linkedinurl: "https://www.linkedin.com/in/jyasonik/"
 promoted: true
-weight: 3
+weight: 2
 layout: team
 ---

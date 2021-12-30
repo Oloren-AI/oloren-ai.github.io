@@ -1,0 +1,245 @@
+/* button */
+.default-button {
+    min-height: 60px;
+    padding: 5px 35px;
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 30px;
+    background: #fff;
+    color: var(--theme__color1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: -24px 0px 30px rgba(0, 0, 0, 0.05), 0px -24px 30px rgba(0, 0, 0, 0.05), 0px 24px 30px rgba(0, 0, 0, 0.05), 24px 0px 30px rgba(0, 0, 0, 0.05);
+}
+.default-button:hover {
+    color: var(--theme__color1);
+}
+.default-button .caret {
+	font-size: 35px;
+	margin-left: 20px;
+    transform: scaleX(1.6);
+}
+
+
+/* small-tools */
+.radius-none {
+    border-radius: 0 !important;
+}
+.underline {
+    text-decoration: underline !important;
+}
+.h-initial {
+    height: initial !important;
+}
+.space-nowrap {
+    white-space: nowrap;
+}
+.hidden-scroll {
+    overflow-y: auto !important;
+    -ms-overflow-style: none !important;  /* IE and Edge */
+    scrollbar-width: none !important;  /* Firefox */
+}
+.hidden-scroll::-webkit-scrollbar {
+    display: none !important;
+}
+.pseudo-before-none::before {
+    display: none !important;
+}
+.pseudo-after-none::after {
+    display: none !important;
+}
+.pseudo-none::before,
+.pseudo-none::after {
+    display: none !important;
+}
+
+
+
+.flip {
+    transform: rotateY(180deg);
+}
+.flip-x {
+    transform: rotateX(180deg);
+}
+.rotate1_8 {
+    transform: rotate(45deg) !important;
+}
+.rotate2_8 {
+    transform: rotate(90deg) !important;
+}
+.rotate3_8 {
+    transform: rotate(135deg) !important;
+}
+.rotate4_8 {
+    transform: rotate(180deg) !important;
+}
+.rotate5_8 {
+    transform: rotate(225deg) !important;
+}
+.rotate6_8 {
+    transform: rotate(270deg) !important;
+}
+.rotate7_8 {
+    transform: rotate(315deg) !important;
+}
+.rotate8_8 {
+    transform: rotate(360deg) !important;
+}
+
+
+/* bg */
+.bg-theme1 {
+    background: var(--theme__color1) !important;
+}
+.bg-theme2 {
+    background: var(--theme__color2) !important;
+}
+.bg-theme3 {
+    background: var(--theme__color3) !important;
+}
+.bg-theme4 {
+    background: var(--theme__color4) !important;
+}
+
+/* hover--bg */
+.hover-bg-theme1:hover {
+    background: var(--theme__color1) !important;
+}
+.hover-bg-theme2:hover {
+    background: var(--theme__color2) !important;
+}
+.hover-bg-theme3:hover {
+    background: var(--theme__color3) !important;
+}
+.hover-bg-theme4:hover {
+    background: var(--theme__color4) !important;
+}
+
+
+/* fonts */
+.font1 {
+    font-family: var(--font1);
+}
+.font2 {
+    font-family: var(--font2);
+}
+.font3 {
+    font-family: var(--font3);
+}
+.font4 {
+    font-family: var(--font4);
+}
+
+
+/* text-color */
+.color-white {
+    color: #fff !important;
+}
+.color-text {
+    color: var(--text__color1) !important;
+}
+.color-theme1 {
+    color: var(--theme__color1) !important;
+}
+.color-theme2 {
+    color: var(--theme__color2) !important;
+}
+.color-theme3 {
+    color: var(--theme__color3) !important;
+}
+.color-theme4 {
+    color: var(--theme__color4) !important;
+}
+
+
+/* text-align */
+.text-left {
+    text-align: left !important;
+}
+.text-right {
+    text-align: right !important;
+}
+.text-center {
+    text-align: center !important;
+}
+.text-justified {
+    text-align: justify !important;
+}
+
+
+/* font-weights */
+.fw-300 {
+    font-weight: 300 !important;
+}
+.fw-400 {
+    font-weight: 400 !important;
+}
+.fw-500 {
+    font-weight: 500 !important;
+}
+.fw-600{
+    font-weight: 600!important;
+}
+.fw-700 {
+    font-weight: 700 !important;
+}
+.fw-800{
+    font-weight: 800!important;
+}
+
+
+
+/* nice-select-edit */
+.nice-select {
+    height: initial;
+    min-height: initial;
+    line-height: 1;
+    padding: 0 20px 0 0;
+    float: none;
+    display: inline-block;
+    border: none;
+}
+.nice-select:after {
+    margin-top: -2px;
+}
+.nice-select .list .option,
+.nice-select.open .list .option {
+    font-size: 16px;
+    line-height: initial;
+    min-height: initial;
+    padding: 13px 15px;
+    min-width: 50px;
+}
+.nice-select .option.selected {
+    font-weight: inherit;
+}
+.nice-select .list {
+    border-radius: 2px;
+    min-width: 100%;
+}
+
+@media (max-width: 767px) {
+    .nice-select .list .option,
+    .nice-select.open .list .option {
+        font-size: 16px;
+        line-height: initial;
+        min-height: initial;
+        padding: 8px 12px;
+        min-width: 50px;
+    } 
+}
+
+
+
+
+
+/* important */
+#scrollUp {
+    background-image: url("../images/base/top.png");
+    bottom: 20px;
+    right: 20px;
+    width: 38px;    /* Width of image */
+    height: 38px;   /* Height of image */
+    color: transparent;
+}

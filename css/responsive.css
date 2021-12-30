@@ -1,0 +1,194 @@
+
+
+@media (max-width: 1399px) {
+    .hero-content h1 {
+        font-size: 40px;
+        margin: 0 0 30px;
+    }
+    p {
+        font-size: 18px;
+        line-height: 1.4;
+    }
+    h2, .h2 {
+        font-size: 28px;
+        margin: 0 0 20px;
+    }
+
+    .default-button {
+        min-height: 50px;
+        padding: 5px 25px;
+        font-size: 15px;
+    }
+
+    .hero-section {
+        padding: 160px 0 230px;
+    }
+
+    .price-card h3 {
+        font-size: 32px;
+        margin: 0 0 30px;
+    }
+    .price-card h5 {
+        font-size: 13px;
+        margin: 0 0 25px;
+    }
+
+    .header-section {
+        padding: 25px 0;
+    }
+
+
+    .single-input .input {
+        padding: 10px 20px;
+        min-height: 50px;
+        border-radius: 25px;
+        font-size: 17px;
+        border-width: 1px;
+    }
+    .single-input label {
+        font-size: 16px;
+        font-weight: 600;
+    }
+    .single-input .title-label {
+        padding: 0 0 7px 20px;
+    }
+    .single-input {
+        margin-bottom: 25px;
+    }
+}
+
+
+@media (max-width: 1199px) {
+    .hero-section {
+        background-size: 150% 100%;
+    }
+
+    .single-feature h3 {
+        font-size: 16px;
+    }
+    .single-feature p {
+        font-size: 16px;
+    }
+    .single-feature h3 .blue-tag {
+        font-size: 12px;
+    }
+
+    .team-member .content-part {
+        padding: 40px 0 0;
+    }
+    .team-member .head-part .text {
+        font-size: 17px;
+    }
+}
+
+
+@media (max-width: 991px) {
+    .single-feature {
+        width: 100%;
+        margin-bottom: 40px;
+    }
+
+    .price-card-wrap {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .price-card {
+        width: 100%;
+        padding: 45px 10px;
+        margin-bottom: 40px;
+        max-width: 340px;
+    }
+
+    .team-member {
+        width: 100%;
+        margin-bottom: 100px;
+    }
+    .team-member .head-part .text {
+        text-align: left;
+        padding-left: 9%;
+    }
+
+    .header-section {
+        padding: 20px 0;
+        background: var(--theme__color1);
+    }
+}
+
+
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 30px;
+        margin: 0 0 25px;
+    }
+
+    .default-button {
+        min-height: 40px;
+        padding: 5px 18px;
+        font-size: 13px;
+    }
+    .default-button .caret {
+        font-size: 25px;
+        margin-left: 13px;
+    }
+
+    .single-input .input {
+        padding: 10px 15px;
+        min-height: 44px;
+        border-radius: 21px;
+        font-size: 16px;
+    }
+    .single-input label {
+        font-size: 15px;
+    }
+    .single-input .title-label {
+        padding: 0 0 5px 15px;
+    }
+}
+
+
+@media (max-width: 575px) {
+    .hero-section {
+        background-size: 200% 100%;
+    }
+    .technology-section {
+        padding: 30px 0 0px;
+    }
+
+    h2, .h2 {
+        font-size: 22px;
+        margin: 0 0 16px;
+    }
+    p {
+        font-size: 16px;
+    }
+
+
+    .price-card-section {
+        margin: -150px 0 -100px;
+        padding:300px 0;
+        background-size: 400% 100%;
+    }
+
+    .team-wrap {
+        padding: 30px 0 0;
+    }
+
+    .contact-section {
+        padding: 60px 0;
+    }
+    .single-input {
+        margin-bottom: 18px;
+    }
+
+    .logo img {
+        width: 110px;
+    }
+}
+
+
+@media (max-width: 390px) {
+    .hero-content .buttons-wrap .button {
+        margin-right: 0px;
+    }
+}

@@ -13,6 +13,7 @@
     "daisyui": "^2.17.0",
     "express-fileupload": "^1.4.0",
     "express.js": "^1.0.0",
+    "highlight.js": "^11.5.1",
     "nodemon": "^2.0.16"
   },
   "devDependencies": {

@@ -1,0 +1,21 @@
+{
+  "name": "attempt_1",
+  "version": "1.0.0",
+  "description": "hi wish me luck :) ",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "build-css": "tailwindcss build -i src/styles.css -o public/styles.css"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "daisyui": "^2.17.0",
+    "express-fileupload": "^1.4.0",
+    "express.js": "^1.0.0",
+    "nodemon": "^2.0.16"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.1.4"
+  }
+}

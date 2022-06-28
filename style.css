@@ -277,6 +277,44 @@ p:last-child {
 }
 /* --preloader-end-- */
 
+/* blog-section */
+.blog-bg {
+  background-image: linear-gradient(to bottom right, blue, purple);
+  height: 100vh;
+  width: 100vw;
+  /* background: url("images/hero-bg.png") no-repeat center center/100% 100%; */
+}
+
+.circle {
+  height: 75vh;
+  width: 75vh;
+  background-color: white;
+  border-radius: 50%;
+  top: 54%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  margin: auto;
+  text-align: center;
+  padding: 10px 10px;
+}
+
+.blog-circle {
+  height: 30vh;
+  width: 30vh;
+  background-color: blue;
+  border-radius: 50%;
+  top: 54%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
 /* ---hero-section--- */
 .hero-section {
   padding: 200px 0 300px;

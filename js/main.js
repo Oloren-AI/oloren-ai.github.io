@@ -35,13 +35,7 @@
   type: 'iframe'
   });
 
-
-        
-
 })(jQuery);
-
-
-
 
 $(document).ready(function(){
 
@@ -55,7 +49,24 @@ $(document).ready(function(){
 
 })
 
-
+var blobs = document.getElementsByClassName('blob');
+for (var i = blobs.length-1; i >= 0; --i) {
+    var blob = blobs[i];  
+    console.log("BLOB")
+    const svgPath = blobs2.svgPath({
+      seed: Math.random(),
+      extraPoints: 8,
+      randomness: 4,
+      size: 256,
+    });
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    var path1 = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+    path1.setAttribute('d', svgPath);
+    svg.appendChild(path1);
+    svg.setAttribute('width', 256);
+    svg.setAttribute('height', 256);
+    blob.appendChild(svg);
+}
 
 
 

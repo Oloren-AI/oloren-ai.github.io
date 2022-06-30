@@ -279,7 +279,7 @@ p:last-child {
 
 /* blog-section */
 .blog-bg {
-  background-image: linear-gradient(to bottom right, blue, purple);
+  background-image: linear-gradient(to bottom right, rgb(59 130 246),rgb(99 102 241));
   height: "100%";
   width: "100%";
   background-attachment: fixed;

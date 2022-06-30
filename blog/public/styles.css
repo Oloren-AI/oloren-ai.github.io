@@ -2576,6 +2576,12 @@ html{
      object-fit: fill;
 }
 
+.blog-grid{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4rem;
+}
+
 .p-10{
   padding: 2.5rem;
 }

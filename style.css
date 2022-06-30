@@ -287,8 +287,8 @@ p:last-child {
 }
 
 .blob {
-  height: 75vh;
-  width: 75vw;
+  height: 30em;
+  width: 30em;
   transform: translate(0%, 8%);
   position: relative;
   margin: auto;
@@ -296,10 +296,15 @@ p:last-child {
   padding: 10px 10px;
 }
 
-.center {
+.center{
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.center-children {
+  display: grid;
+  place-content: center;
 }
 
 .blob-title {
@@ -309,7 +314,7 @@ p:last-child {
   top: 20%;
   position: absolute;
   color: green;
-  background-color: #9fed97;  
+  background-color: #9fed97;
   /* background: url("images/hero-bg.png") no-repeat center center/100% 100%; */
 }
 

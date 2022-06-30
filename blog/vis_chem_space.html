@@ -363,7 +363,7 @@ def add_molecules(df, port, smiles_col = "SMILES", color_col = None, title_col =
     hover_cols : list[str], optional (default None) - list of column names in df to be included in the hover box
     """
     app = JupyterDash(__name__)
-    # fig = graph_chemical_space(df, smiles_col=smiles_col, color_col=color_col, id_col=title_col, chem_rep='mf', dim_reduction='pca', graph_title='mf + pca')
+
     app.layout = html.Div(
         [
             dcc.Loading(id='loading', type='circle', children=[dcc.Graph(id="graph", clear_on_unhover=True)]),
@@ -374,7 +374,6 @@ def add_molecules(df, port, smiles_col = "SMILES", color_col = None, title_col =
     )
     @app.callback(
         Output("graph", "figure"),
-        # Output('loading', 'children'),
         Input("chem-rep-dd", "value"),
         Input("dim-red-dd", "value"),
     )

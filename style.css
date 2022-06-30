@@ -280,7 +280,36 @@ p:last-child {
 /* blog-section */
 .blog-bg {
   background-image: linear-gradient(to bottom right, blue, purple);
-  
+  height: "100%";
+  width: "100%";
+  background-attachment: fixed;
+  /* background: url("images/hero-bg.png") no-repeat center center/100% 100%; */
+}
+
+.blob {
+  height: 75vh;
+  width: 75vw;
+  transform: translate(0%, 8%);
+  position: relative;
+  margin: auto;
+  text-align: center;
+  padding: 10px 10px;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.blob-title {
+  text-align: center;
+  font-size: 2em;
+  font-weight: bold;
+  top: 20%;
+  position: absolute;
+  color: green;
+  background-color: #9fed97;  
   /* background: url("images/hero-bg.png") no-repeat center center/100% 100%; */
 }
 

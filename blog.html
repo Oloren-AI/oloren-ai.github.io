@@ -51,11 +51,11 @@
           </a>
           <div class="main-menu d-lg-block d-none">
             <ul>
-              <li><a href="#technology-section">Technology</a></li>
-              <li><a href="#features-section">Features</a></li> -->
+              <li><a href="index.html#technology-section">Technology</a></li>
+              <li><a href="index.html#features-section">Features</a></li>
               <!-- <li><a href="#">Testimonials</a></li> -->
-              <!-- <li><a href="#demo-section">Demo</a></li>
-              <li><a href="#waitlist-section">Waitlist</a></li>
+              <li><a href="index.html#demo-section">Demo</a></li>
+              <li><a href="index.html#waitlist-section">Waitlist</a></li>
               <li><a href="blog.html">Blog</a></li>
             </ul>
           </div>
@@ -66,54 +66,31 @@
             <i class="far fa-bars"></i>
           </a>
         </div>
-      </header> -->
-      <!--End header-section --> 
-      <div id="container" class="svg-container">
-<script>
-  var width = window.innerWidth,
-      height = window.innerHeight;
-
-  var canvas = d3.select("div#container").append("svg")
-      .attr("preserveAspectRatio", "xMinYMin meet")
-      .attr("viewBox", "0 0 300 300")
-      .classed("svg-content", true);
-      // .append("g")
-      //   .attr("transform", "translate(50, 50)");
-
-  var pack = d3.layout.pack()
-    .size([300, 300-50])
-    // .value(function(d) { return d.size; })
-    .padding(10);
-  
-  d3.json("blogs.json", function (data) {
-    console.log(data);
-      var nodes = pack.nodes(data);
-      console.log(nodes);
-      var node = canvas.selectAll(".node")
-          .data(nodes)
-          .enter()
-          .append("g")
-            .attr("class", "node")
-            .attr("transform", function (d) { return "translate(" + d.x + ',' + d.y + ")"} );
-        
-      node.append("circle")
-          .attr("r", function (d) { return d.r; })
-          .attr("fill", "steelblue")
-          .attr("opacity", 0.25)
-          .attr("stroke", "Black")
-          .attr("stroke-width", "2");
-
-      node.append("text")
-          .text(function (d) { return d.name; })
-          
-  });
-
-</script>  
-</div>
-      <!-- <div class="circle"> Oloren BLOGS
-        <div class="blog-circle">Visualizing the Chemical Space</div>
-      </div> -->
-
+      </header>
+      <!--End header-section -->
+      </div>
+      <div class="grid grid-cols-3 gap-4">
+        <div>
+          <a href="blog/vis_chem_space.html">
+            <div class="blob" fill2="#f26c23" fill="#edb597">
+              <div class="center">
+                <p class="blob-title">Visualizing the chemical space</p>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div>
+          <a href="blog/add_rgroup.html">
+            <div class="blob" fill2="#f26c23" fill="#edb597">
+              <div class="center">
+                <p class="blob-title">Adding R-groups to molecules in RDKit</p>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="blob" fill2="#f26c23" fill="#edb597"></div>
+        <div class="blob" fill2="#f26c23" fill="#edb597"></div>
+      </div>
     <!-- js -->
     <script src="js/jquery-3.6.0.min.js"></script>
     <script src="js/html5shiv.js"></script>
@@ -123,6 +100,7 @@
     <!-- <script src="js/bootstrap.bundle.min.js"></script> -->
     <script src="js/jquery.scrollUp.min.js"></script>
     <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="https://unpkg.com/blobs/v2"></script>
     <script src="js/main.js"></script>
     <!-- End All Js -->
   </body>

@@ -8,7 +8,7 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <meta name="description" content="Site description will be here" />
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> -->
     <link rel="stylesheet" type="text/css" href="css/magnific-popup.css" />
     <link
       href="https://kit-pro.fontawesome.com/releases/v5.15.2/css/pro.min.css"
@@ -18,11 +18,13 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
     <link rel="stylesheet" type="text/css" href="css/responsive.css" />
     <link rel="icon" href="favicon.svg" />
+    <!-- <script src="https://d3js.org/d3.v7.min.js"></script> -->
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    
     <!--End ALL STYLESHEET -->
   </head>
 
-  <body>
-    <div class="blog-bg">
+  <body class="blog-bg">
     <!-- preloader -->
     <div id="preloader"></div>
     <!-- preloader-end -->
@@ -42,7 +44,7 @@
       <!-- offcanvas-start-end -->
 
       <!-- header-section -->
-      <header class="header-section">
+      <!-- <header class="header-section">
         <div class="container">
           <a href="index.html" class="logo">
             <img src="images/logo.svg" alt="" />
@@ -50,11 +52,11 @@
           <div class="main-menu d-lg-block d-none">
             <ul>
               <li><a href="#technology-section">Technology</a></li>
-              <li><a href="#features-section">Features</a></li>
+              <li><a href="#features-section">Features</a></li> -->
               <!-- <li><a href="#">Testimonials</a></li> -->
-              <li><a href="#demo-section">Demo</a></li>
+              <!-- <li><a href="#demo-section">Demo</a></li>
               <li><a href="#waitlist-section">Waitlist</a></li>
-              <li><a href="/Users/melissa/documents/oloren-ai.github.io/blog.html">Blog</a></li>
+              <li><a href="blog.html">Blog</a></li>
             </ul>
           </div>
           <a
@@ -64,11 +66,53 @@
             <i class="far fa-bars"></i>
           </a>
         </div>
-      </header>
-      <!--End header-section -->
-      <div class="circle"> Oloren BLOGS
+      </header> -->
+      <!--End header-section --> 
+      <div id="container" class="svg-container">
+<script>
+  var width = window.innerWidth,
+      height = window.innerHeight;
+
+  var canvas = d3.select("div#container").append("svg")
+      .attr("preserveAspectRatio", "xMinYMin meet")
+      .attr("viewBox", "0 0 300 300")
+      .classed("svg-content", true);
+      // .append("g")
+      //   .attr("transform", "translate(50, 50)");
+
+  var pack = d3.layout.pack()
+    .size([300, 300-50])
+    // .value(function(d) { return d.size; })
+    .padding(10);
+  
+  d3.json("blogs.json", function (data) {
+    console.log(data);
+      var nodes = pack.nodes(data);
+      console.log(nodes);
+      var node = canvas.selectAll(".node")
+          .data(nodes)
+          .enter()
+          .append("g")
+            .attr("class", "node")
+            .attr("transform", function (d) { return "translate(" + d.x + ',' + d.y + ")"} );
+        
+      node.append("circle")
+          .attr("r", function (d) { return d.r; })
+          .attr("fill", "steelblue")
+          .attr("opacity", 0.25)
+          .attr("stroke", "Black")
+          .attr("stroke-width", "2");
+
+      node.append("text")
+          .text(function (d) { return d.name; })
+          
+  });
+
+</script>  
+</div>
+      <!-- <div class="circle"> Oloren BLOGS
         <div class="blog-circle">Visualizing the Chemical Space</div>
-      </div>
+      </div> -->
 
     <!-- js -->
     <script src="js/jquery-3.6.0.min.js"></script>
@@ -76,11 +120,10 @@
     <script src="js/respond.js"></script>
     <script src="js/selectivizr-1.0.2.min.js"></script>
     <script src="js/waypoint.js"></script>
-    <script src="js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="js/bootstrap.bundle.min.js"></script> -->
     <script src="js/jquery.scrollUp.min.js"></script>
     <script src="js/jquery.magnific-popup.min.js"></script>
     <script src="js/main.js"></script>
     <!-- End All Js -->
-    </div>
   </body>
 </html>

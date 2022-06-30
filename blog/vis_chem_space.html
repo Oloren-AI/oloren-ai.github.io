@@ -90,7 +90,7 @@ def rdnd_from_smiles(smiles):
                 <pre class="code-border"><code class="font-code">from rdkit import Chem, DataStructs
 from sklearn.decomposition import PCA
 
-def >pca_df(chem_rep_list):
+def pca_df(chem_rep_list):
     pca = PCA(n_components=2)
     pca_arr = pca.fit_transform(chem_rep_list)
         return pd.DataFrame(pca_arr, columns=["Component 1", "Component 2"])</code></pre>

@@ -1,0 +1,517 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualize Chemical Space</title>
+
+    <link rel="stylesheet" href="public/styles.css">
+    <link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body class="bg-white w-screen absolute z-0">
+    <body class="bg-white w-screen absolute z-0">
+        <a href="../blog.html" class="link"><div class="bg-gradient-to-r from-blue-500 to-indigo-500 w-screen h-64 mt-0 mx-0 px-4 z-10 absolute">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                &larr; Back to Oloren Blog Home
+            </button></div></a>
+    <div class="w-screen flex flex-col md:flex-row mt-20">
+        <main class="bg-white p-10 rounded-3xl relative mx-8 md:max-w-[85%] md:mr-0 float-left items-start flex-col z-20">
+            <!-- title area  -->
+            <header class="title-area">
+                <h1 class="font-body font-bold text-5xl text-black my-2">Visualizing the chemical space</h1>
+                <div class="author-container my-5 flex flex-row content-center">
+                    <img class="self-center object-fill h-10 w-10 rounded-full mr-5" src="images/bob_smith.JPG" alt="could not render the beautiful face of this article's author :(">
+                    <span class="author-name h-5 font-title text-blue-500 text-l flex justify-center">Melissa Du</span>
+                    <span class="date font-bold font-title text-blue-500 text-l mx-2">06/29/22</span>
+                </div>
+                <div class="description font-body text-gray-400 italic">After creating models for drug classification, we need a practical way of visualizing our chemical space and verifying our results. This guide will walk you through how to generate an interactive plotly graph of chemicals that renders 2D images of molecules on hover.</div>
+            </header>
+            <div class="article font-body my-5">
+                <div class="article-text">We will cover two different types of chemical representations (Morgan fingerprint and RDKit 2D molecular descriptors), two different techniques for dimension reduction (PCA and t-SNE), generating a scatterplot in plotly, and creating an <a href="#dash" class="link">interactive Dash app</a> which displays structures on hover. We'll be using the BACE dataset from <a href="https://moleculenet.org/datasets-1">MoleculeNet</a>. All of the code is located in our “Putting Everything Together” section at the end, but we recommend reading through the sections to fully understand how everything works.</div>
+                <div class="table-contents flex flex-col space-y-2 underline my-5 font-sans text-gray-500">
+                    <a href="#chem_rep" class="text-md">Chemical Representations</a>
+                    <a href="#mf" class="indent-5 text-sm">Morgan Fingerprint (Circular Fingerprint)</a>
+                    <a href="#rdkit" class="indent-5 text-sm">RDKit 2D Normalized Descriptor</a>
+                    <a href="#dim_red" class="text-md">Dimensionality Reduction</a>
+                    <a href="#pca" class="indent-5 text-sm">Principal Component Analysis</a>
+                    <a href="#tsne" class="indent-5 text-sm text-ellipsis">t-Distributed Stochastic Neighborhood Embedding</a>
+                    <a href="#plotly" class="text-md">Graphing with Plotly</a>
+                    <a href="#dash" class="text-md">Creating Dash App</a>
+                    <a href="#dash layout" class="indent-5 text-sm">Basic Dash Layout</a>
+                    <a href="#dash callback" class="indent-5 text-sm">Basic Dash Callback</a>
+                    <a href="#everything" class="text-md">Putting Everything Together</a>
+                    <a href="#references" class="text-md">References</a>
+                </div>
+                <div class="article-text">Let's get started! 🙂</div>
+                <!-- Chemical Representations -->
+                <a id="chem_rep"><h3 class="heading">Chemical representations</h3></a>
+                <a id="mf"><h4 class="font-title text-black text-2xl my-2">Morgan Fingerprints</h4></a>
+                <div class="article-text">RDKit provides a function for converting SMILES into Morgan fingerprints that requires the fingerprint radius and number of bits. It is common to use a radius of 2 or 3 and at least 1024 bits. Higher bit values will allow you to retain more information about the molecule. </div>
+                <div class="article-text">In order to perform PCA or t-SNE, we convert the fingerprint into a 1d numpy array. </div>
+                <pre class="p-2"><code class="font-code">from rdkit import Chem, DataStructs
+from rdkit.Chem import AllChem
+import numpy as np
+
+def fp_from_smiles(smiles):
+    mol = Chem.MolFromSmiles(smiles)
+    fp = AllChem.GetMorganFingerprintAsBitVect(mol, 2, nBits=2048) # generate MF as bit vector
+    fp = np.frombuffer(fp.ToBitString().encode(), 'u1') - ord('0') # convert bit vector to 1d numpy array
+    return fp</code></pre>
+
+                <a id="rdkit"><h4 class="font-title text-black text-2xl my-2">RDKit 2D Normalized Descriptor</h4></a>
+                <div class="article-text"> <a href="https://github.com/bp-kelley/descriptastorus" target="_blank" class="link">Descriptastorus</a> is a package for that allows us to efficiently generate a wide range of molecular descriptors from chemical SMILES. Luckily for us, they are also able to calculate and normalize the 2D molecular descriptors provided in RDKit.</div>
+                <div class="article-text">The output of processing a SMILES on the RDKit2DNormalized generator is a 1d array.</div>
+                <pre class="code-border"><code class="font-code">from rdkit import Chem, DataStruct
+from descriptastorus.descriptors import rdNormalizedDescriptors
+
+def rdnd_from_smiles(smiles):
+    generator = rdNormalizedDescriptors.RDKit2DNormalized()
+    rdnd = generator.process(smiles)
+    return rdnd</code></pre>
+
+                <!-- Dimensionality Reduction -->
+                <a id="dim_red"><h3 class="heading">Dimensionality Reduction</h3></a>
+                <a id="pca"><h4 class="font-title text-black text-2xl my-2">Principal Component Analysis</h4></a>
+                <div class="article-text">The scikit-learn package provides a function to perform PCA. We just need to pass in our dataset as an array of the molecules’ chemical representations (chem_rep_list) and specify the number of components. To plot this on a graph, we are limited to 2 or 3 components.</div>
+                <pre class="code-border"><code class="font-code">from rdkit import Chem, DataStructs
+from sklearn.decomposition import PCA
+
+def >pca_df(chem_rep_list):
+    pca = PCA(n_components=2)
+    pca_arr = pca.fit_transform(chem_rep_list)
+        return pd.DataFrame(pca_arr, columns=["Component 1", "Component 2"])</code></pre>
+
+                <a id="tsne"><h4 class="font-title text-black text-2xl my-2">t-Distributed Stochastic Neighborhood Embedding</h4></a>
+                <div class="article-text">Alternatively, we can use t-SNE to reduce the number of dimensions. However, this technique is more computationally heavy, so it’s recommended to use PCA first to reduce the data down to around 50 dimensions. </div>
+                <div class="article-text">The t-SNE function has many <a href="https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html" target="_blank" class="underline text-gray-500">parameters</a>. We recommend modifying them within a range as different values can give dramatically different results. </div>
+                <pre class="code-border"><code class="font-code">from rdkit import Chem, DataStructs
+from sklearn.manifold import TSNE
+
+def tsne_df(chem_rep_list):
+    pca_50 = PCA(n_components=50)
+    pca_result_50 = pca_50.fit_transform(chem_rep_list)
+    pca_50_variance = pca_50.explained_variance_ratio_
+    tsne = TSNE(n_components=2, verbose=0, perplexity=40, n_iter=300)
+    tsne_results = tsne.fit_transform(pca_result_50)mol = Chem.MolFromSmiles(smiles)
+    return pd.DataFrame(tsne_results, columns=["TSNE-1", "TSNE-2"])</code></pre>
+
+                <!-- Graphing with Plotly -->
+                <a id="plotly"><h3 class="heading">Graphing with Plotly</h3></a>
+                <div class="article-text">We can use any of the chemical representations above with any of the dimension reduction techniques. Let’s combine some of the code we’ve written to create a function that allows us to generate a plotly graph. </div>
+                <pre class="code-border"><code class="font-code">from rdkit import Chem, DataStructs
+from sklearn.manifold import TSNE
+
+def graph_chemical_space(
+    df: pd.DataFrame,
+    smiles_col: str = "SMILES",
+    color_col: str = None,
+    id_col: str = None,
+    chem_rep: str = "rdkit",
+    dim_reduction: str = "TSNE",
+    graph_title: str = None
+):
+    """
+    Written by Melissa Du, Oloren AI
+    df : pandas.DataFrame object
+        a pandas dataframe that contains the data plotted in fig.
+    smiles_col : str, optional
+        name of the column in df containing the smiles plotted in fig (default 'SMILES').
+        If provided as a list, will add a slider to choose which column is used for rendering the structures.
+    color_col : str, optional
+        name of the column in df that will specify the point colors plotted in fig (default None)
+    id_col : str, optional
+        name of the column in df that will specify id of the points plotted in fig (default None)
+    chem_rep : "rdkit" | "mf" | "oc" , optional
+        name of the desired chemical representation
+    dim_reduction : "PCA" | "TSNE" , optional
+        name of desired dimension reduction technique
+    graph_title : str, optional
+        title of graph
+    """
+
+    assert chem_rep in ['rdkit', 'mf', 'oc'], "Please enter a valid chemical representation"
+    assert dim_reduction in ["PCA", "TSNE"], "Please enter a valid dimension reduction technique"
+    assert smiles_col in df, "The specified smiles_col is not in the dataframe"
+
+    funcs = {
+        "rdkit" : rdnd_from_smiles,
+        "mf" : fp_from_smiles,
+        "TSNE": tsne_df,
+        "PCA": pca_df
+    }
+
+    mol_list = []
+    # convert smiles to desired chemical representation
+    for smiles in df[smiles_col]:
+        mol_list.append(funcs[chem_rep](smiles))
+    # apply desired dimension reduction technique
+    rd_df = funcs[dim_reduction](mol_list)
+    # populate dataframe with color and id columns
+    rd_df = rd_df.join(df[smiles_col])
+    if id_col is not None:
+        rd_df = rd_df.join(df[id_col])
+    if color_col is not None:
+        rd_df = rd_df.join(df[color_col])
+
+    fig = px.scatter(rd_df, x='Component 1', y='Component 2', color=color_col, title=graph_title)
+    return fig</code></pre>
+                <div class="article-text">We will use the <a href="https://moleculenet.org/datasets-1" target="_blank">BACE dataset</a> and attempt to generate a chemical visualization that distinguishes molecules by pIC50. </div>
+                <pre class="code-border"><code class="font-code">from rdkit import Chem, DataStructs
+import pandas as pd
+
+file_name = 'bace.csv'
+df = pd.read_csv(file_name)[['mol', 'CID', 'pIC50']]</code></pre>
+
+                <div class="article-text">Here is a quick comparison of the different chemical representations and dimension reduction techniques: </div>
+                <pre class="code-border"><code class="font-code">graph_chemical_space(df, smiles_col='mol', color_col='pIC50', id_col='CID', chem_rep='mf', dim_reduction='PCA', graph_title='Morgan Fingerprint + PCA')</code></pre>
+                <!-- <img src="/images/mf+pca.png" alt="Can't render image" class="flex justify-center object-contain"> -->
+                <div class="flex justify-center object-contain">
+                    <a href="https://plotly.com/~mxdu/7/?share_key=xmpkGjodPSeNYx5iWgXAJe" target="_blank" title="mf+pca" style="display: block; text-align: center;"><img src="https://plotly.com/~mxdu/7.png?share_key=xmpkGjodPSeNYx5iWgXAJe" alt="mf+pca" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plotly.com/404.png';" /></a>
+                    <script data-plotly="mxdu:7" sharekey-plotly="xmpkGjodPSeNYx5iWgXAJe" src="https://plotly.com/embed.js" async></script>
+                </div>
+                <div class="caption"><span class="font-bold">Figure 1. &nbsp;</span> Morgan Fingerprint + PCA</div>
+
+                <pre class="code-border"><code class="font-code">graph_chemical_space(df, smiles_col='mol', color_col='pIC50', id_col='CID', chem_rep='mf', dim_reduction='TSNE', graph_title='Morgan Fingerprint + TSNE')</code></pre>
+                <!-- <img src="/images/mf+tsne.png" alt="Can't render image" class="flex justify-center object-contain"> -->
+                <div class="flex justify-center object-contain">
+                    <a href="https://plotly.com/~mxdu/10/?share_key=VTrrdx7Q2NuTDeMIBtUzOe" target="_blank" title="mf+tsne" style="display: block; text-align: center;"><img src="https://plotly.com/~mxdu/10.png?share_key=VTrrdx7Q2NuTDeMIBtUzOe" alt="mf+tsne" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plotly.com/404.png';" /></a>
+                    <script data-plotly="mxdu:10" sharekey-plotly="VTrrdx7Q2NuTDeMIBtUzOe" src="https://plotly.com/embed.js" async></script>
+                </div>
+                <div class="caption"><span class="font-bold">Figure 2. &nbsp;</span>Morgan Fingerprint + t-SNE</div>
+
+                <pre class="code-border"><code class="font-code">graph_chemical_space(df, smiles_col='mol', color_col='pIC50', id_col='CID', chem_rep='rdkit', dim_reduction='PCA', graph_title='RDKit Descriptors + PCA')</code></pre>
+                <!-- <img src="/images/rdkit+pca.png" alt="Can't render image" class="flex justify-center object-contain"> -->
+                <div class="flex justify-center object-contain">
+                    <a href="https://plotly.com/~mxdu/3/?share_key=j00zjBxAscwvmJExcvR7K8" target="_blank" title="rdkit+pca" style="display: block; text-align: center;"><img src="https://plotly.com/~mxdu/3.png?share_key=j00zjBxAscwvmJExcvR7K8" alt="rdkit+pca" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plotly.com/404.png';" /></a>
+                    <script data-plotly="mxdu:3" sharekey-plotly="j00zjBxAscwvmJExcvR7K8" src="https://plotly.com/embed.js" async></script>
+                </div>
+
+                <div class="caption"><span class="font-bold">Figure 3. &nbsp;</span>RDKit + PCA</div>
+
+                <pre class="code-border"><code class="font-code">fig = graph_chemical_space(df, smiles_col='mol', color_col='pIC50', id_col='CID', chem_rep='rdkit', dim_reduction='TSNE', graph_title='RDKit Descriptors + TSNE')</code></pre>
+                <!-- <img src="/images/rdkit+tsne.png" alt="Can't render image" class="flex justify-center object-contain"> -->
+                <div class="flex justify-center object-contain">
+                    <a href="https://plotly.com/~mxdu/14/?share_key=g2MXSOa9MSpP3LC5y7LWLu" target="_blank" title="rdkit+tsne" style="display: block; text-align: center;"><img src="https://plotly.com/~mxdu/14.png?share_key=g2MXSOa9MSpP3LC5y7LWLu" alt="rdkit+tsne" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plotly.com/404.png';" /></a>
+                    <script data-plotly="mxdu:14" sharekey-plotly="g2MXSOa9MSpP3LC5y7LWLu" src="https://plotly.com/embed.js" async></script>
+                </div>
+                <div class="caption"><span class="font-bold">Figure 4. &nbsp;</span>RDKit + t-SNE</div>
+
+                <a id="dash"><h3 class="heading">Creating Dash App</h3></a>
+                <div class="article-text">Now that we’ve generated some graphs, we’re onto the last step of this process: displaying 2D images of the molecules on hover! For this, we will be using Dash, a python framework for creating interactive web applications. </div>
+                <a id="dash layout"><h4 class="font-title text-black text-2xl my-2">Basic Dash Layout</h4></a>
+                <div class="article-text">A Dash app is composed of a tree of nested components that can take the form of </div>
+                <ol class="list-decimal list-outside text-black pl-10">
+                    <li class="pl-5">HTML elements (<code class="bg-gray-300 font-code text-pink-700 p-px">dash.html</code>): basic components like headers, paragraphs, images</li>
+                    <li class="pl-5">Dash Core Component elements (<code class="bg-gray-300 font-code text-pink-700 p-px">dash.dcc</code>): higher-level, interactive components like graphs, drop-downs, tooltips</li>
+                </ol>
+                <div class="article-text">All components can be given an identifying id for future reference. HTML components can be styled with a CSS dictionary.</div>
+                <div class="article-text">Our app will be composed of a DCC Graph component that renders our plotly graph and a DCC Tooltip that allows the user to point to a precise location on the graph.</div>
+                <div class="article-text">The following code generates a basic Dash app that displays the plotly graph above without any hover functionality. Note that we are using JupyterDash, which gives us the option to display the graph inline in a Jupyter notebook in addition to externally on a web browser. </div>
+                <div class="article-text">Setting <code class="bg-gray-300 font-code text-pink-700 p-px">debug=True</code> in <code class="bg-gray-300 font-code text-pink-700 p-px">app.run_server</code> allows the app to update in real-time as changes are being made to the code. Additionally, a port must be specified (default is 8050) and forwarded to display the app interface inline. Make sure you manually forward the port in a Jupyter notebook as the app will not fully render otherwise.</div>
+                <pre class="code-border"><code class="font-code">from rdkit import Chem, DataStructs
+fig = graph_chemical_space(df, smiles_col='mol', color_col='pIC50', id_col='CID', chem_rep='rdkit', dim_reduction='TSNE', graph_title='RDKit Descriptors + TSNE')
+fig.update_traces(hoverinfo="none", hovertemplate=None) # remove all previous hover info, no selector or col/row specificed
+app = JupyterDash(__name__)
+app.layout = html.Div(
+    [
+        dcc.Graph(id="graph", figure=fig, clear_on_unhover=True),
+        dcc.Tooltip(id="graph-tooltip"),
+    ]
+)
+app.run_server(debug=True, port='8050')</code></pre>
+                <a id="dash callback"><h4 class="font-title text-black text-2xl my-2">Basic Dash Callback</h4></a>
+                <div class="article-text">In order to display molecules on hover, we need to add interactivity to our app. More specifically, we want to add a callback function that updates our Dash interface whenever we hover over a point on the graph. </div>
+                <div class="article-text">Callbacks are handled by the <code class="bg-gray-300 font-code text-pink-700 p-px">@app.callback</code> decorator, which which takes in input and output arguments. The inputs and outputs of <code class="bg-gray-300 font-code text-pink-700 p-px">@app.callback</code> are properties of components, which are referenced by their ids.  </div>
+                <div class="article-text">The decorator causes the function that it wraps to be called anytime there are modifications to the input components. Therefore, the wrapped function must specify how the output should be updated. This function must be written directly after the <code class="bg-gray-300 font-code text-pink-700 p-px">@app.callback</code> decorator (no empty lines) and take in input properties as arguments.</div>
+                <div class="article-text">In our case, the input is the hoverData attribute from the Graph component and our output is the data displayed by our Tooltip component. </div>
+                <pre class="code-border"><code class="font-code">from rdkit import Chem, DataStructs
+
+@app.callback(
+    Output("graph-tooltip", "show"),
+    Output("graph-tooltip", "bbox"),
+    Output("graph-tooltip", "children"),
+    Input("graph", "hoverData"),
+)</code></pre>
+                <div class="article-text">Now, we have to define a function that describes how our Tooltip is updated in response to changes in the Graph’s hoverData. This function should:</div>
+                <ol class="list-decimal list-outside text-black pl-10">
+                    <li class="pl-5">Generate a 2D molecule image from a SMILES that can be displayed in an HTML Image component.</li>
+                    <li class="pl-5">Display an HTML Div that contains this image, along with the molecule name and any other captions that are specified.</li>
+                </ol>
+
+                <pre class="code-border"><code class="font-code">def hover(hoverData):
+    if hoverData is None:
+        return False, no_update, no_update
+
+    pt = hoverData["points"][0]
+    bbox = pt["bbox"]
+    num = pt["pointNumber"]
+    df_row = df.iloc[num]
+
+    # Generate 2D image of molecule
+    hoverbox = []
+
+    if title_col is not None:
+        hoverbox.append(html.H4(df_row[title_col], style={"font-family": 'Georgia', "fontSize": 14}))
+    img_str = image_str_from_smiles(df_row[smiles_col], 400)
+    hoverbox.append(html.Img(src=img_str, style={"width": "100%"}))
+    if hover_cols is not None:
+        for col in hover_cols:
+            hoverbox.append(html.P(f"{col} : {df_row[col]}", style={"font-family": 'Georgia', "fontSize": 12}))
+
+    children = [html.Div(hoverbox, style={"width": f"200px", "white-space": "normal"})]
+
+    return True, bbox, children</code></pre>
+            </div>
+            <a id="everything"><h3 class="heading">Putting Everything Together</h3></a>
+            <div class="article-text">Here is the final code that implements everything we went over. Note that we also added in drop-downs so that the chemical representation and dimension reduction technique can be modified within the Dash app.</div>
+            <pre class="bg-gray-100 py-5 border-x-[25px] border-transparent my-5 text-sm overflow-x-scroll"><code class="font-code">import base64
+from io import BytesIO
+
+import pandas as pd
+import numpy as np
+from rdkit.Chem.Draw import rdMolDraw2D
+from rdkit.Chem import AllChem
+from rdkit import Chem
+from descriptastorus.descriptors import rdNormalizedDescriptors
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
+from plotly.graph_objects import Figure
+import plotly.express as px
+from dash import Dash, Input, Output, dcc, html, no_update
+from jupyter_dash import JupyterDash
+
+def image_str_from_smiles(smiles, svg_size) -> str:
+    """
+    Takes a SMILES and image size and generates a string
+    that can be used as the image src in html.
+    """
+    buffered = BytesIO()
+    d2d = rdMolDraw2D.MolDraw2DSVG(svg_size, svg_size)
+    d2d.drawOptions().clearBackground = False
+    d2d.DrawMolecule(Chem.MolFromSmiles(smiles))
+    d2d.FinishDrawing()
+    img_str = d2d.GetDrawingText()
+    buffered.write(str.encode(img_str))
+    img_str = base64.b64encode(buffered.getvalue())
+    img_str = f"data:image/svg+xml;base64,{repr(img_str)[2:-1]}"
+    return img_str
+
+def rdnd_from_smiles(smiles):
+    """
+    Takes in a SMILES and returns a list of the RDKit 2D normalized descriptors
+    of the molecule.
+    """
+    generator = rdNormalizedDescriptors.RDKit2DNormalized()
+    rdnd = generator.process(smiles)
+    return rdnd
+
+def fp_from_smiles(smiles):
+    """
+    Takes in a SMILES and returns a the Morgan Fingerprint representation
+    of the molecule.
+    """
+    mol = Chem.MolFromSmiles(smiles)
+    fp = AllChem.GetMorganFingerprintAsBitVect(mol, 2, nBits=2048) # generate MF as bit vector
+    fp = np.frombuffer(fp.ToBitString().encode(), 'u1') - ord('0') # convert bit vector to 1d numpy array
+    return fp
+
+def tsne_df(chem_rep_list):
+    """
+    Takes in a list containing the chemical representation of a collection of
+    molecules and returns a dataframe containing the t-SNE reduction to 2 components.
+    """
+    pca_50 = PCA(n_components=50)
+    pca_result_50 = pca_50.fit_transform(chem_rep_list)
+    tsne = TSNE(n_components=2, verbose=0, perplexity=40, n_iter=300)
+    tsne_results = tsne.fit_transform(pca_result_50)
+    return pd.DataFrame(tsne_results, columns=["Component 1", "Component 2"])
+
+def pca_df(chem_rep_list):
+    """
+    Takes in a list containing the chemical representation of a collection of
+    molecules and returns a dataframe containing the PCA reduction to 2 components.
+    """
+    pca = PCA(n_components=2)
+    pca_arr = pca.fit_transform(chem_rep_list)
+    return pd.DataFrame(pca_arr,columns=["Component 1","Component 2"])
+
+def add_molecules(df, port, smiles_col = "SMILES", color_col = None, title_col = None, hover_cols = None) -> Dash:
+    """
+    Written by Melissa Du,  Oloren AI
+
+    Takes in a dataframe with molecular SMILES and returns a dash app that displays
+    molecules on hover for a graph of any chemical representation and dimension reduction technique.
+    ---
+    df : pandas.DataFrame object - contains the data plotted in fig
+    port : int - the port that the app server uses
+    smiles_col : str, optional (default 'SMILES') - name of the column in df containing SMILES
+    title_col : str, optional (default None) - name of the column in df that specifies title in hover box
+    hover_cols : list[str], optional (default None) - list of column names in df to be included in the hover box
+    """
+    app = JupyterDash(__name__)
+    # fig = graph_chemical_space(df, smiles_col=smiles_col, color_col=color_col, id_col=title_col, chem_rep='mf', dim_reduction='pca', graph_title='mf + pca')
+    app.layout = html.Div(
+        [
+            dcc.Loading(id='loading', type='circle', children=[dcc.Graph(id="graph", clear_on_unhover=True)]),
+            dcc.Tooltip(id="graph-tooltip"),
+            dcc.Dropdown(id='chem-rep-dd', options=[{'value': 'mf', 'label': 'Morgan Fingerprint'}, {'value': 'rdkit', 'label': 'RDKit 2D Descriptors'}], value='mf'),
+            dcc.Dropdown(id='dim-red-dd', options=[{'value': 'pca', 'label': 'PCA'}, {'value': 'tsne', 'label': 't-SNE'}], value='pca'),
+        ]
+    )
+    @app.callback(
+        Output("graph", "figure"),
+        # Output('loading', 'children'),
+        Input("chem-rep-dd", "value"),
+        Input("dim-red-dd", "value"),
+    )
+    def update_graph(chem_rep, dim_red):
+        print(chem_rep, dim_red)
+        fig = graph_chemical_space(df, smiles_col=smiles_col, color_col=color_col, id_col=title_col, chem_rep=chem_rep, dim_reduction=dim_red, graph_title=f'{chem_rep} + {dim_red}')
+        return fig
+
+    @app.callback(
+        Output("graph-tooltip", "show"),
+        Output("graph-tooltip", "bbox"),
+        Output("graph-tooltip", "children"),
+        Input("graph", "hoverData"),
+    )
+    def hover(hoverData):
+        if hoverData is None:
+            return False, no_update, no_update
+
+        pt = hoverData["points"][0]
+        bbox = pt["bbox"]
+        num = pt["pointNumber"]
+        df_row = df.iloc[num]
+
+        hoverbox = []
+        if title_col is not None:
+            hoverbox.append(html.H4(df_row[title_col], style={"font-family": 'Georgia', "fontSize": 14}))
+        img_str = image_str_from_smiles(df_row[smiles_col], 400)
+        hoverbox.append(html.Img(src=img_str, style={"width": "100%"}))
+        if hover_cols is not None:
+            for col in hover_cols:
+                hoverbox.append(html.P(f"{col} : {df_row[col]}", style={"font-family": 'Georgia', "fontSize": 12}))
+
+        children = [html.Div(hoverbox, style={"width": f"200px", "white-space": "normal"})]
+        return True, bbox, children
+
+    print("If you are working on a remote machine, make sure you forward the port number provided in the add molecules function.")
+    app.run_server(mode='inline', port=port)
+    return app
+
+def graph_chemical_space(df, smiles_col = "SMILES", color_col = None, id_col = None, chem_rep = "rdkit", dim_reduction = "tsne", graph_title = None) -> Figure:
+    """
+    Written by Melissa Du, Oloren AI
+
+    Takes in a dataframe of chemical smiles and properties and generates a plotly figure containing a 2D visualization
+    using a specified chemical representation and dimention reduction technique.
+    ---
+    df : pandas.DataFrame object - a pandas dataframe that contains the data plotted in fig
+    smiles_col : str, optional (default 'SMILES') - name of the column in df containing SMILES
+    color_col : str, optional (default None) - name of the column in df that specifies the plotted point colors
+    id_col : str, optional (default None) - name of the column in df that species id of the plotted points
+    chem_rep : "rdkit" | "mf" | "oc" , optional (default 'rdkit') - name of the desired chemical representation
+    dim_reduction : "pca" | "tsne" , optional (default 'tsne') - name of desired dimension reduction technique
+    graph_title : str, optional (default None) - title of graph
+    port : int - port number, must be forwarded if using a remote machine
+    """
+    assert chem_rep in ['rdkit', 'mf', 'oc'], "Please enter a valid chemical representation"
+    assert dim_reduction in ["pca", "tsne"], "Please enter a valid dimension reduction technique"
+    assert smiles_col in df, "The specified smiles_col is not in the dataframe"
+
+    funcs = {
+        "rdkit" : rdnd_from_smiles,
+        "mf" : fp_from_smiles,
+        "tsne": tsne_df,
+        "pca": pca_df,
+    }
+
+    mol_list = []
+    # convert smiles to desired chemical representation
+    for smiles in df[smiles_col]:
+        mol_list.append(funcs[chem_rep](smiles))
+    # apply desired dimension reduction technique
+    rd_df = funcs[dim_reduction](mol_list)
+    # populate dataframe with color and id columns
+    rd_df = rd_df.join(df[smiles_col])
+    if id_col is not None:
+        rd_df = rd_df.join(df[id_col])
+    if color_col is not None:
+        rd_df = rd_df.join(df[color_col])
+
+    fig = px.scatter(rd_df, x='Component 1', y='Component 2', color=color_col, title=graph_title)
+    fig.update_traces(hoverinfo="none", hovertemplate=None) # remove all previous hover info, no selector or col/row specificed
+    fig.update_layout(transition_duration=500)
+    return fig
+
+file_name = 'bace.csv'
+df = pd.read_csv(file_name)[['mol','CID','pIC50']]
+return add_molecules(df=df, port='8080', smiles_col = 'mol', color_col='pIC50', title_col='CID', hover_cols=['pIC50'])</code></pre>
+
+        </main>
+        <nav class="invisible md:sticky md:visible px-8 flex flex-col space-y-5 top-1/2 -translate-y-1/2 self-start">
+            <a href="#">
+                <img src="/images/facebook.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/twitter.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/email.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/discord.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/heart.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/comment.png" alt="" class="max-h-12 object-contain">
+            </a>
+        </nav>
+    </div>
+    <!-- <div class="read-more my-10">
+        <h3 class="font-body text-blue-500 text-5xl mx-10">Read more...</h3>
+        <div class="flex flex-row space-x-20 my-10">
+            <div class="article-card w-64">
+                <img src="", alt="">
+                <div class="card-text bg-gray-200">
+                    <span>Visualizing chemical space
+                    <span>By John Smith
+                </div>
+            </div>
+            <div class="article-card w-64">
+                <img src="images/meme.jpeg", alt="">
+                <div class="card-text">
+                    <span>Visualizing chemical space
+                    <span>By John Smith
+                </div>
+            </div>
+            <div class="article-card w-64">
+                <img src="images/dog.jpeg", alt="">
+                <div class="card-text">
+                    <span>Visualizing chemical space
+                    <span>By John Smith
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="comments-section my-10">
+        <h3 class="font-body text-black text-5xl mx-10">Comments</h3>
+        <form class="comments">
+            <div class="comment-profile">
+                <img src="" alt="">
+            </div>
+            <div class="comment-box">
+                <textarea name="comment" id="comment" cols="30" rows="10"></textarea>
+            </div>
+        </form>
+    </div> -->
+</body>
+</html>

@@ -1,0 +1,30 @@
+@import url("https://fonts.googleapis.com/css?family=Cabin:400,700|Rubik:400,300,700,300italic");
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.heading {
+    @apply font-body font-bold text-blue-500 text-3xl my-2 mt-5;
+}
+
+.subheading {
+    @apply font-title text-black text-2xl my-2;
+}
+
+.article-text {
+    @apply text-black my-2;
+}
+
+.code-border {
+    @apply bg-gray-100 border-x-[25px] border-transparent py-5 my-5 text-gray-500 text-sm overflow-x-scroll;
+}
+
+.caption {
+    @apply flex justify-center text-black;
+}
+
+.link {
+    @apply underline text-gray-500 hover:text-gray-600 visited:text-gray-800
+ }

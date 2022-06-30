@@ -13,14 +13,14 @@ if($_POST) {
     if(isset($_POST['first_name'])) {
         $visitor_name = filter_var($_POST['first_name'], FILTER_SANITIZE_STRING);
         $email_body .= "<div>
-                           <label><b>First Name:</b></label>&nbsp;<span>".$first_name."</span>
+                           <label><b>First Name:</b></label>&nbsp;<span>".$first_name."   
                         </div>";
     }
 
     if(isset($_POST['last_name'])) {
         $visitor_name = filter_var($_POST['last_name'], FILTER_SANITIZE_STRING);
         $email_body .= "<div>
-                           <label><b>Last Name:</b></label>&nbsp;<span>".$last_name."</span>
+                           <label><b>Last Name:</b></label>&nbsp;<span>".$last_name."   
                         </div>";
     }
  
@@ -28,7 +28,7 @@ if($_POST) {
         $email = str_replace(array("\r", "\n", "%0a", "%0d"), '', $_POST['email']);
         $email = filter_var($email, FILTER_VALIDATE_EMAIL);
         $email_body .= "<div>
-                           <label><b>Email:</b></label>&nbsp;<span>".$email."</span>
+                           <label><b>Email:</b></label>&nbsp;<span>".$email."   
                         </div>";
         $email_title .= $email
     }

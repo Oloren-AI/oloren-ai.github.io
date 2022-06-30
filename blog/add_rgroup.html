@@ -5,21 +5,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Page</title>
+    <title>Add R-groups to RDKIT Molecules</title>
 
     <link rel="stylesheet" href="public/styles.css">
     <link rel="stylesheet"
-href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 </head>
-<body class="bg-white w-screen absolute z-0">  
+<body class="bg-white w-screen absolute z-0">
     <a href="../blog.html" class="link"><div class="bg-gradient-to-r from-blue-500 to-indigo-500 w-screen h-64 mt-0 mx-0 px-4 z-10 absolute">
         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
             &larr; Back to Oloren Blog Home
         </button></div></a>
     <div class="w-screen flex flex-col md:flex-row mt-20">
-        <main class="bg-white p-10 rounded-3xl relative mx-8 md:max-w-[85%] md:mr-0 float-left items-start flex-col z-20"> 
+        <main class="bg-white p-10 rounded-3xl relative mx-8 md:max-w-[85%] md:mr-0 float-left items-start flex-col z-20">
             <!-- title area  -->
             <header class="title-area">
                 <h1 class="font-body font-bold text-5xl text-black my-2">Adding R-groups to molecules in RDKit</h1>
@@ -28,11 +28,11 @@ href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.cs
                     <span class="author-name h-5 font-title text-blue-500 text-l flex justify-center">David Huang</span>
                     <span class="date font-bold font-title text-blue-500 text-l mx-2">6/29/22</span>
                 </div>
-                <div class="description font-body text-gray-400 italic">This blog post is a tutorial on how to attach R-groups to molecules. 
+                <div class="description font-body text-gray-400 italic">This blog post is a tutorial on how to attach R-groups to molecules.
                     Along the way we will learning how to edit molecules in RDKit, how to utilize atom map numbers and
                     wildcard atoms.</div>
-                <div class="article-text">In this example, we will be using <code class="font-code">Chem.RWMol</code> to stitch compounds together to recreate Table 2 in 
-                    "Structure-Aided Design, Synthesis, and Biological Evaluation of Potent and 
+                <div class="article-text">In this example, we will be using <code class="font-code">Chem.RWMol</code> to stitch compounds together to recreate Table 2 in
+                    "Structure-Aided Design, Synthesis, and Biological Evaluation of Potent and
                     Selective Non-Nucleoside Inhibitors Targeting Protein Arginine Methyltransferase 5".</div>
                 <img src="images/add_rgroup/Table2.jpg" alt="Table 2" width="400"/>
             </header>
@@ -47,26 +47,26 @@ href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.cs
                 <a id="#base_mol"><h3 class="heading">Creating the base molecule</h3></a>
                 <div class="article-text">First, we'll draw the base molecules using the wildcard symbol <code class="font-code">*</code> for the R and
                     X groups, with atom map numbers such that R and X are <code class="font-code">*:1</code> and <code class="font-code">*:2</code> respectively.</div>
-                <pre class="code-border"><code class="font-code">from  rdkit import Chem, DataStructs
+                <pre class=""><code class="font-code">from  rdkit import Chem, DataStructs
 from rdkit import Chem
 
 m = Chem.MolFromSmiles("[*:1]C1=C([*:2]=C(C2=CC=C(OCC3=CC=CC=C3)C=C2)N4)C4=NC=N1")</code></pre>
 
                 <img src = "images/add_rgroup/base_molecule.png" alt="Base Molecule" width="200">
-                
+
                 <!-- Dimensionality Reduction -->
                 <a id="func"><h3 class="heading">Function for addition of groups</h3></a>
                 <div class="article-text">Let's write a function for using a dictionary, <code class="font-code">mapping</code>, which maps atom map number
-                    to the group to be added, to add groups onto a <code class="font-code">Chem.Mol</code>, <code class="font-code">m</code>. Code explanation is 
+                    to the group to be added, to add groups onto a <code class="font-code">Chem.Mol</code>, <code class="font-code">m</code>. Code explanation is
                     in comments as well as below the code block.</div>
-                <pre class="code-border"><code class="font-code">  
+                <pre class=""><code class="font-code">
 from rdkit import Chem, DataStructs
 def add_groups(m, mapping):
     # Written by David Huang, Oloren AI
 
     # Loop over atoms until there are no wildcard atoms
     while True:
-                    
+
         # Find wildcard atom if available, otherwise exit
         a = None
         for a_ in m.GetAtoms():
@@ -75,28 +75,28 @@ def add_groups(m, mapping):
                 break
         if a is None:
             break
-                    
+
         # Get appropriate group to substitute in from mapping
         group = mapping[a.GetAtomMapNum()]
-                    
+
         if group.GetNumAtoms() == 1:
-                    
+
             # Directly substitute atom in, if single atom group
             a.SetAtomicNum(group.GetAtomWithIdx(0).GetAtomicNum())
             a.SetAtomMapNum(0)
         else:
-                    
+
             # Set wildcard atoms to having AtomMapNum 1000 for tracking
             a.SetAtomMapNum(1000)
-                    
+
             for a_ in group.GetAtoms():
                 if a_.GetAtomicNum() == 0:
                     a_.SetAtomMapNum(1000)
-                    
+
             # Put group and base molecule together and make it editable
             m = Chem.CombineMols(m, group)
             m = Chem.RWMol(m)
-                    
+
             # Find using tracking number the atoms to merge in new molecule
             a1 = None
             a2 = None
@@ -107,33 +107,33 @@ def add_groups(m, mapping):
                         a1 = a
                     else:
                         a2 = a
-                    
+
             # Find atoms to bind together based on atoms to merge
             b1 = a1.GetBonds()[0]
-            start = (b1.GetBeginAtomIdx() if b1.GetEndAtomIdx() == a1.GetIdx() 
+            start = (b1.GetBeginAtomIdx() if b1.GetEndAtomIdx() == a1.GetIdx()
                 else b1.GetEndAtomIdx())
-                    
+
             b2 = a2.GetBonds()[0]
-            end = (b2.GetBeginAtomIdx() if b2.GetEndAtomIdx() == a2.GetIdx() 
+            end = (b2.GetBeginAtomIdx() if b2.GetEndAtomIdx() == a2.GetIdx()
                 else b2.GetEndAtomIdx())
-                    
+
             # Add the connection and remove original wildcard atoms
             m.AddBond(start, end, order=Chem.rdchem.BondType.SINGLE)
             m.RemoveAtom(a1.GetIdx())
             m.RemoveAtom(a2.GetIdx())
-                    
+
     return m</code></pre>
                 <div class="article-text">Our key strategy in this function is to define attachment points with the Atom
-                    Map Number in both the molecule and in the mapping dictionary. To make the 
+                    Map Number in both the molecule and in the mapping dictionary. To make the
                     additions, we loop over all the atoms in the molecule and check if they are a
                     wildcard atom (atomic number 0) and if they are we make the appropriate
                     additions. <div class="article-text">
-                    
+
                 <div class="article-text">Note, we do this in a <code class="font-code">while</code> loop where we loop until we can't find
                     a wildcard atom, because we cannot edit a molecule within a <code class="font-code">for a in m.GetAtoms()</code>
                     loop without throwing a <code class="font-code">RuntimeError: Sequence modified during iteration</code>.
                     Exception.</div>
-                    
+
                 <div class="article-text">To make these additions, we first give the wildcard atoms in the molecule and the
                     group to be added an Atom Map Number of <code class="font-code">1000</code>` to keep track of it. Then we use
                     <code class="font-code">Chem.CombineMols</code> to combine the molecule and group together in one object and
@@ -145,20 +145,20 @@ def add_groups(m, mapping):
                 <a id="recreate"><h3 class="heading">Recreating the entire table</h3></a>
                     <div class="article-text">Now, to recreate the table we will write a CSV file with the R and X groups as
                         SMILES and load it in as a <code class="font-code">pd.DataFrame</code>.</div>
-                    
-                    <pre class="code-border"><code class="font-code">import pandas as pd
+
+                    <pre class=""><code class="font-code">import pandas as pd
 df = pd.read_csv("table2_raw.csv")</code></pre>
-                    
+
                     <img src="images/add_rgroup/table2_raw.jpg" alt="Table 2 Raw" width="400"/>
-                    <div class="article-text">We can then input the rows of this table into our previous function. We can also 
+                    <div class="article-text">We can then input the rows of this table into our previous function. We can also
                         convert these to SMILES.</div>
-                    <pre class="code-border"><code class="font-code">df["mol"] = [add_groups(Chem.MolFromSmiles("[*:1]C1=C([*:2]=C(C2=CC=C(OCC3=CC=CC=C3)C=C2)N4)C4=NC=N1"),
+                    <pre class=""><code class="font-code">df["mol"] = [add_groups(Chem.MolFromSmiles("[*:1]C1=C([*:2]=C(C2=CC=C(OCC3=CC=CC=C3)C=C2)N4)C4=NC=N1"),
     {1: Chem.MolFromSmiles(r["R"]),
     2: Chem.MolFromSmiles(r["X"])}) for i, r in df.iterrows()]
 df["smi"] = [Chem.MolToSmiles(m) for m in df["mol"]]</code></pre>
                 <a id="result"><h3 class="heading">Our resulting table!</h3></a>
                     <div class="article-text">Let's visualize our result with <code class="font-code">Draw.MolsToGrid</code></div>
-                    <pre class="code-border"><code class="font-code">from rdkit.Chem import Draw
+                    <pre class=""><code class="font-code">from rdkit.Chem import Draw
 Draw.MolsToGridImage(df["mol"], molsPerRow=4, useSVG=True)</code></pre>
 <img src="images/add_rgroup/table2_result.jpg" alt="Table 2 Result" width="400"/>
         </main>
@@ -189,22 +189,22 @@ Draw.MolsToGridImage(df["mol"], molsPerRow=4, useSVG=True)</code></pre>
             <div class="article-card w-64">
                 <img src="", alt="">
                 <div class="card-text bg-gray-200">
-                    <span>Visualizing chemical space   
-                    <span>By John Smith   
+                    <span>Visualizing chemical space
+                    <span>By John Smith
                 </div>
             </div>
             <div class="article-card w-64">
                 <img src="images/meme.jpeg", alt="">
                 <div class="card-text">
-                    <span>Visualizing chemical space   
-                    <span>By John Smith   
+                    <span>Visualizing chemical space
+                    <span>By John Smith
                 </div>
             </div>
             <div class="article-card w-64">
                 <img src="images/dog.jpeg", alt="">
                 <div class="card-text">
-                    <span>Visualizing chemical space   
-                    <span>By John Smith   
+                    <span>Visualizing chemical space
+                    <span>By John Smith
                 </div>
             </div>
         </div>

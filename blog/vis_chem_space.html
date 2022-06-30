@@ -116,6 +116,7 @@ def graph_chemical_space(
     graph_title: str = None
 ):
     """
+    Written by Melissa Du, Oloren AI
     df : pandas.DataFrame object
         a pandas dataframe that contains the data plotted in fig.
     smiles_col : str, optional
@@ -341,6 +342,8 @@ def pca_df(chem_rep_list):
 
 def add_molecules(df, port, smiles_col = "SMILES", color_col = None, title_col = None, hover_cols = None) -> Dash:
     """
+    Written by Melissa Du,  Oloren AI
+
     Takes in a dataframe with molecular SMILES and returns a dash app that displays
     molecules on hover for a graph of any chemical representation and dimension reduction technique.
     ---
@@ -404,6 +407,8 @@ def add_molecules(df, port, smiles_col = "SMILES", color_col = None, title_col =
 
 def graph_chemical_space(df, smiles_col = "SMILES", color_col = None, id_col = None, chem_rep = "rdkit", dim_reduction = "tsne", graph_title = None) -> Figure:
     """
+    Written by Melissa Du, Oloren AI
+
     Takes in a dataframe of chemical smiles and properties and generates a plotly figure containing a 2D visualization
     using a specified chemical representation and dimention reduction technique.
     ---

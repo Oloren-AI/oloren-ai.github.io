@@ -28,7 +28,7 @@ href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.cs
                 <div class="description font-body text-gray-400 italic">After creating models for drug classification, we need a practical way of visualizing our chemical space and verifying our results. This guide will walk you through how to generate an interactive plotly graph of chemicals that renders 2D images of molecules on hover.</div>
             </header>
             <div class="article font-body my-5">
-                <div class="article-text">We will cover two different types of chemical representations (Morgan fingerprint and RDKit 2D molecular descriptors), two different techniques for dimension reduction (PCA and t-SNE), generating a scatterplot in plotly, and creating an interactive Dash app. We'll be using the BACE dataset from <a href="https://moleculenet.org/datasets-1">MoleculeNet</a>. All of the code is located in our “Putting Everything Together” section at the end, but we recommend reading through the sections to fully understand how everything works.</div>
+                <div class="article-text">We will cover two different types of chemical representations (Morgan fingerprint and RDKit 2D molecular descriptors), two different techniques for dimension reduction (PCA and t-SNE), generating a scatterplot in plotly, and creating an <a href="#dash" class="link">interactive Dash app</a> which displays structures on hover. We'll be using the BACE dataset from <a href="https://moleculenet.org/datasets-1">MoleculeNet</a>. All of the code is located in our “Putting Everything Together” section at the end, but we recommend reading through the sections to fully understand how everything works.</div>
                 <div class="table-contents flex flex-col space-y-2 underline my-5 font-sans text-gray-500">
                     <a href="#chem_rep" class="text-md">Chemical Representations</a>
                     <a href="#mf" class="indent-5 text-sm">Morgan Fingerprint (Circular Fingerprint)</a>
@@ -50,22 +50,22 @@ href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.cs
                 <div class="article-text">RDKit provides a function for converting SMILES into Morgan fingerprints that requires the fingerprint radius and number of bits. It is common to use a radius of 2 or 3 and at least 1024 bits. Higher bit values will allow you to retain more information about the molecule. </div>
                 <div class="article-text">In order to perform PCA or t-SNE, we convert the fingerprint into a 1d numpy array. </div>
                 <pre class="code-border"><code class="font-code">from rdkit import Chem, DataStructs
-  from rdkit.Chem import AllChem
-  import numpy as np
+from rdkit.Chem import AllChem
+import numpy as np
 
-  def fp_from_smiles(smiles):
+def fp_from_smiles(smiles):
     mol = Chem.MolFromSmiles(smiles)
     fp = AllChem.GetMorganFingerprintAsBitVect(mol, 2, nBits=2048) # generate MF as bit vector   
     fp = np.frombuffer(fp.ToBitString().encode(), 'u1') - ord('0') # convert bit vector to 1d numpy array   
-      return fp</code></pre>
+    return fp</code></pre>
 
                 <a id="rdkit"><h4 class="font-title text-black text-2xl my-2">RDKit 2D Normalized Descriptor</h4></a>
-                <div class="article-text"> <a href="https://github.com/bp-kelley/descriptastorus" target="_blank" class="underline text-gray-500">Descriptastorus</a> is a package for that allows us to efficiently generate a wide range of molecular descriptors from chemical SMILES. Luckily for us, they are also able to calculate and normalize the 2D molecular descriptors provided in RDKit.</div>
+                <div class="article-text"> <a href="https://github.com/bp-kelley/descriptastorus" target="_blank" class="link">Descriptastorus</a> is a package for that allows us to efficiently generate a wide range of molecular descriptors from chemical SMILES. Luckily for us, they are also able to calculate and normalize the 2D molecular descriptors provided in RDKit.</div>
                 <div class="article-text">The output of processing a SMILES on the RDKit2DNormalized generator is a 1d array.</div>
-                <pre class="code-border"><code class="font-code">from  rdkit import Chem, DataStructs
-  from descriptastorus.descriptors import rdNormalizedDescriptors
+                <pre class="code-border"><code class="font-code">from rdkit import Chem, DataStruct
+from descriptastorus.descriptors import rdNormalizedDescriptors
 
-  def rdnd_from_smiles(smiles):
+def rdnd_from_smiles(smiles):
     generator = rdNormalizedDescriptors.RDKit2DNormalized()
     rdnd = generator.process(smiles)
     return rdnd</code></pre>
@@ -74,35 +74,35 @@ href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.cs
                 <a id="dim_red"><h3 class="heading">Dimensionality Reduction</h3></a>
                 <a id="pca"><h4 class="font-title text-black text-2xl my-2">Principal Component Analysis</h4></a> 
                 <div class="article-text">The scikit-learn package provides a function to perform PCA. We just need to pass in our dataset as an array of the molecules’ chemical representations (chem_rep_list) and specify the number of components. To plot this on a graph, we are limited to 2 or 3 components.</div>
-                <pre class="code-border"><code class="font-code">  from rdkit import Chem, DataStructs
-  from sklearn.decomposition import PCA
+                <pre class="code-border"><code class="font-code">from rdkit import Chem, DataStructs
+from sklearn.decomposition import PCA
 
-  def >pca_df(chem_rep_list):
+def >pca_df(chem_rep_list):
     pca = PCA(n_components=2)
     pca_arr = pca.fit_transform(chem_rep_list) 
-      return    pd.DataFrame(pca_arr,columns=["Component 1", "Component 2"])</code></pre>
+        return pd.DataFrame(pca_arr, columns=["Component 1", "Component 2"])</code></pre>
 
                 <a id="tsne"><h4 class="font-title text-black text-2xl my-2">t-Distributed Stochastic Neighborhood Embedding</h4></a> 
                 <div class="article-text">Alternatively, we can use t-SNE to reduce the number of dimensions. However, this technique is more computationally heavy, so it’s recommended to use PCA first to reduce the data down to around 50 dimensions. </div>
                 <div class="article-text">The t-SNE function has many <a href="https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html" target="_blank" class="underline text-gray-500">parameters</a>. We recommend modifying them within a range as different values can give dramatically different results. </div>
                 <pre class="code-border"><code class="font-code">from rdkit import Chem, DataStructs
-  from sklearn.manifold import TSNE
+from sklearn.manifold import TSNE
 
-  def tsne_df(chem_rep_list):
+def tsne_df(chem_rep_list):
     pca_50 = PCA(n_components=50)
-	pca_result_50 = pca_50.fit_transform(chem_rep_list)
-	pca_50_variance = pca_50.explained_variance_ratio_
-	tsne = TSNE(n_components=2, verbose=0, perplexity=40, n_iter=300)
-	tsne_results = tsne.fit_transform(pca_result_50)mol = Chem.MolFromSmiles(smiles)
+    pca_result_50 = pca_50.fit_transform(chem_rep_list)
+    pca_50_variance = pca_50.explained_variance_ratio_
+    tsne = TSNE(n_components=2, verbose=0, perplexity=40, n_iter=300)
+    tsne_results = tsne.fit_transform(pca_result_50)mol = Chem.MolFromSmiles(smiles)
     return pd.DataFrame(tsne_results, columns=["TSNE-1", "TSNE-2"])</code></pre>
 
                 <!-- Graphing with Plotly -->
                 <a id="plotly"><h3 class="heading">Graphing with Plotly</h3></a>
                 <div class="article-text">We can use any of the chemical representations above with any of the dimension reduction techniques. Let’s combine some of the code we’ve written to create a function that allows us to generate a plotly graph. </div>
                 <pre class="code-border"><code class="font-code">from rdkit import Chem, DataStructs
-  from sklearn.manifold import TSNE
-                    
-  def graph_chemical_space(
+from sklearn.manifold import TSNE
+                  
+def graph_chemical_space(
     df: pd.DataFrame,
     smiles_col: str = "SMILES",
     color_col: str = None,
@@ -156,8 +156,8 @@ href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.cs
     fig = px.scatter(rd_df, x='Component 1', y='Component 2', color=color_col, title=graph_title)
     return fig</code></pre>
                 <div class="article-text">We will use the <a href="https://moleculenet.org/datasets-1" target="_blank">BACE dataset</a> and attempt to generate a chemical visualization that distinguishes molecules by pIC50. </div>
-                <pre class="code-border"><code class="font-code">  from    rdkit   import    Chem, DataStructs
-  import pandas as pd
+                <pre class="code-border"><code class="font-code">from rdkit import Chem, DataStructs
+import pandas as pd
 
 file_name = 'bace.csv'    
 df = pd.read_csv(file_name)[['mol', 'CID', 'pIC50']]</code></pre>
@@ -224,7 +224,7 @@ app.run_server(debug=True, port='8050')</code></pre>
                 <div class="article-text">Callbacks are handled by the <code class="bg-gray-300 font-code text-pink-700 p-px">@app.callback</code> decorator, which which takes in input and output arguments. The inputs and outputs of <code class="bg-gray-300 font-code text-pink-700 p-px">@app.callback</code> are properties of components, which are referenced by their ids.  </div>
                 <div class="article-text">The decorator causes the function that it wraps to be called anytime there are modifications to the input components. Therefore, the wrapped function must specify how the output should be updated. This function must be written directly after the <code class="bg-gray-300 font-code text-pink-700 p-px">@app.callback</code> decorator (no empty lines) and take in input properties as arguments.</div>
                 <div class="article-text">In our case, the input is the hoverData attribute from the Graph component and our output is the data displayed by our Tooltip component. </div>
-                <pre class="code-border"><code class="font-code">  from    rdkit   import    Chem, DataStructs
+                <pre class="code-border"><code class="font-code">from rdkit import Chem, DataStructs
 
 @app.callback(
     Output("graph-tooltip", "show"),

@@ -91,6 +91,7 @@ for (var i = blobs.length-1; i >= 0; --i) {
     console.log(`data:image/svg+xml;base64,${encodedData}`)
     blob.style.backgroundImage = `url(data:image/svg+xml;base64,${encodedData})`;
     blob.style.backgroundRepeat = 'no-repeat';
+    blob.style.backgroundPosition = 'center';
     svg.setAttribute('visibility', 'hidden');
 
 }

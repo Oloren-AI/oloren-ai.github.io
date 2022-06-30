@@ -309,7 +309,23 @@ p:last-child {
   top: 20%;
   position: absolute;
   color: green;
-  background-color: #9fed97;
+  background-color: #9fed97;  
+  /* background: url("images/hero-bg.png") no-repeat center center/100% 100%; */
+}
+
+.svg-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  vertical-align: top;
+  overflow: hidden;
+}
+.svg-content {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .circle {

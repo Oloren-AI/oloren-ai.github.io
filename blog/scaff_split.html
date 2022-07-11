@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intro to scaffold splitting</title>
+    <title>Intro to Scaffold Splitting</title>
 
     <link rel="stylesheet" href="public/styles.css">
     <link rel="stylesheet"
@@ -32,7 +32,7 @@
             <header class="title-area">
                 <h1 class="font-body font-bold text-5xl text-black my-2">Introduction to scaffold splitting</h1>
                 <div class="author-container my-5 flex flex-row content-center">
-                    <img class="self-center object-fill h-10 w-10 rounded-full mr-5" src="images/bob_smith.JPG" alt="could not render the beautiful face of this article's author :(">
+                    <img class="self-center object-fill h-10 w-10 rounded-full mr-5" src="images/andrew-li.png" alt="could not render the beautiful face of this article's author :(">
                     <span class="author-name h-5 font-title text-blue-500 text-l flex justify-center">Andrew Li</span>
                     <span class="date font-bold font-title text-blue-500 text-l mx-2">07/11/22</span>
                 </div>
@@ -47,7 +47,7 @@
                     <a href="#modelperf" class="text-md">Model Performance</a>
                     <a href="#references" class="text-md">References</a>
                 </div>
-                <a id="#intro"><h3 class="heading">Introduction</h3></a>
+                <a id="intro"><h3 class="heading">Introduction</h3></a>
                 <div class="article-text">The chemical space of potentially “drug-like,” pharmacologically active molecules is huge, estimated at 10^60. Evaluating even the restricted chemical space around a particular 
                     molecular scaffold can be time and resource-intensive. Machine learning approaches aiming to learn relationships between molecules and the property in question can dramatically accelerate the screening 
                     process by recognizing abstract and higher-order molecular characteristics in already screened molecules associated with their bioactivity. This allows for better selectivity in future experiments, giving researchers 
@@ -62,7 +62,7 @@
                     could determine heaps of information from a dinosaur’s collarbone. Switch their roles and neither would have a clue at the task before them. ML models suffer from the same problem in cases where data they 
                     encounter in wild, real-world use, differ fundamentally from the data they were trained on, leading potentially to inaccurate and misleading predictions.</div>
 
-                <a id="#scaffolds"><h3 class="heading">Scaffolds</h3></a>
+                <a id="scaffolds"><h3 class="heading">Scaffolds</h3></a>
 
                 <div class="article-text">In the chemical space, this problem risks manifesting itself when a model is used to predict properties for molecules in an unfamiliar chemical space. For 
                     example, medicinal chemists often center work around a molecular scaffold, a foundational molecular structure with desirable properties, testing variations with new R groups and sidechains. 
@@ -76,7 +76,7 @@
                 <div class="article-text">If a model is trained only on molecules that belong to only a handful of scaffold classes, its ability to predict a molecule with an unfamiliar scaffold is unknown. This 
                     blog post explains scaffold splitting, a method of splitting a molecular dataset to enable testing of how well models can predict foreign molecular structures.</div>
 
-                <a id="#scaffvsrandom"><h3 class="heading">Scaffold Split vs. Random Split</h3></a>
+                <a id="scaffvsrandom"><h3 class="heading">Scaffold Split vs. Random Split</h3></a>
                 <div class="article-text">We use the BACE dataset of 1,513 inhibitors of human β-secretase 1 in our testing, and we’ll be using a regression model. With a naive split, the dataset is randomly divided into 
                     a train subset and a test subset. This results in a similar distribution of features and properties across both sets, and is effective in testing model performance on <i>familiar</i> data. Figure 3 depicts this similarity. 
                     To test model performance on <i>unfamiliar</i> data, we artificially split the dataset so that the test set differs from the train set.</div>
@@ -94,7 +94,7 @@
                 </div>
                 <div class="caption"><span class="font-bold">Figure 4.&nbsp;</span> PCA chemical space of train and test sets using scaffold split. Red is train, blue is test.</div>
 
-                <a id="#modelperf"><h3 class="heading">Model Performance</h3></a>
+                <a id="modelperf"><h3 class="heading">Model Performance</h3></a>
                 <div class="article-text">With both data from the random split and scaffold split, we can begin testing model performance. We evaluate two models: a baseline Random Forest that uses molecular Morgan Fingerprints and a proprietary Oloren AI ensemble model.</div>
                 <div class="article-text">Figure 5 plots model predictions of pIC50 inhibition affinity for each test molecule against the true experimental value. The dots are colored by their similarity to the train set, with higher numbers (red) being more similar and lower numbers (blue) less similar.</div>
 
@@ -139,7 +139,7 @@
                     has never seen before, reducing the need and pressure to perform extensive manual assays each time a new chemical class is to be tested. Generalizable models can predict across multiple different scaffolds and molecule types without prior screening, 
                     while a non-generalizable model requires manual generation of data for a new molecule class if accurate predictions are desired.</div>
                 
-                <a id="#references"><h3 class="heading">References</h3></a>
+                <a id="references"><h3 class="heading">References</h3></a>
                 <div class="article-text">[1] Awale, M., Reymond, JL. Web-based 3D-visualization of the DrugBank chemical space. J Cheminform 8, 25 (2016). <a href="https://doi.org/10.1186/s13321-016-0138-2" target="_blank" class="underline text-gray-500">https://doi.org/10.1186/s13321-016-0138-2</a></div>
         </main>
         <nav class="invisible md:sticky md:visible px-8 flex flex-col space-y-5 top-1/2 -translate-y-1/2 self-start">

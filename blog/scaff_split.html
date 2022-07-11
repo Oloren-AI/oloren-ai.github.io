@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intro to scaffold splitting</title>
+
+    <link rel="stylesheet" href="public/styles.css">
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZMJ5EWN4YY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZMJ5EWN4YY');
+    </script>
+</head>
+<body class="bg-white w-screen absolute z-0">
+    <body class="bg-white w-screen absolute z-0">
+        <a href="../blog.html" class="link"><div class="bg-gradient-to-r from-blue-500 to-indigo-500 w-screen h-64 mt-0 mx-0 px-4 z-10 absolute">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                &larr; Back to Oloren Blog Home
+            </button></div></a>
+    <div class="w-screen flex flex-col md:flex-row mt-20">
+        <main class="bg-white p-10 rounded-3xl relative mx-8 md:max-w-[85%] md:mr-0 float-left items-start flex-col z-20">
+            <header class="title-area">
+                <h1 class="font-body font-bold text-5xl text-black my-2">Introduction to scaffold splitting</h1>
+                <div class="author-container my-5 flex flex-row content-center">
+                    <img class="self-center object-fill h-10 w-10 rounded-full mr-5" src="images/bob_smith.JPG" alt="could not render the beautiful face of this article's author :(">
+                    <span class="author-name h-5 font-title text-blue-500 text-l flex justify-center">Andrew Li</span>
+                    <span class="date font-bold font-title text-blue-500 text-l mx-2">07/11/22</span>
+                </div>
+                <div class="description font-body text-gray-400 italic">Discrepancies between the data a model encounters in production and in development necessitate a solid understanding of model generalizability to make sure 
+                    that we are building models that are truly useful in production. This blog explains and visualizes the concept of scaffold splitting, a method to split datasets and test model generalizability.</div>
+            </header>
+            <div class="article font-body my-5">
+                <div class="table-contents flex flex-col space-y-2 underline my-5 font-sans text-gray-500">
+                    <a href="#intro" class="text-md">Introduction</a>
+                    <a href="#scaffolds" class="text-md">Scaffolds</a>
+                    <a href="#scaffvsrandom" class="text-md">Scaffold Split vs. Random Split</a>
+                    <a href="#modelperf" class="text-md">Model Performance</a>
+                    <a href="#references" class="text-md">References</a>
+                </div>
+                <a id="#intro"><h3 class="heading">Introduction</h3></a>
+                <div class="article-text">The chemical space of potentially “drug-like,” pharmacologically active molecules is huge, estimated at 10^60. Evaluating even the restricted chemical space around a particular 
+                    molecular scaffold can be time and resource-intensive. Machine learning approaches aiming to learn relationships between molecules and the property in question can dramatically accelerate the screening 
+                    process by recognizing abstract and higher-order molecular characteristics in already screened molecules associated with their bioactivity. This allows for better selectivity in future experiments, giving researchers 
+                    information on which molecules are most and least likely to have the desired properties.</div>
+
+                <div class="flex justify-center object-contain">
+                    <img src="images/scaff_split/Figure1.png" alt="Chemical Space Visualization" width="400">
+                </div>
+                <div class="caption"><span class="font-bold">Figure 1.&nbsp;</span> 3D Visualization of over 6000 DrugBank molecules across 5 different properties (Awale and Reymond 2016).¹</div>
+
+                <div class="article-text">Models, however, are as good as the data they were trained on. An experienced dendrologist may be able to classify almost all known tree species in the world, and a paleontologist 
+                    could determine heaps of information from a dinosaur’s collarbone. Switch their roles and neither would have a clue at the task before them. ML models suffer from the same problem in cases where data they 
+                    encounter in wild, real-world use, differ fundamentally from the data they were trained on, leading potentially to inaccurate and misleading predictions.</div>
+
+                <a id="#scaffolds"><h3 class="heading">Scaffolds</h3></a>
+
+                <div class="article-text">In the chemical space, this problem risks manifesting itself when a model is used to predict properties for molecules in an unfamiliar chemical space. For 
+                    example, medicinal chemists often center work around a molecular scaffold, a foundational molecular structure with desirable properties, testing variations with new R groups and sidechains. 
+                    Figure 2 depicts molecules alongside their Bemis-Murcko scaffold, a framework for determining scaffolds from molecules.</div>
+
+                <div class="flex justify-center object-contain">
+                    <img src="images/scaff_split/Figure2.png" alt="Molecular Scaffold Examples">
+                </div>
+                <div class="caption"><span class="font-bold">Figure 2.&nbsp;</span> Example molecules from the BACE dataset (top row) and their scaffolds (bottom row).</div>
+
+                <div class="article-text">If a model is trained only on molecules that belong to only a handful of scaffold classes, its ability to predict a molecule with an unfamiliar scaffold is unknown. This 
+                    blog post explains scaffold splitting, a method of splitting a molecular dataset to enable testing of how well models can predict foreign molecular structures.</div>
+
+                <a id="#scaffvsrandom"><h3 class="heading">Scaffold Split vs. Random Split</h3></a>
+                <div class="article-text">We use the BACE dataset of 1,513 inhibitors of human β-secretase 1 in our testing, and we’ll be using a regression model. With a naive split, the dataset is randomly divided into 
+                    a train subset and a test subset. This results in a similar distribution of features and properties across both sets, and is effective in testing model performance on <i>familiar</i> data. Figure 3 depicts this similarity. 
+                    To test model performance on <i>unfamiliar</i> data, we artificially split the dataset so that the test set differs from the train set.</div>
+
+                <div class="flex justify-center object-contain">
+                    <img src="images/scaff_split/Figure3.png" alt="Random Split Chemical Space Visualization">
+                </div>
+                <div class="caption"><span class="font-bold">Figure 3.&nbsp;</span> PCA chemical space of train and test sets using random split. Red is train, blue is test.</div>
+
+                <div class="article-text">Using Oloren AI’s OAM software suite, each molecule in the BACE dataset is grouped together by scaffold. The data is split into train and test sets such that the scaffolds in each group are as distant from the other as possible.</div>
+                <div class="article-text">The result is that every single molecule in the test set has a scaffold unique from the train set, and is molecularly distant from the train set. <b>The test set is engineered to be as foreign to the model as possible.</b> Figure 4 shows almost no overlap between the train and test set after the scaffold split.</div>
+
+                <div class="flex justify-center object-contain">
+                    <img src="images/scaff_split/Figure4.png" alt="Scaffold Split Chemical Space Visualization">
+                </div>
+                <div class="caption"><span class="font-bold">Figure 4.&nbsp;</span> PCA chemical space of train and test sets using scaffold split. Red is train, blue is test.</div>
+
+                <a id="#modelperf"><h3 class="heading">Model Performance</h3></a>
+                <div class="article-text">With both data from the random split and scaffold split, we can begin testing model performance. We evaluate two models: a baseline Random Forest that uses molecular Morgan Fingerprints and a proprietary Oloren AI ensemble model.</div>
+                <div class="article-text">Figure 5 plots model predictions of pIC50 inhibition affinity for each test molecule against the true experimental value. The dots are colored by their similarity to the train set, with higher numbers (red) being more similar and lower numbers (blue) less similar.</div>
+
+                <div class="flex justify-center object-contain">
+                    <a id="rs"><h4 class="font-title text-black text-2xl my-2">Random Split</h4></a>
+                </div>
+                <div class="caption">Morgan Random Forest</div>
+                <div class="flex justify-center object-contain">
+                    <img src="images/scaff_split/Figure5a.png" alt="Morgan RF Prediction Plot">
+                </div>
+                <div class="caption">Oloren Ensemble</div>
+                <div class="flex justify-center object-contain">
+                    <img src="images/scaff_split/Figure5b.png" alt="Oloren Ensemble Prediction Plot">
+                </div>
+                <div class="flex justify-center object-contain">
+                    <a id="rs"><h4 class="font-title text-black text-2xl my-2">Scaffold Split</h4></a>
+                </div>
+                <div class="caption">Morgan Random Forest</div>
+                <div class="flex justify-center object-contain">
+                    <img src="images/scaff_split/Figure5c.png" alt="Morgan RF Prediction Plot">
+                </div>
+                <div class="caption">Oloren Ensemble</div>
+                <div class="flex justify-center object-contain">
+                    <img src="images/scaff_split/Figure5d.png" alt="Oloren Ensemble Prediction Plot">
+                </div>
+                <div class="caption"><span class="font-bold">Figure 5.&nbsp;</span> Model prediction values versus experimental values colored by similarity to the train set.</div>
+
+                <div class="flex justify-center object-contain">
+                    <a id="rs"><h4 class="font-title text-black text-2xl my-2">Model Root Mean Square Error</h4></a>
+                </div>
+                <div class="flex justify-center object-contain">
+                    <img src="images/scaff_split/Table1.png" alt="Model Root Mean Square Error">
+                </div>
+                <div class="caption"><span class="font-bold">Table 1.&nbsp;</span> Table 1. Root mean square error of models across splits.</div>
+
+                <div class="article-text">For both models, prediction accuracy is worse under scaffold splitting, confirming the effectiveness of the split. We expect lower accuracy because the model has never seen these types of molecules before, unlike under the random split.</div>
+                <div class="article-text">We observe that the baseline model performs poorly on the scaffold split data, with a root mean square error (RMSE) of more than 2.5 times that of the random split. The Oloren ensemble model performs only slightly worse than the random split, and its RMSE (0.64) is 
+                    almost equal to the baseline model’s RMSE on the random split (0.61). You’ll observe that with the Oloren ensemble model there are clusters of predicted values around 7.5 and below 7, indicating (A) that this model could be used to filter out molecule candidates with low bioactivity and 
+                    (B) that classification would be a more appropriate approach for this dataset. The concept of AI model translation to decision making during the drug discovery process and strategy for model design will be explored in future posts.</div>
+                <div class="article-text">We can conclude that for the BACE dataset, Oloren’s ensemble model generalizes well to unfamiliar chemical spaces and provides superior performance relative to the baseline model. </div>
+                <div class="article-text">Model generalizability is an important feature to have and understand during the ML-assisted drug screening process. A generalizable model will be able to predict with high confidence the properties of molecules it 
+                    has never seen before, reducing the need and pressure to perform extensive manual assays each time a new chemical class is to be tested. Generalizable models can predict across multiple different scaffolds and molecule types without prior screening, 
+                    while a non-generalizable model requires manual generation of data for a new molecule class if accurate predictions are desired.</div>
+                
+                <a id="#references"><h3 class="heading">References</h3></a>
+                <div class="article-text">[1] Awale, M., Reymond, JL. Web-based 3D-visualization of the DrugBank chemical space. J Cheminform 8, 25 (2016). <a href="https://doi.org/10.1186/s13321-016-0138-2" target="_blank" class="underline text-gray-500">https://doi.org/10.1186/s13321-016-0138-2</a></div>
+        </main>
+        <nav class="invisible md:sticky md:visible px-8 flex flex-col space-y-5 top-1/2 -translate-y-1/2 self-start">
+            <a href="#">
+                <img src="/images/facebook.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/twitter.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/email.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/discord.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/heart.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/comment.png" alt="" class="max-h-12 object-contain">
+            </a>
+        </nav>
+    </div>
+</body>
+</html>

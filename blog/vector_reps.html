@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vector Representations</title>
+
+    <link rel="stylesheet" href="public/styles.css">
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZMJ5EWN4YY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZMJ5EWN4YY');
+    </script>
+</head>
+<body class="bg-white w-screen absolute z-0">
+    <a href="../blog.html" class="link"><div class="bg-gradient-to-r from-blue-500 to-indigo-500 w-screen h-64 mt-0 mx-0 px-4 z-10 absolute">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+            &larr; Back to Oloren Blog Home
+        </button></div></a>
+    <div class="w-screen flex flex-col md:flex-row mt-20">
+        <main class="bg-white p-10 rounded-3xl relative mx-8 md:max-w-[85%] md:mr-0 float-left items-start flex-col z-20">
+            <!-- title area  -->
+            <header class="title-area">
+                <h1 class="font-body font-bold text-5xl text-black my-2">Vector Representations</h1>
+                <div class="author-container my-5 flex flex-row content-center">
+                    <img class="self-center object-fill h-10 w-10 rounded-full mr-5" src="images/add_rgroup/david_huang.JPG" alt="could not render the beautiful face of this article's author :(">
+                    <span class="author-name h-5 font-title text-blue-500 text-l flex justify-center">David Huang</span>
+                    <span class="date font-bold font-title text-blue-500 text-l mx-2">7/11/22</span>
+                </div>
+                <div class="description font-body text-gray-400 italic">Our OlorenVec representation and Descriptastorus’ rdkit2dnormalized descriptor are the 
+                    most effective. However, they aren’t universally superior: other molecular vector 
+                    representations are superior on a narrow set of tasks.</div>
+                
+            </header>
+            <div class="article font-body my-5">
+
+                <a id="#base_mol"><h3 class="heading">Which molecular vector representation should we use?</h3></a>
+                <div class="article-text">There is an abundance of options but a lack of clarity when it comes to selecting a 
+                    molecular vector representation. A fixed-length vector representation is extremely useful
+                    for building machine learning models, visualizations, and even generative models.
+                </div>
+
+                <div class="article-text"><div class="article-text">TA fixed-length vector representation is critical when dealing with small sample sizes, 
+                    where high-dimensional SMILES, SELFIES, molecular graphs, or conformations would not 
+                    be successful. Large sample sizes may allow the use of high-dimensional data, but with 
+                    most problems in drug discovery, small sample sizes necessitate low-dimensional data.
+                </div>
+
+                <div class="article-text">We’ll be testing two popular representations from the Descriptastorus library: 
+                    rdkit2dnormalized and morgan3counts. These are wrappers of RDKit’s descriptors which 
+                    are normalized to appropriate ranges. We’ll be testing two artificial intelligence (AI) 
+                    representations, mol2vec, an unsupervised approach, and OlorenVec, our own 
+                    proprietary semi-supervised contrastive learning approach.
+                </div>
+
+                <!-- Dimensionality Reduction -->
+                <a id="func"><h3 class="heading">Our testing methodology</h3></a>
+                <div class="article-text">We are using the ADMET benchmark tasks provided in the Therapeutic Data Commons. 
+                    There are 22 tasks in total and with each of our four representations we will be training a
+                    Random Forest model (100 estimators) and evaluating them on five splits for each task.</div>
+                
+                <div class="article-text">We first use a one-way ANOVA to see if the choice of molecular vector representation 
+                    has a significant effect on benchmark metrics. Then we use a multi-way t-test to see if 
+                    the best molecular vector representation performs better than all other evaluated 
+                    molecular vector representations.  <div class="article-text">
+
+                <!-- Graphing with Plotly -->
+                <a id="recreate"><h3 class="heading">The results!</h3></a>
+                    <div class="article-text">The below table summarizes the results.</div>
+
+                    <img src="images/vec_rep/vec_results.png" alt="Results of different vector representations" class="flex justify-center object-contain"/>
+                    <div class="article-text">Out of 22 tasks, all had a significant difference in the performance of different 
+                        representations. Only 18 tasks had a molecular vector representation which statistically 
+                        significantly performed better than all other representations. OlorenVec was the superior
+                        representation for 6 tasks; mol2vec was the superior representation for 3 tasks; 
+                        rdkit2dnormalized was the superior representation for 7 tasks; morgan3counts was the 
+                        superior representation for 2 tasks.
+                    </div>
+                    
+                <a id="result"><h3 class="heading">So, what does this mean?</h3></a>
+                    <div class="article-text">This sounds cliché, but each representation is unique and has unique strengths. Of 
+                        course, if you need a good general purpose molecular vector representation you should 
+                        use OlorenVec or a set of cheminformatics descriptors.
+                    </div>
+
+                    <div class="article-text">But, if you want to push your modelling power to its limits, you’ll want to explore all 
+                        these options. The choice of molecular vector representation is a hyperparameter, like 
+                        any other. While other software packages may obscure this choice, Oloren doesn’t. We 
+                        put the power for you to choose and explore a whole range of molecular vector 
+                        representations—implementing our own proprietary methodologies as well as wrapping 
+                        popular open-source molecular vector representations—into your own hands, into you a 
+                        powerful interoperable framework. That’s the power of the library we’ve developed—
+                        Oloren AutoML.
+                    </div>
+                    
+        </main>
+        <nav class="invisible md:sticky md:visible px-8 flex flex-col space-y-5 top-1/2 -translate-y-1/2 self-start">
+            <a href="#">
+                <img src="/images/facebook.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/twitter.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/email.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/discord.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/heart.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/comment.png" alt="" class="max-h-12 object-contain">
+            </a>
+        </nav>
+    </div>
+    <!-- <div class="read-more my-10">
+        <h3 class="font-body text-blue-500 text-5xl mx-10">Read more...</h3>
+        <div class="flex flex-row space-x-20 my-10">
+            <div class="article-card w-64">
+                <img src="", alt="">
+                <div class="card-text bg-gray-200">
+                    <span>Visualizing chemical space
+                    <span>By John Smith
+                </div>
+            </div>
+            <div class="article-card w-64">
+                <img src="images/meme.jpeg", alt="">
+                <div class="card-text">
+                    <span>Visualizing chemical space
+                    <span>By John Smith
+                </div>
+            </div>
+            <div class="article-card w-64">
+                <img src="images/dog.jpeg", alt="">
+                <div class="card-text">
+                    <span>Visualizing chemical space
+                    <span>By John Smith
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="comments-section my-10">
+        <h3 class="font-body text-black text-5xl mx-10">Comments</h3>
+        <form class="comments">
+            <div class="comment-profile">
+                <img src="" alt="">
+            </div>
+            <div class="comment-box">
+                <textarea name="comment" id="comment" cols="30" rows="10"></textarea>
+            </div>
+        </form>
+    </div> -->
+</body>
+</html>

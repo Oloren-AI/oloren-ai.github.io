@@ -1716,6 +1716,40 @@ html{
   --tw-backdrop-sepia:  ;
 }
 
+.container{
+  width: 100%;
+}
+
+@media (min-width: 640px){
+  .container{
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px){
+  .container{
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px){
+  .container{
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px){
+  .container{
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px){
+  .container{
+    max-width: 1536px;
+  }
+}
+
 .btn.loading, 
     .btn.loading:hover{
   pointer-events: none;
@@ -1832,6 +1866,18 @@ html{
   place-items: center;
   text-align: center;
   min-width: 4rem;
+}
+
+.table{
+  position: relative;
+  text-align: left;
+}
+
+.table th:first-child{
+  position: sticky;
+  position: -webkit-sticky;
+  left: 0px;
+  z-index: 11;
 }
 
 .textarea{
@@ -2143,12 +2189,62 @@ html{
   content: attr(data-content);
 }
 
+.table :where(th, td){
+  white-space: nowrap;
+  padding: 1rem;
+  vertical-align: middle;
+}
+
+.table tr.active th, 
+    .table tr.active td, 
+    .table tr.active:nth-child(even) th, 
+    .table tr.active:nth-child(even) td{
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--b3, var(--b2)) / var(--tw-bg-opacity));
+}
+
 .table tr.hover:hover th, 
     .table tr.hover:hover td, 
     .table tr.hover:nth-child(even):hover th, 
     .table tr.hover:nth-child(even):hover td{
   --tw-bg-opacity: 1;
   background-color: hsl(var(--b3, var(--b2)) / var(--tw-bg-opacity));
+}
+
+.table:where(:not(.table-zebra)) :where(thead, tbody, tfoot) :where(tr:not(:last-child) :where(th, td)){
+  border-bottom-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: hsl(var(--b2, var(--b1)) / var(--tw-border-opacity));
+}
+
+.table :where(thead, tfoot) :where(th, td){
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--b2, var(--b1)) / var(--tw-bg-opacity));
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.table :where(:first-child) :where(:first-child) :where(th, td):first-child{
+  border-top-left-radius: 0.5rem;
+}
+
+.table :where(:first-child) :where(:first-child) :where(th, td):last-child{
+  border-top-right-radius: 0.5rem;
+}
+
+.table :where(:last-child) :where(:last-child) :where(th, td):first-child{
+  border-bottom-left-radius: 0.5rem;
+}
+
+.table :where(:last-child) :where(:last-child) :where(th, td):last-child{
+  border-bottom-right-radius: 0.5rem;
+}
+
+.table :where(tbody th, tbody td){
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--b1) / var(--tw-bg-opacity));
 }
 
 .textarea:focus{
@@ -2315,6 +2411,10 @@ html{
   display: flex;
 }
 
+.table{
+  display: table;
+}
+
 .h-64{
   height: 16rem;
 }
@@ -2432,6 +2532,11 @@ html{
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.bg-gray-200{
+  --tw-bg-opacity: 1;
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+}
+
 .bg-gray-300{
   --tw-bg-opacity: 1;
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
@@ -2442,9 +2547,9 @@ html{
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
 }
 
-.bg-gray-200{
+.bg-blue-500{
   --tw-bg-opacity: 1;
-  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
 }
 
 .bg-gradient-to-r{
@@ -2479,9 +2584,18 @@ html{
   padding: 1px;
 }
 
+.p-2{
+  padding: 0.5rem;
+}
+
 .px-4{
   padding-left: 1rem;
   padding-right: 1rem;
+}
+
+.px-8{
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 .py-5{
@@ -2489,9 +2603,9 @@ html{
   padding-bottom: 1.25rem;
 }
 
-.px-8{
-  padding-left: 2rem;
-  padding-right: 2rem;
+.py-2{
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .pl-10{
@@ -2514,12 +2628,12 @@ html{
   font-family: Rubik;
 }
 
-.font-sans{
-  font-family: ui-sans-serif, system-ui;
-}
-
 .font-code{
   font-family: Source Code Pro;
+}
+
+.font-sans{
+  font-family: ui-sans-serif, system-ui;
 }
 
 .text-5xl{
@@ -2568,6 +2682,11 @@ html{
 .text-pink-700{
   --tw-text-opacity: 1;
   color: rgb(190 24 93 / var(--tw-text-opacity));
+}
+
+.text-white{
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .underline{
@@ -2625,6 +2744,27 @@ html{
   justify-content: center;
   --tw-text-opacity: 1;
   color: rgb(0 0 0 / var(--tw-text-opacity));
+}
+
+.link{
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity));
+  -webkit-text-decoration-line: underline;
+          text-decoration-line: underline;
+}
+
+.link:visited{
+  color: rgb(31 41 55 );
+}
+
+.link:hover{
+  --tw-text-opacity: 1;
+  color: rgb(75 85 99 / var(--tw-text-opacity));
+}
+
+.hover\:bg-blue-700:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(29 78 216 / var(--tw-bg-opacity));
 }
 
 @media (min-width: 768px){

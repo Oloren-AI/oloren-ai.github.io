@@ -8,7 +8,7 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <meta name="description" content="Site description will be here" />
-    <!-- <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="css/magnific-popup.css" />
     <link
       href="https://kit-pro.fontawesome.com/releases/v5.15.2/css/pro.min.css"
@@ -18,8 +18,15 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
     <link rel="stylesheet" type="text/css" href="css/responsive.css" />
     <link rel="icon" href="favicon.svg" />
-    <!-- <script src="https://d3js.org/d3.v7.min.js"></script> -->
-    <script src="https://d3js.org/d3.v4.js"></script>    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZMJ5EWN4YY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZMJ5EWN4YY');
+    </script>
     <!--End ALL STYLESHEET -->
   </head>
 
@@ -35,15 +42,16 @@
           <a href="#" class="offcanvas-close"><i class="fa fa-times"></i></a>
           <li><a href="#technology-section">Technology</a></li>
           <li><a href="#features-section">Features</a></li>
+          <li><a href="#">Testimonials</a></li> 
           <li><a href="#demo-section">Demo</a></li>
           <li><a href="#waitlist-section">Waitlist</a></li>
-        </ul>
+        </ul> 
       </div>
       <div class="offcanvas-overlay"></div> -->
       <!-- offcanvas-start-end -->
 
       <!-- header-section -->
-      <!-- <header class="header-section">
+      <header class="header-section">
         <div class="container">
           <a href="index.html" class="logo">
             <img src="images/logo.svg" alt="" />
@@ -51,7 +59,8 @@
           <div class="main-menu d-lg-block d-none">
             <ul>
               <li><a href="#technology-section">Technology</a></li>
-              <li><a href="#features-section">Features</a></li>
+              <!-- <li><a href="#">Testimonials</a></li> -->
+              <li><a href="#demo-section">Demo</a></li>
               <li><a href="blog.html">Blog</a></li>
             </ul>
           </div>
@@ -62,137 +71,33 @@
             <i class="far fa-bars"></i>
           </a>
         </div>
-      </header> -->
-      <!-- End header-section --> 
-      <div id="container" class="svg-container">
-<script>
-  var view,
-      margin = 20,
-      diameter = 300;
+      </header>
+      <!--End header-section -->
+      </div>
+      <div style="display:flex; flex-direction: row; align-items: center; justify-content: center; padding-top: 4em;">
+        <div style="width:fit-content;">
+          <a href="blog/vis_chem_space.html">
+            <div class="blob center-children" fill2="#f26c23" fill="#edb597">
+                <h2 class="text-white font-bold" style="padding-left: 4em; padding-right: 4em;">Visualizing the chemical space</h2>
+            </div>
+          </a>
+        </div>
+        <div style="width:fit-content;">
+          <a href="blog/add_rgroup.html">
+            <div class="blob center-children" fill2="#f26c23" fill="#edb597">
+                <h2 class="text-white font-bold" style="padding-left: 4em; padding-right: 4em;">Adding R-groups in Rdkit</h2>
+            </div>
+          </a>
+        </div>
 
-  var color = d3.scaleOrdinal(d3.schemeCategory10);
-
-  var pack = d3.pack()
-    .size([300, 100]);
-    // .padding(10);
-
-  var canvas = d3.select("div#container").append("svg")
-      // .attr("preserveAspectRatio", "xMinYMin meet")
-      .attr("viewBox", "0 0 300 300")
-      .classed("svg-content", true)
-      .attr("class", "pack")
-      .on("click", function() { zoom(nodes); });
-
-  d3.json("blogs.json", function (data) {
-      var nodes = d3.hierarchy(data);
-      function dragstarted(d) {
-        console.log("dragging!");
-          if (!d3.event.active) simulation.alphaTarget(.03).restart();
-            d.fx = d.x;
-            d.fy = d.y;
-          }
-          function dragged(d) {
-            d.fx = d3.event.x;
-            d.fy = d3.event.y;
-          }
-          function dragended(d) {
-            if (!d3.event.active) simulation.alphaTarget(.03);
-            d.fx = null;
-            d.fy = null;
-          }
-
-    var node = canvas.append("g")
-        .selectAll("circle")
-        .data(pack(nodes).descendants())
-        .enter()
-        .append("circle")
-          .attr("class", "node")
-          .attr("r", function (d) { return d.r; })
-          .attr("cx", 300 / 2)
-          .attr("cy", 300 / 2)
-          .attr("fill", function(d, i) {
-            if(d.children == null) {
-              return "white";
-            } else {
-              return color(i); }
-            }
-            )
-          .attr("opacity", 1)
-          .on("mouseover", function(d, i) {
-                d3.select(this)
-                    .transition()
-                    .duration('50')
-                    .attr('opacity', '0.5')
-                    .attr('stroke', 'black')
-                    .select("name").style({opacity: '1'});
-              })
-          .on('mouseout', function (d, i) {
-            d3.select(this).transition()
-                .duration('50')
-                .attr('opacity', '1')
-                .attr('stroke', null)
-          })
-          .on("click", function(d) { if (focus !== d) zoom(d), d3.event.stopPropagation(); })
-          .call(d3.drag() // call specific function when circle is dragged
-              .on("start", dragstarted)
-              .on("drag", dragged)
-              .on("end", dragended));
-
-      // var simulation = d3.forceSimulation()
-      //     .force("center", d3.forceCenter().x(300 / 2).y(300 / 2)) // Attraction to the center of the svg area
-      //     .force("charge", d3.forceManyBody().strength(.1)) // Nodes are attracted one each other of value is > 0
-      //     .force("collide", d3.forceCollide().strength(.2).radius(function(d){ return (d.r+3) }).iterations(1)) // Force that avoids circle overlapping
-      
-      // simulation
-      //     .nodes(pack(nodes))
-      //     .on('tick', function(d) {
-      //       node
-      //         .attr("cx", function(d) {return d.x; })
-      //         .attr("cy", function(d) { return d.y; })
-      //     });
-    
-    var focus = nodes;
-    console.log(nodes);
-    zoomTo([nodes.x, nodes.y, nodes.r*2]);
-
-    function zoom(d) {
-      var focus0 = focus; focus = d;
-      console.log(d);
-      var transition = d3.transition()
-          .duration(d3.event.altKey ? 7500 : 750)
-          .tween("zoom", function(d) {
-            var i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2 + 20]);
-            return function(t) { zoomTo(i(t)); };
-          });
-
-      transition.selectAll("text")
-        .filter(function(d) { return d.parent === focus || this.style.display === "inline"; })
-          .style("fill-opacity", function(d) { return d.parent === focus ? 1 : 0; })
-          .on("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
-          .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
-    }
-
-    function zoomTo(v) {
-      console.log(v);
-      var k = 300 / v[2];
-      view = v;
-      node.attr("transform", function(d) { return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"; });
-      node.attr("r", function(d) { return d.r * k; });
-    }
-  });
-
-  
-
-  // function ready (error, datapoints) {
-  //   var nodes = 
-  // }
-
-</script>  
-</div>
-      <!-- <div class="circle"> Oloren BLOGS
-        <div class="blog-circle">Visualizing the Chemical Space</div>
-      </div> -->
-
+        <div style="width:fit-content;">
+          <a href="blog/vector_reps.html">
+            <div class="blob center-children" fill2="#f26c23" fill="#edb597">
+                <h2 class="text-white font-bold" style="padding-left: 4em; padding-right: 4em;">Vector representations</h2>
+            </div>
+          </a>
+        </div>
+      </div>
     <!-- js -->
     <script src="js/jquery-3.6.0.min.js"></script>
     <script src="js/html5shiv.js"></script>
@@ -202,6 +107,7 @@
     <!-- <script src="js/bootstrap.bundle.min.js"></script> -->
     <script src="js/jquery.scrollUp.min.js"></script>
     <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="https://unpkg.com/blobs/v2"></script>
     <script src="js/main.js"></script>
     <!-- End All Js -->
   </body>

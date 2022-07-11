@@ -24,3 +24,7 @@
 .caption {
     @apply flex justify-center text-black;
 }
+
+.link {
+    @apply underline text-gray-500 hover:text-gray-600 visited:text-gray-800
+ }

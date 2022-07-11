@@ -73,20 +73,22 @@
   var color = d3.scaleOrdinal(d3.schemeCategory10);
 
   var pack = d3.pack()
-    .size([300, 100]);
+    .size([300, 300]);
     // .padding(10);
 
   var canvas = d3.select("div#container").append("svg")
-      // .attr("preserveAspectRatio", "xMinYMin meet")
+      .attr("preserveAspectRatio", "xMinYMin meet")
       .attr("viewBox", "0 0 300 300")
       .classed("svg-content", true)
       .attr("class", "pack")
-      .on("click", function() { zoom(nodes); });
+      .on("click", function(d) { 
+          zoom(nodes); 
+      });
 
   d3.json("blogs.json", function (data) {
       var nodes = d3.hierarchy(data);
       function dragstarted(d) {
-        console.log("dragging!");
+        // console.log("dragging!");
           if (!d3.event.active) simulation.alphaTarget(.03).restart();
             d.fx = d.x;
             d.fy = d.y;
@@ -118,6 +120,12 @@
             }
             )
           .attr("opacity", 1)
+          .attr("xlink:href", function(d) {
+            console.log(d.url);
+            if (d.children == null) {
+              return d.url;
+            }
+          })
           .on("mouseover", function(d, i) {
                 d3.select(this)
                     .transition()
@@ -132,12 +140,27 @@
                 .attr('opacity', '1')
                 .attr('stroke', null)
           })
-          .on("click", function(d) { if (focus !== d) zoom(d), d3.event.stopPropagation(); })
-          .call(d3.drag() // call specific function when circle is dragged
-              .on("start", dragstarted)
-              .on("drag", dragged)
-              .on("end", dragended));
-
+          .on("click", function(d) { 
+              if (focus !== d) zoom(d), d3.event.stopPropagation(); 
+          });
+          // .call(d3.drag() // call specific function when circle is dragged
+          //     .on("start", dragstarted)
+          //     .on("drag", dragged)
+          //     .on("end", dragended));
+      
+    const label = canvas.append("g")
+      .style("font", "10px Cabin")
+      .attr("text-anchor", "middle")
+      .selectAll("text")
+        .data(pack(nodes).descendants())
+        .enter()
+        .append("text")
+            .text(function (d) { return d.data.name; })
+            .style("fill-opacity", d => d.parent === nodes ? 1 : 0)
+            .style("display", d => d.parent === nodes ? "inline" : "none");
+    
+    
+      
       // var simulation = d3.forceSimulation()
       //     .force("center", d3.forceCenter().x(300 / 2).y(300 / 2)) // Attraction to the center of the svg area
       //     .force("charge", d3.forceManyBody().strength(.1)) // Nodes are attracted one each other of value is > 0
@@ -152,12 +175,10 @@
       //     });
     
     var focus = nodes;
-    console.log(nodes);
     zoomTo([nodes.x, nodes.y, nodes.r*2]);
 
     function zoom(d) {
       var focus0 = focus; focus = d;
-      console.log(d);
       var transition = d3.transition()
           .duration(d3.event.altKey ? 7500 : 750)
           .tween("zoom", function(d) {
@@ -165,17 +186,21 @@
             return function(t) { zoomTo(i(t)); };
           });
 
-      transition.selectAll("text")
-        .filter(function(d) { return d.parent === focus || this.style.display === "inline"; })
-          .style("fill-opacity", function(d) { return d.parent === focus ? 1 : 0; })
-          .on("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
-          .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
+      label
+      .filter(function(d) { return d.parent === focus || this.style.display === "inline"; })
+      .transition(transition)
+        .style("fill-opacity", d => d.parent === focus ? 1 : 0)
+        .on("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
+        .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
     }
 
     function zoomTo(v) {
-      console.log(v);
       var k = 300 / v[2];
       view = v;
+      
+      label.attr("transform", function(d) { 
+        // console.log(d, v, k);
+        return "translate(" + (d.x - v[0] + 150) * k + "," + (d.y - v[1] + 150) * k + ")"; });
       node.attr("transform", function(d) { return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"; });
       node.attr("r", function(d) { return d.r * k; });
     }

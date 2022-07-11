@@ -3,8 +3,10 @@
     "value": 30,
     "children": [
     {
-        "name": "Back to homepage",
-        "value": 30
+        "name": "Home",
+        "value": 30,
+        "url": "./index.html",
+        "children": null
     },
     {
         "name": "Features",
@@ -12,11 +14,13 @@
         "children": [
             {
                 "name": "Visualizing the Chemical Space",
-                "value": 30
+                "value": 30,
+                "children": null
             },
             {
                 "name": "Unicorns are REAL!!!",
-                "value": 30
+                "value": 30,
+                "children": null
             }
         ]
     },

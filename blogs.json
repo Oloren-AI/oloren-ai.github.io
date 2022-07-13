@@ -3,6 +3,10 @@
     "value": 30,
     "children": [
     {
+        "name": "Back to homepage",
+        "value": 30
+    },
+    {
         "name": "Features",
         "value": 30,
         "children": [

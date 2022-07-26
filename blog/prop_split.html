@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intro to Property Splitting</title>
+
+    <link rel="stylesheet" href="public/styles.css">
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZMJ5EWN4YY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZMJ5EWN4YY');
+    </script>
+</head>
+<body class="bg-white w-screen absolute z-0">
+    <body class="bg-white w-screen absolute z-0">
+        <a href="../blog.html" class="link"><div class="bg-gradient-to-r from-blue-500 to-indigo-500 w-screen h-64 mt-0 mx-0 px-4 z-10 absolute">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                &larr; Back to Oloren Blog Home
+            </button></div></a>
+    <div class="w-screen flex flex-col md:flex-row mt-20">
+        <main class="bg-white p-10 rounded-3xl relative mx-8 md:max-w-[85%] md:mr-0 float-left items-start flex-col z-20">
+            <header class="title-area">
+                <h1 class="font-body font-bold text-5xl text-black my-2">Intro to property splitting</h1>
+                <div class="author-container my-5 flex flex-row content-center">
+                    <img class="self-center object-fill h-10 w-10 rounded-full mr-5" src="images/andrew-li.png" alt="could not render the beautiful face of this article's author :(">
+                    <span class="author-name h-5 font-title text-blue-500 text-l flex justify-center">Andrew Li</span>
+                    <span class="date font-bold font-title text-blue-500 text-l mx-2">07/26/22</span>
+                </div>
+                <div class="description font-body text-gray-400 italic">This blog post investigates how well models classify molecules with varying levels of minority train set representation. We find that model performance increases sharply with increasing representation 
+                    before levelling off prior to fully balanced data. There is additionally significant dataset-dependent variance in this behavior.</div>
+            </header>
+            <div class="article font-body my-5">
+                <div class="table-contents flex flex-col space-y-2 underline my-5 font-sans text-gray-500">
+                    <a href="#intro" class="text-md">Introduction</a>
+                    <a href="#data" class="text-md">Data</a>
+                    <a href="#prop_experiment" class="text-md">Property Splitting and Experiment Design</a>
+                    <a href="#models" class="text-md">Models</a>
+                    <a href="#results" class="text-md">Results and Takeaways</a>
+                </div>
+                <a id="intro"><h3 class="heading">Introduction</h3></a>
+                <div class="article-text">Datasets are often unbalanced in their distribution of sample properties, causing unpredictable behavior with important test samples that have only a minority of similar samples in 
+                    the train set. This can be prevalent with molecular datasets where there is an imbalance among classes (such as between inhibitors and non-inhibitors) or a poorly represented range of target variable values. 
+                    This blog post will investigate model performance in these cases.</div>
+
+                <a id="data"><h3 class="heading">Data</h3></a>
+
+                <div class="article-text">We compile a set of human protein inhibitor datasets from the ChEMBL database. Each dataset represents one target protein and measures inhibition with the pIC50 (negative log of molar IC50) 
+                    value. Dataset specifications grouped by target protein are listed in Table 1.</div>
+
+                <div class="flex justify-center object-contain">
+                    <img src="images/prop_split/Table1.png" alt="Dataset Specifications">
+                </div>
+                <div class="caption"><span class="font-bold">Table 1.&nbsp;</span> Dataset sizes and target protein information.</div>
+
+                <div class="article-text">Molecules with pIC50 >7.0 are classified as inhibitors, and molecules with pIC50 ≤7.0 are classified as non-inhibitors.</div>
+
+                <a id="prop_experiment"><h3 class="heading">Property Splitting and Experiment Design</h3></a>
+                <div class="article-text">This experiment centers around manipulating the representation of inhibitors and non-inhibitors in the train set. Holding the total number of training samples constant, we sample increasingly large numbers of inhibitors, making our dataset more and more diverse. 
+                    This effectively splits the dataset by its target property and allows us to observe model performance with varying levels of train set diversity. Table 2 displays the train set specifications for each level of representation.</div>
+
+                <div class="article-text">The test set is constructed to have a 50/50 split in inhibitor/non-inhibitor representation. This balance is conserved across all train splits.</div>
+
+                <div class="flex justify-center object-contain">
+                    <img src="images/prop_split/Table2.png" alt="Dataset Split Specifications">
+                </div>
+                <div class="caption"><span class="font-bold">Table 2.&nbsp;</span> Dataset split specifications.</div>
+
+                <a id="models"><h3 class="heading">Models</h3></a>
+                <div class="article-text">We perform the experiment for all datasets with three Oloren ensemble boosting models of varying architectures. Each model uses a combination of random forests trained on molecular descriptors (Morgan Fingerprints and normalized RDKit2D descriptors) and Oloren’s propietary 
+                    <a href="https://oloren.ai/blog/vector_reps.html" target="_blank" class="underline text-gray-500">OlorenVec</a> representation.</div>
+                
+                <a id="results"><h3 class="heading">Results and Takeaways</h3></a>
+
+                <div class="article-text">Figure 1 displays the performance of each model tested for each dataset. Area Under the Receiver Operating Characteristic curve (AUROC) is used as the primary classification metric.</div>
+
+                <div class="flex justify-center object-contain">
+                    <img src="images/prop_split/Figure1.png" alt="Model Performance Plots">
+                </div>
+                <div class="caption"><span class="font-bold">Figure 1.&nbsp;</span> Plots of Model Performance</div>
+
+                <div class="article-text">We observe that a more diverse and balanced train set universally leads to improved performance. As the number of inhibitors present in the train set rises to 300 (50%), AUROC reliably increases for each dataset and model. Note that the increases in performance level 
+                    off once the number of inhibitor samples reaches 200, or 33% of the train set, at which point further improvements are small.</div>
+                <div class="article-text">The general shape of the curves (near-linear at the beginning followed by leveling off) is conserved across models and datasets. However, there are significant dataset-dependent differences.</div>
+                <div class="article-text">The primary factor determining overall performance seems to be the dataset, with the relative positions of the curves conserved across models. Model performance on the hERG dataset consistently outperforms the other datasets, while 
+                    performance on the Isocitrate dehydrogenase dataset consistently underperforms. That said, besides hERG, the other datasets appear bunched together in the 0.7-0.8 AUROC range. This suggests that there are dataset inherent factors (such as the nature of the target protein) that have significant impacts on model performance.</div>
+                <div class="article-text">While a dataset could always be bigger and have better target representation, there are diminishing returns in performance improvements past the 1/3 train set proportion mark for a single class in this binary classification case. Despite this, the amount of data one needs for a certain level of performance varies 
+                    widely based on the data. Comparing the hERG dataset to the Akt1 and Orexin receptor 2 datasets, one needs 100 fewer inhibitor samples to achieve approximately equal AUROC scores. Considering the variability this experiment shows, you never know how much data you’ll need until you try.</div>
+                
+        </main>
+        <nav class="invisible md:sticky md:visible px-8 flex flex-col space-y-5 top-1/2 -translate-y-1/2 self-start">
+            <a href="#">
+                <img src="/images/facebook.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/twitter.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/email.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/discord.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/heart.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/comment.png" alt="" class="max-h-12 object-contain">
+            </a>
+        </nav>
+    </div>
+</body>
+</html>

@@ -55,7 +55,8 @@
 						machine learning model is only the first half of the story. Especially in a field with stakes as
 						high as drug screening and development, being able to assess the certainty of a prediction is
 						essential to evaluating and deploying models in the real world. In this post, we introduce the
-						<pre><code>BaseErrorModel</code></pre> class, a library of different methods for evaluating the
+						<code class="font-code">BaseErrorModel</code> class, a library of different methods for
+						evaluating the
 						uncertainty
 						of model predictions, generalizable to any model architecture. No matter how well your model
 						performs, no model is perfect, and being able to see when a model might be making poor
@@ -79,7 +80,7 @@
 						<a href="#references" class="text-md">References</a>
 					</div>
 
-					<a id="#high_level">
+					<a id="high_level">
 						<h3 class="heading">High Level Overview</h3>
 					</a>
 					<div class="article-text">All error models are built around the following architecture:</div>
@@ -254,52 +255,13 @@
 					<div class="article-text">The workflow of constructing and using an error model consists of three
 						main steps:</div>
 					<ol>
-						<li><a href="#build">Building the error metric function </a><a href="#build">
-								<style>
-									@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
-								</style><span data-token-index="0" contenteditable="false"
-									class="notion-text-equation-token"
-									style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
-											class="katex"><span class="katex-mathml"><math
-													xmlns="http://www.w3.org/1998/Math/MathML">
-													<semantics>
-														<mrow>
-															<mtext>EM</mtext>
-														</mrow>
-														<annotation encoding="application/x-tex">\text{EM}
-														</annotation>
-													</semantics>
-												</math></span><span class="katex-html" aria-hidden="true"><span
-													class="base"><span class="strut"
-														style="height:0.68333em;vertical-align:0em;"></span><span
-														class="mord text"><span
-															class="mord">EM</span></span></span></span></span></span><span></span></span>
-							</a></li>
-						<li><a href="#select">Selecting the best calibrator </a>
-							<style>
-								@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
-							</style><span data-token-index="0" contenteditable="false"
-								class="notion-text-equation-token"
-								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
-										class="katex"><span class="katex-mathml"><math
-												xmlns="http://www.w3.org/1998/Math/MathML">
-												<semantics>
-													<mrow>
-														<mi>f</mi>
-													</mrow>
-													<annotation encoding="application/x-tex">f</annotation>
-												</semantics>
-											</math></span><span class="katex-html" aria-hidden="true"><span
-												class="base"><span class="strut"
-													style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span
-													class="mord mathnormal"
-													style="margin-right:0.10764em;">f</span></span></span></span></span><span></span></span>
-						</li>
+						<li><a href="#build">Building the error metric function</a></li>
+						<li><a href="#select">Selecting the best calibrator</a></li>
 						<li><a href="#score">Scoring with the error model</a></li>
 					</ol>
 					<div class="article-text">We will now go over each step in a bit more detail.
 					</div>
-					<a id="#high_level">
+					<a id="high_level">
 						<h4 class="font-title text-black text-2xl my-2">Building the error metric function</h4>
 					</a>
 					<div class="article-text">For simple error models, supplying <style>
@@ -563,7 +525,7 @@
 												class="mord mathcal"
 												style="margin-right:0.09931em;">F</span></span></span></span></span><span>﻿</span></span>
 						is a random forest model.</div>
-					<a id="#select">
+					<a id="select">
 						<h4 class="font-title text-black text-2xl my-2">Selecting a calibrator</h4>
 					</a>
 					<div class="article-text">Selecting a calibration function <style>
@@ -595,7 +557,7 @@
 						quantiles through either binning metric score to a confidence interval value. The function for
 						this curve is then assigned to the calibration function. More details about the fitting process
 						are explained in the examples below.</div>
-					<a id="#score">
+					<a id="score">
 						<h4 class="font-title text-black text-2xl my-2">Scoring with the error model</h4>
 					</a>
 					<div class="article-text">After an error model is fitted, both
@@ -646,15 +608,15 @@
 						are defined functions, and confidence intervals can be calculated by inputting a target molecule
 						or molecules.
 					</div>
-					<a id="#getting_started">
+					<a id="getting_started">
 						<h3 class="heading">Getting Started</h3>
 					</a>
 					<div class="article-text">We start by training a model on a dataset. For this post, we will train an
-						<pre><code>oam.RandomForestModel</code></pre> on a lipophilicity dataset from <a
+						<code class="font-code">oam.RandomForestModel</code> on a lipophilicity dataset from <a
 							href="https://moleculenet.org/datasets-1">MoleculeNet</a>. The goal of the proceeding
 						error models will be to measure the uncertainty of predictions from this model.
 					</div>
-					<pre class="p-2"><code class="font-code">import olorenautoml as oam
+					<pre class="code-border"><code class="font-code">import olorenautoml as oam
 import pandas as pd
 import numpy as np
 
@@ -664,11 +626,11 @@ lipo_dataset = splitter.transform(lipo_dataset)
 
 model = oam.RandomForestModel(oam.OlorenCheckpoint('default'), n_estimators=1000)
 model.fit(lipo_dataset.train_dataset[0], lipo_dataset.train_dataset[1])</code></pre>
-					<a id="#basic">
+					<a id="basic">
 						<h3 class="heading">Basic Error Models</h3>
 					</a>
 					<div class="article-text">To demonstrate a basic error model, we will use the
-						<pre><code>oam.SDC</code></pre>
+						<code class="font-code">oam.SDC</code>
 						error model that employs an error metric function called <a
 							href="https://pubs.acs.org/doi/10.1021/acs.jcim.8b00597"><strong>SDC</strong></a>, or <a
 							href="https://pubs.acs.org/doi/10.1021/acs.jcim.8b00597"><strong>sum of distance-weighted
@@ -946,7 +908,7 @@ model.fit(lipo_dataset.train_dataset[0], lipo_dataset.train_dataset[1])</code></
 												class="mord">3</span></span></span></span></span><span></span></span>,
 						which has been shown to generate the best results.
 					</div>
-					<a id="#initial_basic">
+					<a id="initial_basic">
 						<h4 class="font-title text-black text-2xl my-2">Initialization</h4>
 					</a>
 					<div class="article-text">Below is the code for initializing and building the error model. While no
@@ -967,20 +929,19 @@ model.fit(lipo_dataset.train_dataset[0], lipo_dataset.train_dataset[1])</code></
 											class="base"><span class="strut"
 												style="height:0.43056em;vertical-align:0em;"></span><span
 												class="mord mathnormal">a</span></span></span></span></span><span></span></span>
-						for SDC. All error models are built with a
-						<pre><code>BaseModel</code></pre> and a
-						<pre><code>BaseDataset</code></pre>
-						corresponding to the model and its training dataset, respectively.
+						for SDC. All error models are built with a <code class="font-code">BaseModel</code> and a <code
+							class="font-code">BaseDataset</code> corresponding to the model and its training dataset,
+						respectively.
 					</div>
-					<pre class="p-2"><code class="font-code">error_model = oam.SDC()
+					<pre class="code-border"><code class="font-code">error_model = oam.SDC()
 error_model.build(model, lipo_dataset)</code></pre>
 					<div class="article-text">If the entire dataset was used to train the model as opposed to only
-						<pre><code>train_dataset</code></pre>, this can be configured by setting
-						<pre><code>use_entire_dataset = True</code></pre> during initialization.
+						<code class="font-code">train_dataset</code>, this can be configured by setting
+						<code class="font-code">use_entire_dataset = True</code> during initialization.
 					</div>
 					<pre
 						class="p-2"><code class="font-code">error_model.build(model, lipo_dataset, use_entire_dataset=True)</code></pre>
-					<a id="#fit_basic">
+					<a id="fit_basic">
 						<h4 class="font-title text-black text-2xl my-2">Fitting the model</h4>
 					</a>
 					<div class="article-text">There are two main methods for fitting the error model: fitting against a
@@ -990,7 +951,7 @@ error_model.build(model, lipo_dataset)</code></pre>
 						recommend when such a dataset is available. This could be a validation dataset, a test dataset,
 						or withheld data not used during the training process. Below, we fit our error model using the
 						validation dataset.</div>
-					<pre class="p-2"><code class="font-code">error_model.fit(lipo_dataset.valid_dataset[0], lipo_dataset.valid_dataset[1])
+					<pre class="code-border"><code class="font-code">error_model.fit(lipo_dataset.valid_dataset[0], lipo_dataset.valid_dataset[1])
 # 420it [00:02, 174.60it/s]</code></pre>
 					<figure id="d20b45de-0294-45d1-88df-b29c2055df68" class="image"><a
 							href="Evaluating%20Model%20Uncertainty%20with%20Oloren%20AutoML%20d20b45de029445d188dfb29c2055df68/figure.png"><img
@@ -1009,12 +970,12 @@ error_model.build(model, lipo_dataset)</code></pre>
 						candidate curves fitted against the blue points.
 					</div>
 					<div class="article-text">The
-						<pre><code>.fit()</code></pre> method can also optionally take in arguments for
+						<code class="font-code">.fit()</code> method can also optionally take in arguments for
 						the error percentile, fitting method, file name to save the plot, and more. For example, if we
 						wish to fit 75th percentile error bars using a rolling quantile method with the graph saved to
 						'error_model_fit.png', we can run the code below.
 					</div>
-					<pre class="p-2"><code class="font-code">error_model.fit(lipo_dataset.valid_dataset[0], lipo_dataset.valid_dataset[1]
+					<pre class="code-border"><code class="font-code">error_model.fit(lipo_dataset.valid_dataset[0], lipo_dataset.valid_dataset[1]
 	method='roll', quantile=0.75, filename='error_model_fit.png')</code></pre>
 					<figure id="389cd97d-2ba9-4e43-8166-7e227ccf7cc3" class="image"><a
 							href="Evaluating%20Model%20Uncertainty%20with%20Oloren%20AutoML%20d20b45de029445d188dfb29c2055df68/figure%201.png"><img
@@ -1026,13 +987,12 @@ error_model.build(model, lipo_dataset)</code></pre>
 						the number of bins, the minimum number of points required per bin, and the window size for
 						rolling quantile. </div>
 					<div class="article-text">We can also fit the error model with cross-validation, which is done below
-						and produces the corresponding graph. Since cross-validation requires no extra data,
-						<pre><code>.fit_cv()</code></pre> has no required arguments, though it can optionally take the
-						same keyword
-						arguments as
-						<pre><code>.fit()</code></pre> for customizing the curve-fitting procedure.
+						and produces the corresponding graph. Since cross-validation requires no extra data, <code
+							class="font-code">.fit_cv()</code> has no required arguments, though it can optionally take
+						the same keyword arguments as <code class="font-code">.fit()</code> for customizing the
+						curve-fitting procedure.
 					</div>
-					<pre class="p-2"><code class="font-code">error_model.fit_cv()
+					<pre class="code-border"><code class="font-code">error_model.fit_cv()
 # cross validating with split=0.05
 # 168it [00:00, 193.01it/s]
 # ...
@@ -1044,43 +1004,44 @@ error_model.build(model, lipo_dataset)</code></pre>
 								src="Evaluating%20Model%20Uncertainty%20with%20Oloren%20AutoML%20d20b45de029445d188dfb29c2055df68/figure%202.png" /></a>
 					</figure>
 					<div class="article-text">The
-						<pre><code>.fit_cv()</code></pre> method can also take in two option arguments,
-						<pre><code>n_splits=10</code></pre> and
-						<pre><code>test_size_range=(0.05, 0.5)</code></pre>.
+						<code class="font-code">.fit_cv()</code> method can also take in two option arguments, <code
+							class="font-code">n_splits=10</code> and <code
+							class="font-code">test_size_range=(0.05, 0.5)</code>.
 					</div>
-					<a id="#score_basic">
+					<a id="score_basic">
 						<h4 class="font-title text-black text-2xl my-2">Scoring datasets</h4>
 					</a>
 					<div class="article-text">Once an error model is fitted, it is easy to score a dataset. Here we
 						compute the predicted error bars for each prediction in the original dataset's
-						<pre><code>test_dataset</code></pre>.
+						<code class="font-code">test_dataset</code>.
 					</div>
-					<pre class="p-2"><code class="font-code">error_model.score(lipo_dataset.test_dataset[0])
+					<pre class="code-border"><code class="font-code">error_model.score(lipo_dataset.test_dataset[0])
 # array([1.07448983, 1.15935886, 1.09753033, 1.02649071, 0.99616767,..])</code></pre>
 					<div class="article-text">To assess the validity of the predicted error bars, we can compute the
 						number of predictions in the test dataset that are within their computed error bars.
 					</div>
-					<pre class="p-2"><code class="font-code">y_predicted = model.predict(lipo_dataset.test_dataset[0]['smiles'])
+					<pre class="code-border"><code class="font-code">y_predicted = model.predict(lipo_dataset.test_dataset[0]['smiles'])
 error_predicted = error_model.score(lipo_dataset.test_dataset[0])
 in_ci = np.abs(lipo_dataset.test_dataset[1] - y_predicted) < error_predicted
 print(sum(in_ci) / len(in_ci))
 # 0.8357142857142857</code></pre>
 					<div class="article-text">Since by default we fit 80% confidence intervals, it makes sense that
 						roughly 80% of the test data are within their confidence intervals.</div>
-					<a id="#aggregate">
+					<a id="aggregate">
 						<h3 class="heading">Aggregate Error Models</h3>
 					</a>
 					<div class="article-text">Error models become more powerful when aggregated together. Here, we
 						introduce the
-						<pre><code>BaseAggregateErrorModel</code></pre> class, which in addition to a model and its
+						<code class="font-code">BaseAggregateErrorModel</code> class, which in addition to a model
+						and its
 						training data, takes in a list of error models and produces an aggregate score from the outputs
 						of those error models. For this post, we will use the
-						<pre><code>oam.RandomForestErrorModel</code></pre>,
+						<code class="font-code">oam.RandomForestErrorModel</code>,
 						which trains a random forest model on the outputs of the inputted error models to predict a
 						score that correlates with residuals. This approach is adopted from <a
 							href="https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.5b00110">https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.5b00110</a>.
 					</div>
-					<a id="#initial_agg">
+					<a id="initial_agg">
 						<h4 class="font-title text-black text-2xl my-2">Initialization</h4>
 					</a>
 					<div class="article-text">Like basic error models, aggregate error
@@ -1092,10 +1053,10 @@ print(sum(in_ci) / len(in_ci))
 						Additional
 						parameters
 						for each error model can also be passed in as a dictionary of keyword arguments.</div>
-					<pre class="p-2"><code class="font-code">error_models = [oam.SDC(), oam.wRMSD1(), oam.wRMSD2(), oam.PREDICTED()]
+					<pre class="code-border"><code class="font-code">error_models = [oam.SDC(), oam.wRMSD1(), oam.wRMSD2(), oam.PREDICTED()]
 rf_error = oam.RandomForestErrorModel(error_models)
 rf_error.build(model, lipo_dataset)</code></pre>
-					<a id="#train_agg">
+					<a id="train_agg">
 						<h4 class="font-title text-black text-2xl my-2">Training the aggregate model</h4>
 					</a>
 					<h2 id="8228f593-a722-450c-8f83-2172bc7782ba" class="">Training the aggregate model</h2>
@@ -1104,7 +1065,7 @@ rf_error.build(model, lipo_dataset)</code></pre>
 						dataset (different from fitting) or cross validation with the training dataset. We recommend
 						training via cross validation and fitting with an external dataset, which is what we will do
 						here.</div>
-					<pre class="p-2"><code class="font-code">rf_error.train_cv()
+					<pre class="code-border"><code class="font-code">rf_error.train_cv()
 # cross validating with split=0.1
 # 336it [00:01, 203.51it/s]
 # 336it [00:01, 200.63it/s]
@@ -1114,23 +1075,18 @@ rf_error.build(model, lipo_dataset)</code></pre>
 # 3024it [00:03, 775.36it/s]
 # 3024it [00:04, 695.52it/s]
 # 3024it [00:04, 692.61it/s]</code></pre>
-					<div class="article-text">The
-						<pre><code>.train_cv()</code></pre> method can
-						take
-						in
-						two
-						option arguments,
-						<pre><code>n_splits=9</code></pre> and
-						<pre><code>test_size_range=(0.1, 0.9)</code></pre>.
+					<div class="article-text">The <code class="font-code">.train_cv()</code> method can take in two
+						option arguments, <code class="font-code">n_splits=9</code> and <code
+							class="font-code">test_size_range=(0.1, 0.9)</code>.
 					</div>
-					<a id="#fit_agg">
+					<a id="fit_agg">
 						<h4 class="font-title text-black text-2xl my-2">Fitting the model</h4>
 					</a>
 					<div class="article-text">We now fit the aggregate model against the validation dataset, which has
 						the same procedure as for basic error models. While the data distribution for training and
 						fitting is ultimately up to the user, <strong>do not use the same data for both training and
 							fitting</strong>, as that will result in a poorly fit model.</div>
-					<pre class="p-2"><code class="font-code">rf_error.fit(lipo_dataset.valid_dataset[0], lipo_dataset.valid_dataset[1])
+					<pre class="code-border"><code class="font-code">rf_error.fit(lipo_dataset.valid_dataset[0], lipo_dataset.valid_dataset[1])
 # 420it [00:09, 45.05it/s]
 # 420it [00:08, 46.92it/s]
 # 420it [00:07, 53.38it/s]</code></pre>
@@ -1142,12 +1098,12 @@ rf_error.build(model, lipo_dataset)</code></pre>
 					<div class="article-text">As opposed to SDC, the curve here has a positive slope, indicating that a
 						greater score outputted by the random forest model corresponds with a greater uncertainty in the
 						residual. </div>
-					<a id="#score_agg">
+					<a id="score_agg">
 						<h4 class="font-title text-black text-2xl my-2">Scoring datasets</h4>
 					</a>
 					<div class="article-text">Scoring datasets also follows the same
 						procedure as for basic error models.</div>
-					<pre class="p-2"><code class="font-code">rf_error.score(lipo_dataset.test_dataset[0])
+					<pre class="code-border"><code class="font-code">rf_error.score(lipo_dataset.test_dataset[0])
 # array([1.22888853, 0.8210725 , 1.28685512, 0.99717322, 1.10889895,..])
 
 y_predicted = model.predict(lipo_dataset.test_dataset[0]['smiles'])
@@ -1155,7 +1111,7 @@ error_predicted = rf_error.score(lipo_dataset.test_dataset[0])
 in_ci = np.abs(lipo_dataset.test_dataset[1] - y_predicted) < error_predicted
 print(sum(in_ci) / len(in_ci))
 # 0.8214285714285714</code></pre>
-					<a id="#references">
+					<a id="references">
 						<h3 class="heading">References</h3>
 					</a>
 					<div class="article-text">More information on model fitting and

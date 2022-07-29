@@ -254,369 +254,430 @@
 					</div>
 					<div class="article-text">The workflow of constructing and using an error model consists of three
 						main steps:</div>
-					<ol>
-						<li><a href="#build">Building the error metric function</a></li>
-						<li><a href="#select">Selecting the best calibrator</a></li>
-						<li><a href="#score">Scoring with the error model</a></li>
-					</ol>
-					<div class="article-text">We will now go over each step in a bit more detail.
-					</div>
-					<a id="high_level">
-						<h4 class="font-title text-black text-2xl my-2">Building the error metric function</h4>
-					</a>
-					<div class="article-text">For simple error models, supplying <style>
-							@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
-						</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
-							style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
-									class="katex"><span class="katex-mathml"><math
-											xmlns="http://www.w3.org/1998/Math/MathML">
-											<semantics>
-												<mrow>
-													<mi mathvariant="script">M</mi>
-												</mrow>
-												<annotation encoding="application/x-tex">\mathcal{M}</annotation>
-											</semantics>
-										</math></span><span class="katex-html" aria-hidden="true"><span
-											class="base"><span class="strut"
-												style="height:0.68333em;vertical-align:0em;"></span><span
-												class="mord mathcal">M</span></span></span></span></span><span></span></span>,
-						the trained model, and <style>
-							@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
-						</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
-							style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
-									class="katex"><span class="katex-mathml"><math
-											xmlns="http://www.w3.org/1998/Math/MathML">
-											<semantics>
-												<mrow>
-													<mi mathvariant="script">D</mi>
-												</mrow>
-												<annotation encoding="application/x-tex">\mathcal{D}</annotation>
-											</semantics>
-										</math></span><span class="katex-html" aria-hidden="true"><span
-											class="base"><span class="strut"
-												style="height:0.68333em;vertical-align:0em;"></span><span
-												class="mord mathcal"
-												style="margin-right:0.02778em;">D</span></span></span></span></span><span></span></span>,
-						the training dataset, is enough to build the error metric function. </div>
-					<div class="article-text">For aggregate error models, building the error metric function is more
-						complicated. Aggregate error models, as the name suggests, compute an aggregate score based on
-						several different error metric functions. In short, an aggregate error model on
-						<style>
-							@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
-						</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
-							style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
-									class="katex"><span class="katex-mathml"><math
-											xmlns="http://www.w3.org/1998/Math/MathML">
-											<semantics>
-												<mrow>
-													<mi>k</mi>
-												</mrow>
-												<annotation encoding="application/x-tex">k</annotation>
-											</semantics>
-										</math></span><span class="katex-html" aria-hidden="true"><span
-											class="base"><span class="strut"
-												style="height:0.69444em;vertical-align:0em;"></span><span
-												class="mord mathnormal"
-												style="margin-right:0.03148em;">k</span></span></span></span></span><span></span></span>
-						metrics has its error metric function defined as
-					</div>
-					<figure id="6732782f-6ae7-4b87-b042-439e4b09eeaf" class="equation">
-						<style>
-							@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
-						</style>
-						<div class="equation-container"><span class="katex-display"><span class="katex"><span
-										class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"
-											display="block">
-											<semantics>
-												<mrow>
-													<mtext>EM</mtext>
-													<mo stretchy="false">(</mo>
-													<mi>m</mi>
-													<mo separator="true">,</mo>
-													<mi mathvariant="script">M</mi>
-													<mo separator="true">,</mo>
-													<mi mathvariant="script">D</mi>
-													<mo stretchy="false">)</mo>
-													<mo>=</mo>
-													<mi mathvariant="script">F</mi>
-													<mo stretchy="false">(</mo>
-													<msub>
-														<mtext>EM</mtext>
-														<mn>1</mn>
-													</msub>
-													<mo stretchy="false">(</mo>
-													<mi>m</mi>
-													<mo separator="true">,</mo>
-													<mi mathvariant="script">M</mi>
-													<mo separator="true">,</mo>
-													<mi mathvariant="script">D</mi>
-													<mo stretchy="false">)</mo>
-													<mo separator="true">,</mo>
-													<mo>…</mo>
-													<mo separator="true">,</mo>
-													<msub>
-														<mtext>EM</mtext>
+					<<ol class="list-decimal list-outside text-black pl-10">
+						<li class="pl-5"><a href="#build">Building the error metric function <style>
+									@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
+								</style><span data-token-index="0" contenteditable="false"
+									class="notion-text-equation-token"
+									style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+											class="katex"><span class="katex-mathml"><math
+													xmlns="http://www.w3.org/1998/Math/MathML">
+													<semantics>
+														<mrow>
+															<mtext>EM</mtext>
+														</mrow>
+														<annotation encoding="application/x-tex">\text{EM}</annotation>
+													</semantics>
+												</math></span><span class="katex-html" aria-hidden="true"><span
+													class="base"><span class="strut"
+														style="height:0.68333em;vertical-align:0em;"></span><span
+														class="mord text"><span
+															class="mord">EM</span></span></span></span></span></span><span>﻿</span></span></a>
+						</li>
+						<li class="pl-5"><a href="#select">Selecting the best calibrator <style>
+									@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
+								</style><span data-token-index="0" contenteditable="false"
+									class="notion-text-equation-token"
+									style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+											class="katex"><span class="katex-mathml"><math
+													xmlns="http://www.w3.org/1998/Math/MathML">
+													<semantics>
+														<mrow>
+															<mi>f</mi>
+														</mrow>
+														<annotation encoding="application/x-tex">f</annotation>
+													</semantics>
+												</math></span><span class="katex-html" aria-hidden="true"><span
+													class="base"><span class="strut"
+														style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span
+														class="mord mathnormal"
+														style="margin-right:0.10764em;">f</span></span></span></span></span><span>﻿</span></span></a>
+						</li>
+						<li class="pl-5"><a href="#score">Scoring with the error model</a></li>
+						</ol>
+						<div class="article-text">We will now go over each step in a bit more detail.
+						</div>
+						<a id="high_level">
+							<h4 class="font-title text-black text-2xl my-2">Building the error metric function</h4>
+						</a>
+						<div class="article-text">For simple error models, supplying <style>
+								@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
+							</style><span data-token-index="0" contenteditable="false"
+								class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math
+												xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<mi mathvariant="script">M</mi>
+													</mrow>
+													<annotation encoding="application/x-tex">\mathcal{M}</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span
+												class="base"><span class="strut"
+													style="height:0.68333em;vertical-align:0em;"></span><span
+													class="mord mathcal">M</span></span></span></span></span><span></span></span>,
+							the trained model, and <style>
+								@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
+							</style><span data-token-index="0" contenteditable="false"
+								class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math
+												xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<mi mathvariant="script">D</mi>
+													</mrow>
+													<annotation encoding="application/x-tex">\mathcal{D}</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span
+												class="base"><span class="strut"
+													style="height:0.68333em;vertical-align:0em;"></span><span
+													class="mord mathcal"
+													style="margin-right:0.02778em;">D</span></span></span></span></span><span></span></span>,
+							the training dataset, is enough to build the error metric function. </div>
+						<div class="article-text">For aggregate error models, building the error metric function is more
+							complicated. Aggregate error models, as the name suggests, compute an aggregate score based
+							on
+							several different error metric functions. In short, an aggregate error model on
+							<style>
+								@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
+							</style><span data-token-index="0" contenteditable="false"
+								class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math
+												xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
 														<mi>k</mi>
-													</msub>
-													<mo stretchy="false">(</mo>
-													<mi>m</mi>
-													<mo separator="true">,</mo>
-													<mi mathvariant="script">M</mi>
-													<mo separator="true">,</mo>
-													<mi mathvariant="script">D</mi>
-													<mo stretchy="false">)</mo>
-													<mo stretchy="false">)</mo>
-												</mrow>
-												<annotation encoding="application/x-tex">\text{EM}(m, \mathcal{M},
-													\mathcal{D})=\mathcal{F}(\text{EM}_1(m,\mathcal{M},\mathcal{D}),\dots,\text{EM}_k(m,\mathcal{M},\mathcal{D}))
-												</annotation>
-											</semantics>
-										</math></span><span class="katex-html" aria-hidden="true"><span
-											class="base"><span class="strut"
-												style="height:1em;vertical-align:-0.25em;"></span><span
-												class="mord text"><span class="mord">EM</span></span><span
-												class="mopen">(</span><span class="mord mathnormal">m</span><span
-												class="mpunct">,</span><span class="mspace"
-												style="margin-right:0.16666666666666666em;"></span><span
-												class="mord mathcal">M</span><span class="mpunct">,</span><span
-												class="mspace" style="margin-right:0.16666666666666666em;"></span><span
-												class="mord mathcal" style="margin-right:0.02778em;">D</span><span
-												class="mclose">)</span><span class="mspace"
-												style="margin-right:0.2777777777777778em;"></span><span
-												class="mrel">=</span><span class="mspace"
-												style="margin-right:0.2777777777777778em;"></span></span><span
-											class="base"><span class="strut"
-												style="height:1em;vertical-align:-0.25em;"></span><span
-												class="mord mathcal" style="margin-right:0.09931em;">F</span><span
-												class="mopen">(</span><span class="mord"><span class="mord text"><span
-														class="mord">EM</span></span><span class="msupsub"><span
-														class="vlist-t vlist-t2"><span class="vlist-r"><span
-																class="vlist"
-																style="height:0.30110799999999993em;"><span
-																	style="top:-2.5500000000000003em;margin-right:0.05em;"><span
-																		class="pstrut"
-																		style="height:2.7em;"></span><span
-																		class="sizing reset-size6 size3 mtight"><span
-																			class="mord mtight">1</span></span></span></span><span
-																class="vlist-s">​</span></span><span
-															class="vlist-r"><span class="vlist"
-																style="height:0.15em;"><span></span></span></span></span></span></span><span
-												class="mopen">(</span><span class="mord mathnormal">m</span><span
-												class="mpunct">,</span><span class="mspace"
-												style="margin-right:0.16666666666666666em;"></span><span
-												class="mord mathcal">M</span><span class="mpunct">,</span><span
-												class="mspace" style="margin-right:0.16666666666666666em;"></span><span
-												class="mord mathcal" style="margin-right:0.02778em;">D</span><span
-												class="mclose">)</span><span class="mpunct">,</span><span class="mspace"
-												style="margin-right:0.16666666666666666em;"></span><span
-												class="minner">…</span><span class="mspace"
-												style="margin-right:0.16666666666666666em;"></span><span
-												class="mpunct">,</span><span class="mspace"
-												style="margin-right:0.16666666666666666em;"></span><span
-												class="mord"><span class="mord text"><span
-														class="mord">EM</span></span><span class="msupsub"><span
-														class="vlist-t vlist-t2"><span class="vlist-r"><span
-																class="vlist"
-																style="height:0.33610799999999996em;"><span
-																	style="top:-2.5500000000000003em;margin-right:0.05em;"><span
-																		class="pstrut"
-																		style="height:2.7em;"></span><span
-																		class="sizing reset-size6 size3 mtight"><span
-																			class="mord mathnormal mtight"
-																			style="margin-right:0.03148em;">k</span></span></span></span><span
-																class="vlist-s">​</span></span><span
-															class="vlist-r"><span class="vlist"
-																style="height:0.15em;"><span></span></span></span></span></span></span><span
-												class="mopen">(</span><span class="mord mathnormal">m</span><span
-												class="mpunct">,</span><span class="mspace"
-												style="margin-right:0.16666666666666666em;"></span><span
-												class="mord mathcal">M</span><span class="mpunct">,</span><span
-												class="mspace" style="margin-right:0.16666666666666666em;"></span><span
-												class="mord mathcal" style="margin-right:0.02778em;">D</span><span
-												class="mclose">))</span></span></span></span></span></div>
-					</figure>
-					<div class="article-text">where <style>
-							@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
-						</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
-							style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
-									class="katex"><span class="katex-mathml"><math
-											xmlns="http://www.w3.org/1998/Math/MathML">
-											<semantics>
-												<mrow>
-													<msub>
+													</mrow>
+													<annotation encoding="application/x-tex">k</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span
+												class="base"><span class="strut"
+													style="height:0.69444em;vertical-align:0em;"></span><span
+													class="mord mathnormal"
+													style="margin-right:0.03148em;">k</span></span></span></span></span><span></span></span>
+							metrics has its error metric function defined as
+						</div>
+						<figure id="6732782f-6ae7-4b87-b042-439e4b09eeaf" class="equation">
+							<style>
+								@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
+							</style>
+							<div class="equation-container"><span class="katex-display"><span class="katex"><span
+											class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"
+												display="block">
+												<semantics>
+													<mrow>
 														<mtext>EM</mtext>
+														<mo stretchy="false">(</mo>
+														<mi>m</mi>
+														<mo separator="true">,</mo>
+														<mi mathvariant="script">M</mi>
+														<mo separator="true">,</mo>
+														<mi mathvariant="script">D</mi>
+														<mo stretchy="false">)</mo>
+														<mo>=</mo>
+														<mi mathvariant="script">F</mi>
+														<mo stretchy="false">(</mo>
+														<msub>
+															<mtext>EM</mtext>
+															<mn>1</mn>
+														</msub>
+														<mo stretchy="false">(</mo>
+														<mi>m</mi>
+														<mo separator="true">,</mo>
+														<mi mathvariant="script">M</mi>
+														<mo separator="true">,</mo>
+														<mi mathvariant="script">D</mi>
+														<mo stretchy="false">)</mo>
+														<mo separator="true">,</mo>
+														<mo>…</mo>
+														<mo separator="true">,</mo>
+														<msub>
+															<mtext>EM</mtext>
+															<mi>k</mi>
+														</msub>
+														<mo stretchy="false">(</mo>
+														<mi>m</mi>
+														<mo separator="true">,</mo>
+														<mi mathvariant="script">M</mi>
+														<mo separator="true">,</mo>
+														<mi mathvariant="script">D</mi>
+														<mo stretchy="false">)</mo>
+														<mo stretchy="false">)</mo>
+													</mrow>
+													<annotation encoding="application/x-tex">\text{EM}(m, \mathcal{M},
+														\mathcal{D})=\mathcal{F}(\text{EM}_1(m,\mathcal{M},\mathcal{D}),\dots,\text{EM}_k(m,\mathcal{M},\mathcal{D}))
+													</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span
+												class="base"><span class="strut"
+													style="height:1em;vertical-align:-0.25em;"></span><span
+													class="mord text"><span class="mord">EM</span></span><span
+													class="mopen">(</span><span class="mord mathnormal">m</span><span
+													class="mpunct">,</span><span class="mspace"
+													style="margin-right:0.16666666666666666em;"></span><span
+													class="mord mathcal">M</span><span class="mpunct">,</span><span
+													class="mspace"
+													style="margin-right:0.16666666666666666em;"></span><span
+													class="mord mathcal" style="margin-right:0.02778em;">D</span><span
+													class="mclose">)</span><span class="mspace"
+													style="margin-right:0.2777777777777778em;"></span><span
+													class="mrel">=</span><span class="mspace"
+													style="margin-right:0.2777777777777778em;"></span></span><span
+												class="base"><span class="strut"
+													style="height:1em;vertical-align:-0.25em;"></span><span
+													class="mord mathcal" style="margin-right:0.09931em;">F</span><span
+													class="mopen">(</span><span class="mord"><span
+														class="mord text"><span class="mord">EM</span></span><span
+														class="msupsub"><span class="vlist-t vlist-t2"><span
+																class="vlist-r"><span class="vlist"
+																	style="height:0.30110799999999993em;"><span
+																		style="top:-2.5500000000000003em;margin-right:0.05em;"><span
+																			class="pstrut"
+																			style="height:2.7em;"></span><span
+																			class="sizing reset-size6 size3 mtight"><span
+																				class="mord mtight">1</span></span></span></span><span
+																	class="vlist-s">​</span></span><span
+																class="vlist-r"><span class="vlist"
+																	style="height:0.15em;"><span></span></span></span></span></span></span><span
+													class="mopen">(</span><span class="mord mathnormal">m</span><span
+													class="mpunct">,</span><span class="mspace"
+													style="margin-right:0.16666666666666666em;"></span><span
+													class="mord mathcal">M</span><span class="mpunct">,</span><span
+													class="mspace"
+													style="margin-right:0.16666666666666666em;"></span><span
+													class="mord mathcal" style="margin-right:0.02778em;">D</span><span
+													class="mclose">)</span><span class="mpunct">,</span><span
+													class="mspace"
+													style="margin-right:0.16666666666666666em;"></span><span
+													class="minner">…</span><span class="mspace"
+													style="margin-right:0.16666666666666666em;"></span><span
+													class="mpunct">,</span><span class="mspace"
+													style="margin-right:0.16666666666666666em;"></span><span
+													class="mord"><span class="mord text"><span
+															class="mord">EM</span></span><span class="msupsub"><span
+															class="vlist-t vlist-t2"><span class="vlist-r"><span
+																	class="vlist"
+																	style="height:0.33610799999999996em;"><span
+																		style="top:-2.5500000000000003em;margin-right:0.05em;"><span
+																			class="pstrut"
+																			style="height:2.7em;"></span><span
+																			class="sizing reset-size6 size3 mtight"><span
+																				class="mord mathnormal mtight"
+																				style="margin-right:0.03148em;">k</span></span></span></span><span
+																	class="vlist-s">​</span></span><span
+																class="vlist-r"><span class="vlist"
+																	style="height:0.15em;"><span></span></span></span></span></span></span><span
+													class="mopen">(</span><span class="mord mathnormal">m</span><span
+													class="mpunct">,</span><span class="mspace"
+													style="margin-right:0.16666666666666666em;"></span><span
+													class="mord mathcal">M</span><span class="mpunct">,</span><span
+													class="mspace"
+													style="margin-right:0.16666666666666666em;"></span><span
+													class="mord mathcal" style="margin-right:0.02778em;">D</span><span
+													class="mclose">))</span></span></span></span></span></div>
+						</figure>
+						<div class="article-text">where <style>
+								@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
+							</style><span data-token-index="0" contenteditable="false"
+								class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math
+												xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<msub>
+															<mtext>EM</mtext>
+															<mi>i</mi>
+														</msub>
+													</mrow>
+													<annotation encoding="application/x-tex">\text{EM}_i</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span
+												class="base"><span class="strut"
+													style="height:0.83333em;vertical-align:-0.15em;"></span><span
+													class="mord"><span class="mord text"><span
+															class="mord">EM</span></span><span class="msupsub"><span
+															class="vlist-t vlist-t2"><span class="vlist-r"><span
+																	class="vlist"
+																	style="height:0.31166399999999994em;"><span
+																		style="top:-2.5500000000000003em;margin-right:0.05em;"><span
+																			class="pstrut"
+																			style="height:2.7em;"></span><span
+																			class="sizing reset-size6 size3 mtight"><span
+																				class="mord mathnormal mtight">i</span></span></span></span><span
+																	class="vlist-s">​</span></span><span
+																class="vlist-r"><span class="vlist"
+																	style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>
+							is the <style>
+								@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
+							</style><span data-token-index="0" contenteditable="false"
+								class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math
+												xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
 														<mi>i</mi>
-													</msub>
-												</mrow>
-												<annotation encoding="application/x-tex">\text{EM}_i</annotation>
-											</semantics>
-										</math></span><span class="katex-html" aria-hidden="true"><span
-											class="base"><span class="strut"
-												style="height:0.83333em;vertical-align:-0.15em;"></span><span
-												class="mord"><span class="mord text"><span
-														class="mord">EM</span></span><span class="msupsub"><span
-														class="vlist-t vlist-t2"><span class="vlist-r"><span
-																class="vlist"
-																style="height:0.31166399999999994em;"><span
-																	style="top:-2.5500000000000003em;margin-right:0.05em;"><span
-																		class="pstrut"
-																		style="height:2.7em;"></span><span
-																		class="sizing reset-size6 size3 mtight"><span
-																			class="mord mathnormal mtight">i</span></span></span></span><span
-																class="vlist-s">​</span></span><span
-															class="vlist-r"><span class="vlist"
-																style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>
-						is the <style>
-							@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
-						</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
-							style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
-									class="katex"><span class="katex-mathml"><math
-											xmlns="http://www.w3.org/1998/Math/MathML">
-											<semantics>
-												<mrow>
-													<mi>i</mi>
-												</mrow>
-												<annotation encoding="application/x-tex">i</annotation>
-											</semantics>
-										</math></span><span class="katex-html" aria-hidden="true"><span
-											class="base"><span class="strut"
-												style="height:0.65952em;vertical-align:0em;"></span><span
-												class="mord mathnormal">i</span></span></span></span></span><span>﻿</span></span>th
-						error metric. The function <style>
-							@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
-						</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
-							style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
-									class="katex"><span class="katex-mathml"><math
-											xmlns="http://www.w3.org/1998/Math/MathML">
-											<semantics>
-												<mrow>
-													<mi mathvariant="script">F</mi>
-													<mo stretchy="false">(</mo>
-													<mo>⋅</mo>
-													<mo stretchy="false">)</mo>
-												</mrow>
-												<annotation encoding="application/x-tex">\mathcal{F}(\cdot)
-												</annotation>
-											</semantics>
-										</math></span><span class="katex-html" aria-hidden="true"><span
-											class="base"><span class="strut"
-												style="height:1em;vertical-align:-0.25em;"></span><span
-												class="mord mathcal" style="margin-right:0.09931em;">F</span><span
-												class="mopen">(</span><span class="mord">⋅</span><span
-												class="mclose">)</span></span></span></span></span><span>﻿</span></span>
-						is unique to each aggregate error model class, and often must be trained on either an external
-						dataset or via cross validation of the training dataset against the actual residuals. An example
-						of this implementation can be found in the <a href="#aggregate">Aggregate
-							Error Models</a> section, where <style>
-							@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
-						</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
-							style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
-									class="katex"><span class="katex-mathml"><math
-											xmlns="http://www.w3.org/1998/Math/MathML">
-											<semantics>
-												<mrow>
-													<mi mathvariant="script">F</mi>
-												</mrow>
-												<annotation encoding="application/x-tex">\mathcal{F}</annotation>
-											</semantics>
-										</math></span><span class="katex-html" aria-hidden="true"><span
-											class="base"><span class="strut"
-												style="height:0.68333em;vertical-align:0em;"></span><span
-												class="mord mathcal"
-												style="margin-right:0.09931em;">F</span></span></span></span></span><span>﻿</span></span>
-						is a random forest model.</div>
-					<a id="select">
-						<h4 class="font-title text-black text-2xl my-2">Selecting a calibrator</h4>
-					</a>
-					<div class="article-text">Selecting a calibration function <style>
-							@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
-						</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
-							style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
-									class="katex"><span class="katex-mathml"><math
-											xmlns="http://www.w3.org/1998/Math/MathML">
-											<semantics>
-												<mrow>
-													<mi>f</mi>
-													<mo stretchy="false">(</mo>
-													<mo>⋅</mo>
-													<mo stretchy="false">)</mo>
-												</mrow>
-												<annotation encoding="application/x-tex">f(\cdot)</annotation>
-											</semantics>
-										</math></span><span class="katex-html" aria-hidden="true"><span
-											class="base"><span class="strut"
-												style="height:1em;vertical-align:-0.25em;"></span><span
-												class="mord mathnormal" style="margin-right:0.10764em;">f</span><span
-												class="mopen">(</span><span class="mord">⋅</span><span
-												class="mclose">)</span></span></span></span></span><span>﻿</span></span>
-						is called <em>fitting</em>. This auxiliary function helps establish a relationship between the
-						error metric score and an interpretable confidence interval.</div>
-					<div class="article-text">During fitting, a plot of residual vs.
-						error metric score is generated for either an external dataset or the out-of-fold predictions
-						collected via cross validation with the training dataset. The data is then summarized into
-						quantiles through either binning metric score to a confidence interval value. The function for
-						this curve is then assigned to the calibration function. More details about the fitting process
-						are explained in the examples below.</div>
-					<a id="score">
-						<h4 class="font-title text-black text-2xl my-2">Scoring with the error model</h4>
-					</a>
-					<div class="article-text">After an error model is fitted, both
-						<style>
-							@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
-						</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
-							style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
-									class="katex"><span class="katex-mathml"><math
-											xmlns="http://www.w3.org/1998/Math/MathML">
-											<semantics>
-												<mrow>
-													<mi>f</mi>
-													<mo stretchy="false">(</mo>
-													<mo>⋅</mo>
-													<mo stretchy="false">)</mo>
-												</mrow>
-												<annotation encoding="application/x-tex">f(\cdot)</annotation>
-											</semantics>
-										</math></span><span class="katex-html" aria-hidden="true"><span
-											class="base"><span class="strut"
-												style="height:1em;vertical-align:-0.25em;"></span><span
-												class="mord mathnormal" style="margin-right:0.10764em;">f</span><span
-												class="mopen">(</span><span class="mord">⋅</span><span
-												class="mclose">)</span></span></span></span></span><span>﻿</span></span>
-						and
-						<style>
-							@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
-						</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
-							style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
-									class="katex"><span class="katex-mathml"><math
-											xmlns="http://www.w3.org/1998/Math/MathML">
-											<semantics>
-												<mrow>
-													<mtext>EM</mtext>
-													<mo stretchy="false">(</mo>
-													<mo>⋅</mo>
-													<mo stretchy="false">)</mo>
-												</mrow>
-												<annotation encoding="application/x-tex">\text{EM}(\cdot)
-												</annotation>
-											</semantics>
-										</math></span><span class="katex-html" aria-hidden="true"><span
-											class="base"><span class="strut"
-												style="height:1em;vertical-align:-0.25em;"></span><span
-												class="mord text"><span class="mord">EM</span></span><span
-												class="mopen">(</span><span class="mord">⋅</span><span
-												class="mclose">)</span></span></span></span></span><span>﻿</span></span>
-						are defined functions, and confidence intervals can be calculated by inputting a target molecule
-						or molecules.
-					</div>
-					<a id="getting_started">
-						<h3 class="heading">Getting Started</h3>
-					</a>
-					<div class="article-text">We start by training a model on a dataset. For this post, we will train an
-						<code class="font-code">oam.RandomForestModel</code> on a lipophilicity dataset from <a
-							href="https://moleculenet.org/datasets-1">MoleculeNet</a>. The goal of the proceeding
-						error models will be to measure the uncertainty of predictions from this model.
-					</div>
-					<pre class="code-border"><code class="font-code">import olorenautoml as oam
+													</mrow>
+													<annotation encoding="application/x-tex">i</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span
+												class="base"><span class="strut"
+													style="height:0.65952em;vertical-align:0em;"></span><span
+													class="mord mathnormal">i</span></span></span></span></span><span>﻿</span></span>th
+							error metric. The function <style>
+								@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
+							</style><span data-token-index="0" contenteditable="false"
+								class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math
+												xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<mi mathvariant="script">F</mi>
+														<mo stretchy="false">(</mo>
+														<mo>⋅</mo>
+														<mo stretchy="false">)</mo>
+													</mrow>
+													<annotation encoding="application/x-tex">\mathcal{F}(\cdot)
+													</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span
+												class="base"><span class="strut"
+													style="height:1em;vertical-align:-0.25em;"></span><span
+													class="mord mathcal" style="margin-right:0.09931em;">F</span><span
+													class="mopen">(</span><span class="mord">⋅</span><span
+													class="mclose">)</span></span></span></span></span><span>﻿</span></span>
+							is unique to each aggregate error model class, and often must be trained on either an
+							external
+							dataset or via cross validation of the training dataset against the actual residuals. An
+							example
+							of this implementation can be found in the <a href="#aggregate">Aggregate
+								Error Models</a> section, where <style>
+								@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
+							</style><span data-token-index="0" contenteditable="false"
+								class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math
+												xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<mi mathvariant="script">F</mi>
+													</mrow>
+													<annotation encoding="application/x-tex">\mathcal{F}</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span
+												class="base"><span class="strut"
+													style="height:0.68333em;vertical-align:0em;"></span><span
+													class="mord mathcal"
+													style="margin-right:0.09931em;">F</span></span></span></span></span><span>﻿</span></span>
+							is a random forest model.</div>
+						<a id="select">
+							<h4 class="font-title text-black text-2xl my-2">Selecting a calibrator</h4>
+						</a>
+						<div class="article-text">Selecting a calibration function <style>
+								@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
+							</style><span data-token-index="0" contenteditable="false"
+								class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math
+												xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<mi>f</mi>
+														<mo stretchy="false">(</mo>
+														<mo>⋅</mo>
+														<mo stretchy="false">)</mo>
+													</mrow>
+													<annotation encoding="application/x-tex">f(\cdot)</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span
+												class="base"><span class="strut"
+													style="height:1em;vertical-align:-0.25em;"></span><span
+													class="mord mathnormal"
+													style="margin-right:0.10764em;">f</span><span
+													class="mopen">(</span><span class="mord">⋅</span><span
+													class="mclose">)</span></span></span></span></span><span>﻿</span></span>
+							is called <em>fitting</em>. This auxiliary function helps establish a relationship between
+							the
+							error metric score and an interpretable confidence interval.</div>
+						<div class="article-text">During fitting, a plot of residual vs.
+							error metric score is generated for either an external dataset or the out-of-fold
+							predictions
+							collected via cross validation with the training dataset. The data is then summarized into
+							quantiles through either binning metric score to a confidence interval value. The function
+							for
+							this curve is then assigned to the calibration function. More details about the fitting
+							process
+							are explained in the examples below.</div>
+						<a id="score">
+							<h4 class="font-title text-black text-2xl my-2">Scoring with the error model</h4>
+						</a>
+						<div class="article-text">After an error model is fitted, both
+							<style>
+								@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
+							</style><span data-token-index="0" contenteditable="false"
+								class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math
+												xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<mi>f</mi>
+														<mo stretchy="false">(</mo>
+														<mo>⋅</mo>
+														<mo stretchy="false">)</mo>
+													</mrow>
+													<annotation encoding="application/x-tex">f(\cdot)</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span
+												class="base"><span class="strut"
+													style="height:1em;vertical-align:-0.25em;"></span><span
+													class="mord mathnormal"
+													style="margin-right:0.10764em;">f</span><span
+													class="mopen">(</span><span class="mord">⋅</span><span
+													class="mclose">)</span></span></span></span></span><span>﻿</span></span>
+							and
+							<style>
+								@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
+							</style><span data-token-index="0" contenteditable="false"
+								class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math
+												xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<mtext>EM</mtext>
+														<mo stretchy="false">(</mo>
+														<mo>⋅</mo>
+														<mo stretchy="false">)</mo>
+													</mrow>
+													<annotation encoding="application/x-tex">\text{EM}(\cdot)
+													</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span
+												class="base"><span class="strut"
+													style="height:1em;vertical-align:-0.25em;"></span><span
+													class="mord text"><span class="mord">EM</span></span><span
+													class="mopen">(</span><span class="mord">⋅</span><span
+													class="mclose">)</span></span></span></span></span><span>﻿</span></span>
+							are defined functions, and confidence intervals can be calculated by inputting a target
+							molecule
+							or molecules.
+						</div>
+						<a id="getting_started">
+							<h3 class="heading">Getting Started</h3>
+						</a>
+						<div class="article-text">We start by training a model on a dataset. For this post, we will
+							train an
+							<code class="font-code">oam.RandomForestModel</code> on a lipophilicity dataset from <a
+								href="https://moleculenet.org/datasets-1">MoleculeNet</a>. The goal of the proceeding
+							error models will be to measure the uncertainty of predictions from this model.
+						</div>
+						<pre class="code-border"><code class="font-code">import olorenautoml as oam
 import pandas as pd
 import numpy as np
 
@@ -626,446 +687,466 @@ lipo_dataset = splitter.transform(lipo_dataset)
 
 model = oam.RandomForestModel(oam.OlorenCheckpoint('default'), n_estimators=1000)
 model.fit(lipo_dataset.train_dataset[0], lipo_dataset.train_dataset[1])</code></pre>
-					<a id="basic">
-						<h3 class="heading">Basic Error Models</h3>
-					</a>
-					<div class="article-text">To demonstrate a basic error model, we will use the
-						<code class="font-code">oam.SDC</code>
-						error model that employs an error metric function called <a
-							href="https://pubs.acs.org/doi/10.1021/acs.jcim.8b00597"><strong>SDC</strong></a>, or <a
-							href="https://pubs.acs.org/doi/10.1021/acs.jcim.8b00597"><strong>sum of distance-weighted
-								contributions</strong></a>. In short, the SDC measures the weighted similarity between
-						an input molecule to the training molecules according to the following equation:
-					</div>
-					<figure id="7021735c-c437-4937-86c1-a866dd608943" class="equation">
-						<style>
-							@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
-						</style>
-						<div class="equation-container"><span class="katex-display"><span class="katex"><span
-										class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"
-											display="block">
-											<semantics>
-												<mrow>
-													<mtext>EM</mtext>
-													<mo stretchy="false">(</mo>
-													<mi>m</mi>
-													<mo separator="true">,</mo>
-													<mi mathvariant="script">M</mi>
-													<mo separator="true">,</mo>
-													<mi mathvariant="script">D</mi>
-													<mo stretchy="false">)</mo>
-													<mo>=</mo>
-													<munder>
-														<mo>∑</mo>
-														<mrow>
-															<msup>
-																<mi>m</mi>
-																<mo mathvariant="normal" lspace="0em" rspace="0em">′
-																</mo>
-															</msup>
-															<mo>∈</mo>
-															<mi mathvariant="script">D</mi>
-														</mrow>
-													</munder>
-													<msup>
-														<mi>e</mi>
-														<mrow>
-															<mi>a</mi>
-															<mi>d</mi>
-															<mo stretchy="false">(</mo>
-															<mi>m</mi>
-															<mo separator="true">,</mo>
-															<msup>
-																<mi>m</mi>
-																<mo mathvariant="normal" lspace="0em" rspace="0em">′
-																</mo>
-															</msup>
-															<mo stretchy="false">)</mo>
-															<mi mathvariant="normal">/</mi>
-															<mn>1</mn>
-															<mo>−</mo>
-															<mi>d</mi>
-															<mo stretchy="false">(</mo>
-															<mi>m</mi>
-															<mo separator="true">,</mo>
-															<msup>
-																<mi>m</mi>
-																<mo mathvariant="normal" lspace="0em" rspace="0em">′
-																</mo>
-															</msup>
-															<mo stretchy="false">)</mo>
-														</mrow>
-													</msup>
-												</mrow>
-												<annotation encoding="application/x-tex">\text{EM}(m, \mathcal{M},
-													\mathcal{D})=\sum_{m&#x27;\in \mathcal{D}} e^{ad(m, m&#x27;) /
-													1-d(m,
-													m&#x27;)}</annotation>
-											</semantics>
-										</math></span><span class="katex-html" aria-hidden="true"><span
-											class="base"><span class="strut"
-												style="height:1em;vertical-align:-0.25em;"></span><span
-												class="mord text"><span class="mord">EM</span></span><span
-												class="mopen">(</span><span class="mord mathnormal">m</span><span
-												class="mpunct">,</span><span class="mspace"
-												style="margin-right:0.16666666666666666em;"></span><span
-												class="mord mathcal">M</span><span class="mpunct">,</span><span
-												class="mspace" style="margin-right:0.16666666666666666em;"></span><span
-												class="mord mathcal" style="margin-right:0.02778em;">D</span><span
-												class="mclose">)</span><span class="mspace"
-												style="margin-right:0.2777777777777778em;"></span><span
-												class="mrel">=</span><span class="mspace"
-												style="margin-right:0.2777777777777778em;"></span></span><span
-											class="base"><span class="strut"
-												style="height:2.3717110000000003em;vertical-align:-1.321706em;"></span><span
-												class="mop op-limits"><span class="vlist-t vlist-t2"><span
-														class="vlist-r"><span class="vlist"
-															style="height:1.050005em;"><span
-																style="top:-1.8556639999999998em;margin-left:0em;"><span
-																	class="pstrut" style="height:3.05em;"></span><span
-																	class="sizing reset-size6 size3 mtight"><span
-																		class="mord mtight"><span
-																			class="mord mtight"><span
-																				class="mord mathnormal mtight">m</span><span
-																				class="msupsub"><span
-																					class="vlist-t"><span
-																						class="vlist-r"><span
-																							class="vlist"
-																							style="height:0.6828285714285715em;"><span
-																								style="top:-2.786em;margin-right:0.07142857142857144em;"><span
-																									class="pstrut"
-																									style="height:2.5em;"></span><span
-																									class="sizing reset-size3 size1 mtight"><span
-																										class="mord mtight"><span
-																											class="mord mtight">′</span></span></span></span></span></span></span></span></span><span
-																			class="mrel mtight">∈</span><span
-																			class="mord mathcal mtight"
-																			style="margin-right:0.02778em;">D</span></span></span></span><span
-																style="top:-3.0500049999999996em;"><span class="pstrut"
-																	style="height:3.05em;"></span><span><span
-																		class="mop op-symbol large-op">∑</span></span></span></span><span
-															class="vlist-s">​</span></span><span class="vlist-r"><span
-															class="vlist"
-															style="height:1.321706em;"><span></span></span></span></span></span><span
-												class="mspace" style="margin-right:0.16666666666666666em;"></span><span
-												class="mord"><span class="mord mathnormal">e</span><span
-													class="msupsub"><span class="vlist-t"><span class="vlist-r"><span
-																class="vlist" style="height:0.99248em;"><span
-																	style="top:-3.113em;margin-right:0.05em;"><span
-																		class="pstrut"
-																		style="height:2.7em;"></span><span
-																		class="sizing reset-size6 size3 mtight"><span
-																			class="mord mtight"><span
-																				class="mord mathnormal mtight">a</span><span
-																				class="mord mathnormal mtight">d</span><span
-																				class="mopen mtight">(</span><span
-																				class="mord mathnormal mtight">m</span><span
-																				class="mpunct mtight">,</span><span
-																				class="mord mtight"><span
-																					class="mord mathnormal mtight">m</span><span
-																					class="msupsub"><span
-																						class="vlist-t"><span
-																							class="vlist-r"><span
-																								class="vlist"
-																								style="height:0.8278285714285715em;"><span
-																									style="top:-2.931em;margin-right:0.07142857142857144em;"><span
-																										class="pstrut"
-																										style="height:2.5em;"></span><span
-																										class="sizing reset-size3 size1 mtight"><span
-																											class="mord mtight"><span
-																												class="mord mtight">′</span></span></span></span></span></span></span></span></span><span
-																				class="mclose mtight">)</span><span
-																				class="mord mtight">/1</span><span
-																				class="mbin mtight">−</span><span
-																				class="mord mathnormal mtight">d</span><span
-																				class="mopen mtight">(</span><span
-																				class="mord mathnormal mtight">m</span><span
-																				class="mpunct mtight">,</span><span
-																				class="mord mtight"><span
-																					class="mord mathnormal mtight">m</span><span
-																					class="msupsub"><span
-																						class="vlist-t"><span
-																							class="vlist-r"><span
-																								class="vlist"
-																								style="height:0.8278285714285715em;"><span
-																									style="top:-2.931em;margin-right:0.07142857142857144em;"><span
-																										class="pstrut"
-																										style="height:2.5em;"></span><span
-																										class="sizing reset-size3 size1 mtight"><span
-																											class="mord mtight"><span
-																												class="mord mtight">′</span></span></span></span></span></span></span></span></span><span
-																				class="mclose mtight">)</span></span></span></span></span></span></span></span></span></span></span></span></span>
+						<a id="basic">
+							<h3 class="heading">Basic Error Models</h3>
+						</a>
+						<div class="article-text">To demonstrate a basic error model, we will use the
+							<code class="font-code">oam.SDC</code>
+							error model that employs an error metric function called <a
+								href="https://pubs.acs.org/doi/10.1021/acs.jcim.8b00597"><strong>SDC</strong></a>, or <a
+								href="https://pubs.acs.org/doi/10.1021/acs.jcim.8b00597"><strong>sum of
+									distance-weighted
+									contributions</strong></a>. In short, the SDC measures the weighted similarity
+							between
+							an input molecule to the training molecules according to the following equation:
 						</div>
-					</figure>
-					<div class="article-text">where <style>
-							@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
-						</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
-							style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
-									class="katex"><span class="katex-mathml"><math
-											xmlns="http://www.w3.org/1998/Math/MathML">
-											<semantics>
-												<mrow>
-													<mi>d</mi>
-													<mo stretchy="false">(</mo>
-													<mi>m</mi>
-													<mo separator="true">,</mo>
-													<msup>
+						<figure id="7021735c-c437-4937-86c1-a866dd608943" class="equation">
+							<style>
+								@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
+							</style>
+							<div class="equation-container"><span class="katex-display"><span class="katex"><span
+											class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"
+												display="block">
+												<semantics>
+													<mrow>
+														<mtext>EM</mtext>
+														<mo stretchy="false">(</mo>
 														<mi>m</mi>
-														<mo mathvariant="normal" lspace="0em" rspace="0em">′</mo>
-													</msup>
-													<mo stretchy="false">)</mo>
-												</mrow>
-												<annotation encoding="application/x-tex">d(m,m&#x27;)</annotation>
-											</semantics>
-										</math></span><span class="katex-html" aria-hidden="true"><span
-											class="base"><span class="strut"
-												style="height:1.001892em;vertical-align:-0.25em;"></span><span
-												class="mord mathnormal">d</span><span class="mopen">(</span><span
-												class="mord mathnormal">m</span><span class="mpunct">,</span><span
-												class="mspace" style="margin-right:0.16666666666666666em;"></span><span
-												class="mord"><span class="mord mathnormal">m</span><span
-													class="msupsub"><span class="vlist-t"><span class="vlist-r"><span
-																class="vlist" style="height:0.751892em;"><span
-																	style="top:-3.063em;margin-right:0.05em;"><span
+														<mo separator="true">,</mo>
+														<mi mathvariant="script">M</mi>
+														<mo separator="true">,</mo>
+														<mi mathvariant="script">D</mi>
+														<mo stretchy="false">)</mo>
+														<mo>=</mo>
+														<munder>
+															<mo>∑</mo>
+															<mrow>
+																<msup>
+																	<mi>m</mi>
+																	<mo mathvariant="normal" lspace="0em" rspace="0em">′
+																	</mo>
+																</msup>
+																<mo>∈</mo>
+																<mi mathvariant="script">D</mi>
+															</mrow>
+														</munder>
+														<msup>
+															<mi>e</mi>
+															<mrow>
+																<mi>a</mi>
+																<mi>d</mi>
+																<mo stretchy="false">(</mo>
+																<mi>m</mi>
+																<mo separator="true">,</mo>
+																<msup>
+																	<mi>m</mi>
+																	<mo mathvariant="normal" lspace="0em" rspace="0em">′
+																	</mo>
+																</msup>
+																<mo stretchy="false">)</mo>
+																<mi mathvariant="normal">/</mi>
+																<mn>1</mn>
+																<mo>−</mo>
+																<mi>d</mi>
+																<mo stretchy="false">(</mo>
+																<mi>m</mi>
+																<mo separator="true">,</mo>
+																<msup>
+																	<mi>m</mi>
+																	<mo mathvariant="normal" lspace="0em" rspace="0em">′
+																	</mo>
+																</msup>
+																<mo stretchy="false">)</mo>
+															</mrow>
+														</msup>
+													</mrow>
+													<annotation encoding="application/x-tex">\text{EM}(m, \mathcal{M},
+														\mathcal{D})=\sum_{m&#x27;\in \mathcal{D}} e^{ad(m, m&#x27;) /
+														1-d(m,
+														m&#x27;)}</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span
+												class="base"><span class="strut"
+													style="height:1em;vertical-align:-0.25em;"></span><span
+													class="mord text"><span class="mord">EM</span></span><span
+													class="mopen">(</span><span class="mord mathnormal">m</span><span
+													class="mpunct">,</span><span class="mspace"
+													style="margin-right:0.16666666666666666em;"></span><span
+													class="mord mathcal">M</span><span class="mpunct">,</span><span
+													class="mspace"
+													style="margin-right:0.16666666666666666em;"></span><span
+													class="mord mathcal" style="margin-right:0.02778em;">D</span><span
+													class="mclose">)</span><span class="mspace"
+													style="margin-right:0.2777777777777778em;"></span><span
+													class="mrel">=</span><span class="mspace"
+													style="margin-right:0.2777777777777778em;"></span></span><span
+												class="base"><span class="strut"
+													style="height:2.3717110000000003em;vertical-align:-1.321706em;"></span><span
+													class="mop op-limits"><span class="vlist-t vlist-t2"><span
+															class="vlist-r"><span class="vlist"
+																style="height:1.050005em;"><span
+																	style="top:-1.8556639999999998em;margin-left:0em;"><span
 																		class="pstrut"
-																		style="height:2.7em;"></span><span
+																		style="height:3.05em;"></span><span
 																		class="sizing reset-size6 size3 mtight"><span
 																			class="mord mtight"><span
-																				class="mord mtight">′</span></span></span></span></span></span></span></span></span><span
-												class="mclose">)</span></span></span></span></span><span>﻿</span></span>
-						is the Tanimoto distance between the input molecule <style>
-							@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
-						</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
-							style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
-									class="katex"><span class="katex-mathml"><math
-											xmlns="http://www.w3.org/1998/Math/MathML">
-											<semantics>
-												<mrow>
-													<mi>m</mi>
-												</mrow>
-												<annotation encoding="application/x-tex">m</annotation>
-											</semantics>
-										</math></span><span class="katex-html" aria-hidden="true"><span
-											class="base"><span class="strut"
-												style="height:0.43056em;vertical-align:0em;"></span><span
-												class="mord mathnormal">m</span></span></span></span></span><span>﻿</span></span>
-						and the training molecule <style>
-							@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
-						</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
-							style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
-									class="katex"><span class="katex-mathml"><math
-											xmlns="http://www.w3.org/1998/Math/MathML">
-											<semantics>
-												<mrow>
-													<msub>
-														<mi>m</mi>
-														<mi>i</mi>
-													</msub>
-												</mrow>
-												<annotation encoding="application/x-tex">m_i</annotation>
-											</semantics>
-										</math></span><span class="katex-html" aria-hidden="true"><span
-											class="base"><span class="strut"
-												style="height:0.58056em;vertical-align:-0.15em;"></span><span
-												class="mord"><span class="mord mathnormal">m</span><span
-													class="msupsub"><span class="vlist-t vlist-t2"><span
-															class="vlist-r"><span class="vlist"
-																style="height:0.31166399999999994em;"><span
-																	style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																				class="mord mtight"><span
+																					class="mord mathnormal mtight">m</span><span
+																					class="msupsub"><span
+																						class="vlist-t"><span
+																							class="vlist-r"><span
+																								class="vlist"
+																								style="height:0.6828285714285715em;"><span
+																									style="top:-2.786em;margin-right:0.07142857142857144em;"><span
+																										class="pstrut"
+																										style="height:2.5em;"></span><span
+																										class="sizing reset-size3 size1 mtight"><span
+																											class="mord mtight"><span
+																												class="mord mtight">′</span></span></span></span></span></span></span></span></span><span
+																				class="mrel mtight">∈</span><span
+																				class="mord mathcal mtight"
+																				style="margin-right:0.02778em;">D</span></span></span></span><span
+																	style="top:-3.0500049999999996em;"><span
 																		class="pstrut"
-																		style="height:2.7em;"></span><span
-																		class="sizing reset-size6 size3 mtight"><span
-																			class="mord mathnormal mtight">i</span></span></span></span><span
+																		style="height:3.05em;"></span><span><span
+																			class="mop op-symbol large-op">∑</span></span></span></span><span
 																class="vlist-s">​</span></span><span
 															class="vlist-r"><span class="vlist"
-																style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>
-						using Morgan fingerprints with a radius of 2. A higher SDC means the given molecule is more
-						similar to the training set, while a lower SDC means it is more dissimilar to the training set.
-						By default, we set
-						<style>
-							@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
-						</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
-							style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
-									class="katex"><span class="katex-mathml"><math
-											xmlns="http://www.w3.org/1998/Math/MathML">
-											<semantics>
-												<mrow>
-													<mi>a</mi>
-													<mo>=</mo>
-													<mn>3</mn>
-												</mrow>
-												<annotation encoding="application/x-tex">a=3</annotation>
-											</semantics>
-										</math></span><span class="katex-html" aria-hidden="true"><span
-											class="base"><span class="strut"
-												style="height:0.43056em;vertical-align:0em;"></span><span
-												class="mord mathnormal">a</span><span class="mspace"
-												style="margin-right:0.2777777777777778em;"></span><span
-												class="mrel">=</span><span class="mspace"
-												style="margin-right:0.2777777777777778em;"></span></span><span
-											class="base"><span class="strut"
-												style="height:0.64444em;vertical-align:0em;"></span><span
-												class="mord">3</span></span></span></span></span><span></span></span>,
-						which has been shown to generate the best results.
-					</div>
-					<a id="initial_basic">
-						<h4 class="font-title text-black text-2xl my-2">Initialization</h4>
-					</a>
-					<div class="article-text">Below is the code for initializing and building the error model. While no
-						arguments are required for initialization, method-specific parameters may be set as different
-						from default, such as the value of <style>
-							@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
-						</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
-							style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
-									class="katex"><span class="katex-mathml"><math
-											xmlns="http://www.w3.org/1998/Math/MathML">
-											<semantics>
-												<mrow>
-													<mi>a</mi>
-												</mrow>
-												<annotation encoding="application/x-tex">a</annotation>
-											</semantics>
-										</math></span><span class="katex-html" aria-hidden="true"><span
-											class="base"><span class="strut"
-												style="height:0.43056em;vertical-align:0em;"></span><span
-												class="mord mathnormal">a</span></span></span></span></span><span></span></span>
-						for SDC. All error models are built with a <code class="font-code">BaseModel</code> and a <code
-							class="font-code">BaseDataset</code> corresponding to the model and its training dataset,
-						respectively.
-					</div>
-					<pre class="code-border"><code class="font-code">error_model = oam.SDC()
+																style="height:1.321706em;"><span></span></span></span></span></span><span
+													class="mspace"
+													style="margin-right:0.16666666666666666em;"></span><span
+													class="mord"><span class="mord mathnormal">e</span><span
+														class="msupsub"><span class="vlist-t"><span
+																class="vlist-r"><span class="vlist"
+																	style="height:0.99248em;"><span
+																		style="top:-3.113em;margin-right:0.05em;"><span
+																			class="pstrut"
+																			style="height:2.7em;"></span><span
+																			class="sizing reset-size6 size3 mtight"><span
+																				class="mord mtight"><span
+																					class="mord mathnormal mtight">a</span><span
+																					class="mord mathnormal mtight">d</span><span
+																					class="mopen mtight">(</span><span
+																					class="mord mathnormal mtight">m</span><span
+																					class="mpunct mtight">,</span><span
+																					class="mord mtight"><span
+																						class="mord mathnormal mtight">m</span><span
+																						class="msupsub"><span
+																							class="vlist-t"><span
+																								class="vlist-r"><span
+																									class="vlist"
+																									style="height:0.8278285714285715em;"><span
+																										style="top:-2.931em;margin-right:0.07142857142857144em;"><span
+																											class="pstrut"
+																											style="height:2.5em;"></span><span
+																											class="sizing reset-size3 size1 mtight"><span
+																												class="mord mtight"><span
+																													class="mord mtight">′</span></span></span></span></span></span></span></span></span><span
+																					class="mclose mtight">)</span><span
+																					class="mord mtight">/1</span><span
+																					class="mbin mtight">−</span><span
+																					class="mord mathnormal mtight">d</span><span
+																					class="mopen mtight">(</span><span
+																					class="mord mathnormal mtight">m</span><span
+																					class="mpunct mtight">,</span><span
+																					class="mord mtight"><span
+																						class="mord mathnormal mtight">m</span><span
+																						class="msupsub"><span
+																							class="vlist-t"><span
+																								class="vlist-r"><span
+																									class="vlist"
+																									style="height:0.8278285714285715em;"><span
+																										style="top:-2.931em;margin-right:0.07142857142857144em;"><span
+																											class="pstrut"
+																											style="height:2.5em;"></span><span
+																											class="sizing reset-size3 size1 mtight"><span
+																												class="mord mtight"><span
+																													class="mord mtight">′</span></span></span></span></span></span></span></span></span><span
+																					class="mclose mtight">)</span></span></span></span></span></span></span></span></span></span></span></span></span>
+							</div>
+						</figure>
+						<div class="article-text">where <style>
+								@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
+							</style><span data-token-index="0" contenteditable="false"
+								class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math
+												xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<mi>d</mi>
+														<mo stretchy="false">(</mo>
+														<mi>m</mi>
+														<mo separator="true">,</mo>
+														<msup>
+															<mi>m</mi>
+															<mo mathvariant="normal" lspace="0em" rspace="0em">′</mo>
+														</msup>
+														<mo stretchy="false">)</mo>
+													</mrow>
+													<annotation encoding="application/x-tex">d(m,m&#x27;)</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span
+												class="base"><span class="strut"
+													style="height:1.001892em;vertical-align:-0.25em;"></span><span
+													class="mord mathnormal">d</span><span class="mopen">(</span><span
+													class="mord mathnormal">m</span><span class="mpunct">,</span><span
+													class="mspace"
+													style="margin-right:0.16666666666666666em;"></span><span
+													class="mord"><span class="mord mathnormal">m</span><span
+														class="msupsub"><span class="vlist-t"><span
+																class="vlist-r"><span class="vlist"
+																	style="height:0.751892em;"><span
+																		style="top:-3.063em;margin-right:0.05em;"><span
+																			class="pstrut"
+																			style="height:2.7em;"></span><span
+																			class="sizing reset-size6 size3 mtight"><span
+																				class="mord mtight"><span
+																					class="mord mtight">′</span></span></span></span></span></span></span></span></span><span
+													class="mclose">)</span></span></span></span></span><span>﻿</span></span>
+							is the Tanimoto distance between the input molecule <style>
+								@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
+							</style><span data-token-index="0" contenteditable="false"
+								class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math
+												xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<mi>m</mi>
+													</mrow>
+													<annotation encoding="application/x-tex">m</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span
+												class="base"><span class="strut"
+													style="height:0.43056em;vertical-align:0em;"></span><span
+													class="mord mathnormal">m</span></span></span></span></span><span>﻿</span></span>
+							and the training molecule <style>
+								@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
+							</style><span data-token-index="0" contenteditable="false"
+								class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math
+												xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<msub>
+															<mi>m</mi>
+															<mi>i</mi>
+														</msub>
+													</mrow>
+													<annotation encoding="application/x-tex">m_i</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span
+												class="base"><span class="strut"
+													style="height:0.58056em;vertical-align:-0.15em;"></span><span
+													class="mord"><span class="mord mathnormal">m</span><span
+														class="msupsub"><span class="vlist-t vlist-t2"><span
+																class="vlist-r"><span class="vlist"
+																	style="height:0.31166399999999994em;"><span
+																		style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																			class="pstrut"
+																			style="height:2.7em;"></span><span
+																			class="sizing reset-size6 size3 mtight"><span
+																				class="mord mathnormal mtight">i</span></span></span></span><span
+																	class="vlist-s">​</span></span><span
+																class="vlist-r"><span class="vlist"
+																	style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>
+							using Morgan fingerprints with a radius of 2. A higher SDC means the given molecule is more
+							similar to the training set, while a lower SDC means it is more dissimilar to the training
+							set.
+							By default, we set
+							<style>
+								@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
+							</style><span data-token-index="0" contenteditable="false"
+								class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math
+												xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<mi>a</mi>
+														<mo>=</mo>
+														<mn>3</mn>
+													</mrow>
+													<annotation encoding="application/x-tex">a=3</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span
+												class="base"><span class="strut"
+													style="height:0.43056em;vertical-align:0em;"></span><span
+													class="mord mathnormal">a</span><span class="mspace"
+													style="margin-right:0.2777777777777778em;"></span><span
+													class="mrel">=</span><span class="mspace"
+													style="margin-right:0.2777777777777778em;"></span></span><span
+												class="base"><span class="strut"
+													style="height:0.64444em;vertical-align:0em;"></span><span
+													class="mord">3</span></span></span></span></span><span></span></span>,
+							which has been shown to generate the best results.
+						</div>
+						<a id="initial_basic">
+							<h4 class="font-title text-black text-2xl my-2">Initialization</h4>
+						</a>
+						<div class="article-text">Below is the code for initializing and building the error model. While
+							no
+							arguments are required for initialization, method-specific parameters may be set as
+							different
+							from default, such as the value of <style>
+								@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
+							</style><span data-token-index="0" contenteditable="false"
+								class="notion-text-equation-token"
+								style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+										class="katex"><span class="katex-mathml"><math
+												xmlns="http://www.w3.org/1998/Math/MathML">
+												<semantics>
+													<mrow>
+														<mi>a</mi>
+													</mrow>
+													<annotation encoding="application/x-tex">a</annotation>
+												</semantics>
+											</math></span><span class="katex-html" aria-hidden="true"><span
+												class="base"><span class="strut"
+													style="height:0.43056em;vertical-align:0em;"></span><span
+													class="mord mathnormal">a</span></span></span></span></span><span></span></span>
+							for SDC. All error models are built with a <code class="font-code">BaseModel</code> and a
+							<code class="font-code">BaseDataset</code> corresponding to the model and its training
+							dataset,
+							respectively.
+						</div>
+						<pre class="code-border"><code class="font-code">error_model = oam.SDC()
 error_model.build(model, lipo_dataset)</code></pre>
-					<div class="article-text">If the entire dataset was used to train the model as opposed to only
-						<code class="font-code">train_dataset</code>, this can be configured by setting
-						<code class="font-code">use_entire_dataset = True</code> during initialization.
-					</div>
-					<pre
-						class="p-2"><code class="font-code">error_model.build(model, lipo_dataset, use_entire_dataset=True)</code></pre>
-					<a id="fit_basic">
-						<h4 class="font-title text-black text-2xl my-2">Fitting the model</h4>
-					</a>
-					<div class="article-text">There are two main methods for fitting the error model: fitting against a
-						validation dataset and fitting by cross-validation on the training dataset.
-					</div>
-					<div class="article-text">Fitting against an external dataset is the most simple and is what we
-						recommend when such a dataset is available. This could be a validation dataset, a test dataset,
-						or withheld data not used during the training process. Below, we fit our error model using the
-						validation dataset.</div>
-					<pre class="code-border"><code class="font-code">error_model.fit(lipo_dataset.valid_dataset[0], lipo_dataset.valid_dataset[1])
+						<div class="article-text">If the entire dataset was used to train the model as opposed to only
+							<code class="font-code">train_dataset</code>, this can be configured by setting
+							<code class="font-code">use_entire_dataset = True</code> during initialization.
+						</div>
+						<pre
+							class="code-border"><code class="font-code">error_model.build(model, lipo_dataset, use_entire_dataset=True)</code></pre>
+						<a id="fit_basic">
+							<h4 class="font-title text-black text-2xl my-2">Fitting the model</h4>
+						</a>
+						<div class="article-text">There are two main methods for fitting the error model: fitting
+							against a
+							validation dataset and fitting by cross-validation on the training dataset.
+						</div>
+						<div class="article-text">Fitting against an external dataset is the most simple and is what we
+							recommend when such a dataset is available. This could be a validation dataset, a test
+							dataset,
+							or withheld data not used during the training process. Below, we fit our error model using
+							the
+							validation dataset.</div>
+						<pre class="code-border"><code class="font-code">error_model.fit(lipo_dataset.valid_dataset[0], lipo_dataset.valid_dataset[1])
 # 420it [00:02, 174.60it/s]</code></pre>
-					<figure id="d20b45de-0294-45d1-88df-b29c2055df68" class="image"><a
-							href="Evaluating%20Model%20Uncertainty%20with%20Oloren%20AutoML%20d20b45de029445d188dfb29c2055df68/figure.png"><img
-								style="width:432px"
-								src="Evaluating%20Model%20Uncertainty%20with%20Oloren%20AutoML%20d20b45de029445d188dfb29c2055df68/figure.png" /></a>
-					</figure>
-					<div class="article-text">Fitting the error model will generate the above plot of the observed
-						residuals for the external dataset plotted against their SDC score, depicted by the
-						<strong>black points</strong>. In this instance, the fitted error model is a linear model with a
-						negative slope, which agrees with our intuition that as molecules become more similar to the
-						training set (and thus have a higher SDC score), their observed residuals become smaller.
-					</div>
-					<div class="article-text">The <strong style="color:blue;">blue points</strong>
-						depict the 80th percentile for equal-width bins, and the <strong style="color:red;">red
-							curve</strong> is the error model, generated by selecting the best curve among
-						candidate curves fitted against the blue points.
-					</div>
-					<div class="article-text">The
-						<code class="font-code">.fit()</code> method can also optionally take in arguments for
-						the error percentile, fitting method, file name to save the plot, and more. For example, if we
-						wish to fit 75th percentile error bars using a rolling quantile method with the graph saved to
-						'error_model_fit.png', we can run the code below.
-					</div>
-					<pre class="code-border"><code class="font-code">error_model.fit(lipo_dataset.valid_dataset[0], lipo_dataset.valid_dataset[1]
+						<img src="/images/error_model/figure1.png" alt="Can't render image"
+							class="flex justify-center object-contain">
+						<div class="article-text">Fitting the error model will generate the above plot of the observed
+							residuals for the external dataset plotted against their SDC score, depicted by the
+							<strong>black points</strong>. In this instance, the fitted error model is a linear model
+							with a
+							negative slope, which agrees with our intuition that as molecules become more similar to the
+							training set (and thus have a higher SDC score), their observed residuals become smaller.
+						</div>
+						<div class="article-text">The <strong style="color:blue;">blue points</strong>
+							depict the 80th percentile for equal-width bins, and the <strong style="color:red;">red
+								curve</strong> is the error model, generated by selecting the best curve among
+							candidate curves fitted against the blue points.
+						</div>
+						<div class="article-text">The
+							<code class="font-code">.fit()</code> method can also optionally take in arguments for
+							the error percentile, fitting method, file name to save the plot, and more. For example, if
+							we
+							wish to fit 75th percentile error bars using a rolling quantile method with the graph saved
+							to
+							'error_model_fit.png', we can run the code below.
+						</div>
+						<pre class="code-border"><code class="font-code">error_model.fit(lipo_dataset.valid_dataset[0], lipo_dataset.valid_dataset[1]
 	method='roll', quantile=0.75, filename='error_model_fit.png')</code></pre>
-					<figure id="389cd97d-2ba9-4e43-8166-7e227ccf7cc3" class="image"><a
-							href="Evaluating%20Model%20Uncertainty%20with%20Oloren%20AutoML%20d20b45de029445d188dfb29c2055df68/figure%201.png"><img
-								style="width:432px"
-								src="Evaluating%20Model%20Uncertainty%20with%20Oloren%20AutoML%20d20b45de029445d188dfb29c2055df68/figure%201.png" /></a>
-					</figure>
-					<div class="article-text">Methods are restricted to 'bin' for equal-width binning, 'qbin' for
-						quantile-based binning, and 'roll' for rolling quantile, and other arguments that can be set are
-						the number of bins, the minimum number of points required per bin, and the window size for
-						rolling quantile. </div>
-					<div class="article-text">We can also fit the error model with cross-validation, which is done below
-						and produces the corresponding graph. Since cross-validation requires no extra data, <code
-							class="font-code">.fit_cv()</code> has no required arguments, though it can optionally take
-						the same keyword arguments as <code class="font-code">.fit()</code> for customizing the
-						curve-fitting procedure.
-					</div>
-					<pre class="code-border"><code class="font-code">error_model.fit_cv()
+						<img src="/images/error_model/figure2.png" alt="Can't render image"
+							class="flex justify-center object-contain">
+						<div class="article-text">Methods are restricted to 'bin' for equal-width binning, 'qbin' for
+							quantile-based binning, and 'roll' for rolling quantile, and other arguments that can be set
+							are
+							the number of bins, the minimum number of points required per bin, and the window size for
+							rolling quantile. </div>
+						<div class="article-text">We can also fit the error model with cross-validation, which is done
+							below
+							and produces the corresponding graph. Since cross-validation requires no extra data, <code
+								class="font-code">.fit_cv()</code> has no required arguments, though it can optionally
+							take
+							the same keyword arguments as <code class="font-code">.fit()</code> for customizing the
+							curve-fitting procedure.
+						</div>
+						<pre class="code-border"><code class="font-code">error_model.fit_cv()
 # cross validating with split=0.05
 # 168it [00:00, 193.01it/s]
 # ...
 # cross validating with split=0.5
 # 1680it [00:04, 351.05it/s]</code></pre>
-					<figure id="6ec88a94-24b4-4bb9-b9b6-1ae12e598586" class="image"><a
-							href="Evaluating%20Model%20Uncertainty%20with%20Oloren%20AutoML%20d20b45de029445d188dfb29c2055df68/figure%202.png"><img
-								style="width:432px"
-								src="Evaluating%20Model%20Uncertainty%20with%20Oloren%20AutoML%20d20b45de029445d188dfb29c2055df68/figure%202.png" /></a>
-					</figure>
-					<div class="article-text">The
-						<code class="font-code">.fit_cv()</code> method can also take in two option arguments, <code
-							class="font-code">n_splits=10</code> and <code
-							class="font-code">test_size_range=(0.05, 0.5)</code>.
-					</div>
-					<a id="score_basic">
-						<h4 class="font-title text-black text-2xl my-2">Scoring datasets</h4>
-					</a>
-					<div class="article-text">Once an error model is fitted, it is easy to score a dataset. Here we
-						compute the predicted error bars for each prediction in the original dataset's
-						<code class="font-code">test_dataset</code>.
-					</div>
-					<pre class="code-border"><code class="font-code">error_model.score(lipo_dataset.test_dataset[0])
+						<img src="/images/error_model/figure3.png" alt="Can't render image"
+							class="flex justify-center object-contain">
+						<div class="article-text">The
+							<code class="font-code">.fit_cv()</code> method can also take in two option arguments, <code
+								class="font-code">n_splits=10</code> and <code
+								class="font-code">test_size_range=(0.05, 0.5)</code>.
+						</div>
+						<a id="score_basic">
+							<h4 class="font-title text-black text-2xl my-2">Scoring datasets</h4>
+						</a>
+						<div class="article-text">Once an error model is fitted, it is easy to score a dataset. Here we
+							compute the predicted error bars for each prediction in the original dataset's
+							<code class="font-code">test_dataset</code>.
+						</div>
+						<pre class="code-border"><code class="font-code">error_model.score(lipo_dataset.test_dataset[0])
 # array([1.07448983, 1.15935886, 1.09753033, 1.02649071, 0.99616767,..])</code></pre>
-					<div class="article-text">To assess the validity of the predicted error bars, we can compute the
-						number of predictions in the test dataset that are within their computed error bars.
-					</div>
-					<pre class="code-border"><code class="font-code">y_predicted = model.predict(lipo_dataset.test_dataset[0]['smiles'])
+						<div class="article-text">To assess the validity of the predicted error bars, we can compute the
+							number of predictions in the test dataset that are within their computed error bars.
+						</div>
+						<pre class="code-border"><code class="font-code">y_predicted = model.predict(lipo_dataset.test_dataset[0]['smiles'])
 error_predicted = error_model.score(lipo_dataset.test_dataset[0])
 in_ci = np.abs(lipo_dataset.test_dataset[1] - y_predicted) < error_predicted
 print(sum(in_ci) / len(in_ci))
 # 0.8357142857142857</code></pre>
-					<div class="article-text">Since by default we fit 80% confidence intervals, it makes sense that
-						roughly 80% of the test data are within their confidence intervals.</div>
-					<a id="aggregate">
-						<h3 class="heading">Aggregate Error Models</h3>
-					</a>
-					<div class="article-text">Error models become more powerful when aggregated together. Here, we
-						introduce the
-						<code class="font-code">BaseAggregateErrorModel</code> class, which in addition to a model
-						and its
-						training data, takes in a list of error models and produces an aggregate score from the outputs
-						of those error models. For this post, we will use the
-						<code class="font-code">oam.RandomForestErrorModel</code>,
-						which trains a random forest model on the outputs of the inputted error models to predict a
-						score that correlates with residuals. This approach is adopted from <a
-							href="https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.5b00110">https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.5b00110</a>.
-					</div>
-					<a id="initial_agg">
-						<h4 class="font-title text-black text-2xl my-2">Initialization</h4>
-					</a>
-					<div class="article-text">Like basic error models, aggregate error
-						models
-						also
-						must be built with the trained model and the training dataset. However, we must input a list
-						of
-						initialized error models that are to be aggregated together during initialization.
-						Additional
-						parameters
-						for each error model can also be passed in as a dictionary of keyword arguments.</div>
-					<pre class="code-border"><code class="font-code">error_models = [oam.SDC(), oam.wRMSD1(), oam.wRMSD2(), oam.PREDICTED()]
+						<div class="article-text">Since by default we fit 80% confidence intervals, it makes sense that
+							roughly 80% of the test data are within their confidence intervals.</div>
+						<a id="aggregate">
+							<h3 class="heading">Aggregate Error Models</h3>
+						</a>
+						<div class="article-text">Error models become more powerful when aggregated together. Here, we
+							introduce the
+							<code class="font-code">BaseAggregateErrorModel</code> class, which in addition to a model
+							and its
+							training data, takes in a list of error models and produces an aggregate score from the
+							outputs
+							of those error models. For this post, we will use the
+							<code class="font-code">oam.RandomForestErrorModel</code>,
+							which trains a random forest model on the outputs of the inputted error models to predict a
+							score that correlates with residuals. This approach is adopted from <a
+								href="https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.5b00110">https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.5b00110</a>.
+						</div>
+						<a id="initial_agg">
+							<h4 class="font-title text-black text-2xl my-2">Initialization</h4>
+						</a>
+						<div class="article-text">Like basic error models, aggregate error
+							models
+							also
+							must be built with the trained model and the training dataset. However, we must input a list
+							of
+							initialized error models that are to be aggregated together during initialization.
+							Additional
+							parameters
+							for each error model can also be passed in as a dictionary of keyword arguments.</div>
+						<pre class="code-border"><code class="font-code">error_models = [oam.SDC(), oam.wRMSD1(), oam.wRMSD2(), oam.PREDICTED()]
 rf_error = oam.RandomForestErrorModel(error_models)
 rf_error.build(model, lipo_dataset)</code></pre>
-					<a id="train_agg">
-						<h4 class="font-title text-black text-2xl my-2">Training the aggregate model</h4>
-					</a>
-					<h2 id="8228f593-a722-450c-8f83-2172bc7782ba" class="">Training the aggregate model</h2>
-					<div class="article-text">Unlike for basic error models, most aggregate error models must be trained
-						before they can be fitted against residuals. Like fitting, training can be done with an external
-						dataset (different from fitting) or cross validation with the training dataset. We recommend
-						training via cross validation and fitting with an external dataset, which is what we will do
-						here.</div>
-					<pre class="code-border"><code class="font-code">rf_error.train_cv()
+						<a id="train_agg">
+							<h4 class="font-title text-black text-2xl my-2">Training the aggregate model</h4>
+						</a>
+						<div class="article-text">Unlike for basic error models, most aggregate error models must be
+							trained
+							before they can be fitted against residuals. Like fitting, training can be done with an
+							external
+							dataset (different from fitting) or cross validation with the training dataset. We recommend
+							training via cross validation and fitting with an external dataset, which is what we will do
+							here.</div>
+						<pre class="code-border"><code class="font-code">rf_error.train_cv()
 # cross validating with split=0.1
 # 336it [00:01, 203.51it/s]
 # 336it [00:01, 200.63it/s]
@@ -1075,35 +1156,35 @@ rf_error.build(model, lipo_dataset)</code></pre>
 # 3024it [00:03, 775.36it/s]
 # 3024it [00:04, 695.52it/s]
 # 3024it [00:04, 692.61it/s]</code></pre>
-					<div class="article-text">The <code class="font-code">.train_cv()</code> method can take in two
-						option arguments, <code class="font-code">n_splits=9</code> and <code
-							class="font-code">test_size_range=(0.1, 0.9)</code>.
-					</div>
-					<a id="fit_agg">
-						<h4 class="font-title text-black text-2xl my-2">Fitting the model</h4>
-					</a>
-					<div class="article-text">We now fit the aggregate model against the validation dataset, which has
-						the same procedure as for basic error models. While the data distribution for training and
-						fitting is ultimately up to the user, <strong>do not use the same data for both training and
-							fitting</strong>, as that will result in a poorly fit model.</div>
-					<pre class="code-border"><code class="font-code">rf_error.fit(lipo_dataset.valid_dataset[0], lipo_dataset.valid_dataset[1])
+						<div class="article-text">The <code class="font-code">.train_cv()</code> method can take in two
+							option arguments, <code class="font-code">n_splits=9</code> and <code
+								class="font-code">test_size_range=(0.1, 0.9)</code>.
+						</div>
+						<a id="fit_agg">
+							<h4 class="font-title text-black text-2xl my-2">Fitting the model</h4>
+						</a>
+						<div class="article-text">We now fit the aggregate model against the validation dataset, which
+							has
+							the same procedure as for basic error models. While the data distribution for training and
+							fitting is ultimately up to the user, <strong>do not use the same data for both training and
+								fitting</strong>, as that will result in a poorly fit model.</div>
+						<pre class="code-border"><code class="font-code">rf_error.fit(lipo_dataset.valid_dataset[0], lipo_dataset.valid_dataset[1])
 # 420it [00:09, 45.05it/s]
 # 420it [00:08, 46.92it/s]
 # 420it [00:07, 53.38it/s]</code></pre>
-					<figure id="8425e5ea-a043-4901-a594-dd8e04b39463" class="image"><a
-							href="Evaluating%20Model%20Uncertainty%20with%20Oloren%20AutoML%20d20b45de029445d188dfb29c2055df68/figure%203.png"><img
-								style="width:432px"
-								src="Evaluating%20Model%20Uncertainty%20with%20Oloren%20AutoML%20d20b45de029445d188dfb29c2055df68/figure%203.png" /></a>
-					</figure>
-					<div class="article-text">As opposed to SDC, the curve here has a positive slope, indicating that a
-						greater score outputted by the random forest model corresponds with a greater uncertainty in the
-						residual. </div>
-					<a id="score_agg">
-						<h4 class="font-title text-black text-2xl my-2">Scoring datasets</h4>
-					</a>
-					<div class="article-text">Scoring datasets also follows the same
-						procedure as for basic error models.</div>
-					<pre class="code-border"><code class="font-code">rf_error.score(lipo_dataset.test_dataset[0])
+						<img src="/images/error_model/figure4.png" alt="Can't render image"
+							class="flex justify-center object-contain">
+						<div class="article-text">As opposed to SDC, the curve here has a positive slope, indicating
+							that a
+							greater score outputted by the random forest model corresponds with a greater uncertainty in
+							the
+							residual. </div>
+						<a id="score_agg">
+							<h4 class="font-title text-black text-2xl my-2">Scoring datasets</h4>
+						</a>
+						<div class="article-text">Scoring datasets also follows the same
+							procedure as for basic error models.</div>
+						<pre class="code-border"><code class="font-code">rf_error.score(lipo_dataset.test_dataset[0])
 # array([1.22888853, 0.8210725 , 1.28685512, 0.99717322, 1.10889895,..])
 
 y_predicted = model.predict(lipo_dataset.test_dataset[0]['smiles'])
@@ -1111,20 +1192,20 @@ error_predicted = rf_error.score(lipo_dataset.test_dataset[0])
 in_ci = np.abs(lipo_dataset.test_dataset[1] - y_predicted) < error_predicted
 print(sum(in_ci) / len(in_ci))
 # 0.8214285714285714</code></pre>
-					<a id="references">
-						<h3 class="heading">References</h3>
-					</a>
-					<div class="article-text">More information on model fitting and
-						aggregate model training can be found in the Oloren AutoML documentation.</div>
-					<a href="https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.5b00110">
-						https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.5b00110
-					</a>
-					<a href="https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.8b00114">
-						https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.8b00114
-					</a>
-					<a href="https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.8b00597">
-						https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.8b00597
-					</a>
+						<a id="references">
+							<h3 class="heading">References</h3>
+						</a>
+						<div class="article-text">More information on model fitting and
+							aggregate model training can be found in the Oloren AutoML documentation.</div>
+						<a href="https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.5b00110">
+							https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.5b00110
+						</a><br>
+						<a href="https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.8b00114">
+							https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.8b00114
+						</a><br>
+						<a href="https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.8b00597">
+							https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.8b00597
+						</a><br>
 				</div>
 			</main>
 			<nav

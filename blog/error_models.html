@@ -39,8 +39,7 @@
 				class="bg-white p-10 rounded-3xl relative mx-8 md:max-w-[85%] md:mr-0 float-left items-start flex-col z-20">
 				<!-- title area  -->
 				<header class="title-area">
-					<h1 class="font-body font-bold text-5xl text-black my-2">Evaluating Model Uncertainty with Oloren
-						AutoML</h1>
+					<h1 class="font-body font-bold text-5xl text-black my-2">Visualizing the chemical space</h1>
 					<div class="author-container my-5 flex flex-row content-center">
 						<img class="self-center object-fill h-10 w-10 rounded-full mr-5" src="images/alex.JPG"
 							alt="could not render the beautiful face of this article's author :(">
@@ -56,7 +55,8 @@
 						machine learning model is only the first half of the story. Especially in a field with stakes as
 						high as drug screening and development, being able to assess the certainty of a prediction is
 						essential to evaluating and deploying models in the real world. In this post, we introduce the
-						<code>BaseErrorModel</code> class, a library of different methods for evaluating the uncertainty
+						<pre><code>BaseErrorModel</code></pre> class, a library of different methods for evaluating the
+						uncertainty
 						of model predictions, generalizable to any model architecture. No matter how well your model
 						performs, no model is perfect, and being able to see when a model might be making poor
 						predictions is a critical tool for the widespread adoption of AI in drug discovery.
@@ -253,7 +253,7 @@
 					</div>
 					<div class="article-text">The workflow of constructing and using an error model consists of three
 						main steps:</div>
-					<ol type="1" class="numbered-list" start="1">
+					<ol>
 						<li><a href="#build">Building the error metric function </a><a href="#build">
 								<style>
 									@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
@@ -436,7 +436,7 @@
 																		style="height:2.7em;"></span><span
 																		class="sizing reset-size6 size3 mtight"><span
 																			class="mord mtight">1</span></span></span></span><span
-																class="vlist-s"></span></span><span
+																class="vlist-s">​</span></span><span
 															class="vlist-r"><span class="vlist"
 																style="height:0.15em;"><span></span></span></span></span></span></span><span
 												class="mopen">(</span><span class="mord mathnormal">m</span><span
@@ -462,7 +462,7 @@
 																		class="sizing reset-size6 size3 mtight"><span
 																			class="mord mathnormal mtight"
 																			style="margin-right:0.03148em;">k</span></span></span></span><span
-																class="vlist-s"></span></span><span
+																class="vlist-s">​</span></span><span
 															class="vlist-r"><span class="vlist"
 																style="height:0.15em;"><span></span></span></span></span></span></span><span
 												class="mopen">(</span><span class="mord mathnormal">m</span><span
@@ -501,7 +501,7 @@
 																		style="height:2.7em;"></span><span
 																		class="sizing reset-size6 size3 mtight"><span
 																			class="mord mathnormal mtight">i</span></span></span></span><span
-																class="vlist-s"></span>/span></span><span
+																class="vlist-s">​</span></span><span
 															class="vlist-r"><span class="vlist"
 																style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>
 						is the <style>
@@ -519,7 +519,7 @@
 										</math></span><span class="katex-html" aria-hidden="true"><span
 											class="base"><span class="strut"
 												style="height:0.65952em;vertical-align:0em;"></span><span
-												class="mord mathnormal">i</span></span></span></span></span><span></span></span>th
+												class="mord mathnormal">i</span></span></span></span></span><span>﻿</span></span>th
 						error metric. The function <style>
 							@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
 						</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
@@ -541,7 +541,7 @@
 												style="height:1em;vertical-align:-0.25em;"></span><span
 												class="mord mathcal" style="margin-right:0.09931em;">F</span><span
 												class="mopen">(</span><span class="mord">⋅</span><span
-												class="mclose">)</span></span></span></span></span><span></span></span>
+												class="mclose">)</span></span></span></span></span><span>﻿</span></span>
 						is unique to each aggregate error model class, and often must be trained on either an external
 						dataset or via cross validation of the training dataset against the actual residuals. An example
 						of this implementation can be found in the <a href="#aggregate">Aggregate
@@ -561,7 +561,7 @@
 											class="base"><span class="strut"
 												style="height:0.68333em;vertical-align:0em;"></span><span
 												class="mord mathcal"
-												style="margin-right:0.09931em;">F</span></span></span></span></span><span></span></span>
+												style="margin-right:0.09931em;">F</span></span></span></span></span><span>﻿</span></span>
 						is a random forest model.</div>
 					<a id="#select">
 						<h4 class="font-title text-black text-2xl my-2">Selecting a calibrator</h4>
@@ -586,7 +586,7 @@
 												style="height:1em;vertical-align:-0.25em;"></span><span
 												class="mord mathnormal" style="margin-right:0.10764em;">f</span><span
 												class="mopen">(</span><span class="mord">⋅</span><span
-												class="mclose">)</span></span></span></span></span><span></span></span>
+												class="mclose">)</span></span></span></span></span><span>﻿</span></span>
 						is called <em>fitting</em>. This auxiliary function helps establish a relationship between the
 						error metric score and an interpretable confidence interval.</div>
 					<div class="article-text">During fitting, a plot of residual vs.
@@ -619,7 +619,7 @@
 												style="height:1em;vertical-align:-0.25em;"></span><span
 												class="mord mathnormal" style="margin-right:0.10764em;">f</span><span
 												class="mopen">(</span><span class="mord">⋅</span><span
-												class="mclose">)</span></span></span></span></span><span></span></span>
+												class="mclose">)</span></span></span></span></span><span>﻿</span></span>
 						and
 						<style>
 							@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
@@ -642,7 +642,7 @@
 												style="height:1em;vertical-align:-0.25em;"></span><span
 												class="mord text"><span class="mord">EM</span></span><span
 												class="mopen">(</span><span class="mord">⋅</span><span
-												class="mclose">)</span></span></span></span></span><span></span></span>
+												class="mclose">)</span></span></span></span></span><span>﻿</span></span>
 						are defined functions, and confidence intervals can be calculated by inputting a target molecule
 						or molecules.
 					</div>
@@ -650,7 +650,7 @@
 						<h3 class="heading">Getting Started</h3>
 					</a>
 					<div class="article-text">We start by training a model on a dataset. For this post, we will train an
-						<code>oam.RandomForestModel</code> on a lipophilicity dataset from <a
+						<pre><code>oam.RandomForestModel</code></pre> on a lipophilicity dataset from <a
 							href="https://moleculenet.org/datasets-1">MoleculeNet</a>. The goal of the proceeding
 						error models will be to measure the uncertainty of predictions from this model.
 					</div>
@@ -667,7 +667,8 @@ model.fit(lipo_dataset.train_dataset[0], lipo_dataset.train_dataset[1])</code></
 					<a id="#basic">
 						<h3 class="heading">Basic Error Models</h3>
 					</a>
-					<div class="article-text">To demonstrate a basic error model, we will use the <code>oam.SDC</code>
+					<div class="article-text">To demonstrate a basic error model, we will use the
+						<pre><code>oam.SDC</code></pre>
 						error model that employs an error metric function called <a
 							href="https://pubs.acs.org/doi/10.1021/acs.jcim.8b00597"><strong>SDC</strong></a>, or <a
 							href="https://pubs.acs.org/doi/10.1021/acs.jcim.8b00597"><strong>sum of distance-weighted
@@ -697,7 +698,7 @@ model.fit(lipo_dataset.train_dataset[0], lipo_dataset.train_dataset[1])</code></
 														<mrow>
 															<msup>
 																<mi>m</mi>
-																<mo mathvariant="normal" lspace="0em" rspace="0em">'
+																<mo mathvariant="normal" lspace="0em" rspace="0em">′
 																</mo>
 															</msup>
 															<mo>∈</mo>
@@ -714,20 +715,20 @@ model.fit(lipo_dataset.train_dataset[0], lipo_dataset.train_dataset[1])</code></
 															<mo separator="true">,</mo>
 															<msup>
 																<mi>m</mi>
-																<mo mathvariant="normal" lspace="0em" rspace="0em">'
+																<mo mathvariant="normal" lspace="0em" rspace="0em">′
 																</mo>
 															</msup>
 															<mo stretchy="false">)</mo>
 															<mi mathvariant="normal">/</mi>
 															<mn>1</mn>
-															<mo>-</mo>
+															<mo>−</mo>
 															<mi>d</mi>
 															<mo stretchy="false">(</mo>
 															<mi>m</mi>
 															<mo separator="true">,</mo>
 															<msup>
 																<mi>m</mi>
-																<mo mathvariant="normal" lspace="0em" rspace="0em">'
+																<mo mathvariant="normal" lspace="0em" rspace="0em">′
 																</mo>
 															</msup>
 															<mo stretchy="false">)</mo>
@@ -774,14 +775,14 @@ model.fit(lipo_dataset.train_dataset[0], lipo_dataset.train_dataset[1])</code></
 																									style="height:2.5em;"></span><span
 																									class="sizing reset-size3 size1 mtight"><span
 																										class="mord mtight"><span
-																											class="mord mtight">'</span></span></span></span></span></span></span></span></span><span
+																											class="mord mtight">′</span></span></span></span></span></span></span></span></span><span
 																			class="mrel mtight">∈</span><span
 																			class="mord mathcal mtight"
 																			style="margin-right:0.02778em;">D</span></span></span></span><span
 																style="top:-3.0500049999999996em;"><span class="pstrut"
 																	style="height:3.05em;"></span><span><span
 																		class="mop op-symbol large-op">∑</span></span></span></span><span
-															class="vlist-s"></span></span><span class="vlist-r"><span
+															class="vlist-s">​</span></span><span class="vlist-r"><span
 															class="vlist"
 															style="height:1.321706em;"><span></span></span></span></span></span><span
 												class="mspace" style="margin-right:0.16666666666666666em;"></span><span
@@ -810,10 +811,10 @@ model.fit(lipo_dataset.train_dataset[0], lipo_dataset.train_dataset[1])</code></
 																										style="height:2.5em;"></span><span
 																										class="sizing reset-size3 size1 mtight"><span
 																											class="mord mtight"><span
-																												class="mord mtight">'</span></span></span></span></span></span></span></span></span><span
+																												class="mord mtight">′</span></span></span></span></span></span></span></span></span><span
 																				class="mclose mtight">)</span><span
 																				class="mord mtight">/1</span><span
-																				class="mbin mtight">-</span><span
+																				class="mbin mtight">−</span><span
 																				class="mord mathnormal mtight">d</span><span
 																				class="mopen mtight">(</span><span
 																				class="mord mathnormal mtight">m</span><span
@@ -830,7 +831,7 @@ model.fit(lipo_dataset.train_dataset[0], lipo_dataset.train_dataset[1])</code></
 																										style="height:2.5em;"></span><span
 																										class="sizing reset-size3 size1 mtight"><span
 																											class="mord mtight"><span
-																												class="mord mtight">'</span></span></span></span></span></span></span></span></span><span
+																												class="mord mtight">′</span></span></span></span></span></span></span></span></span><span
 																				class="mclose mtight">)</span></span></span></span></span></span></span></span></span></span></span></span></span>
 						</div>
 					</figure>
@@ -848,7 +849,7 @@ model.fit(lipo_dataset.train_dataset[0], lipo_dataset.train_dataset[1])</code></
 													<mo separator="true">,</mo>
 													<msup>
 														<mi>m</mi>
-														<mo mathvariant="normal" lspace="0em" rspace="0em">'</mo>
+														<mo mathvariant="normal" lspace="0em" rspace="0em">′</mo>
 													</msup>
 													<mo stretchy="false">)</mo>
 												</mrow>
@@ -868,8 +869,8 @@ model.fit(lipo_dataset.train_dataset[0], lipo_dataset.train_dataset[1])</code></
 																		style="height:2.7em;"></span><span
 																		class="sizing reset-size6 size3 mtight"><span
 																			class="mord mtight"><span
-																				class="mord mtight">'</span></span></span></span></span></span></span></span></span><span
-												class="mclose">)</span></span></span></span></span><span></span></span>
+																				class="mord mtight">′</span></span></span></span></span></span></span></span></span><span
+												class="mclose">)</span></span></span></span></span><span>﻿</span></span>
 						is the Tanimoto distance between the input molecule <style>
 							@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
 						</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
@@ -885,7 +886,7 @@ model.fit(lipo_dataset.train_dataset[0], lipo_dataset.train_dataset[1])</code></
 										</math></span><span class="katex-html" aria-hidden="true"><span
 											class="base"><span class="strut"
 												style="height:0.43056em;vertical-align:0em;"></span><span
-												class="mord mathnormal">m</span></span></span></span></span><span></span></span>
+												class="mord mathnormal">m</span></span></span></span></span><span>﻿</span></span>
 						and the training molecule <style>
 							@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css');
 						</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
@@ -913,7 +914,7 @@ model.fit(lipo_dataset.train_dataset[0], lipo_dataset.train_dataset[1])</code></
 																		style="height:2.7em;"></span><span
 																		class="sizing reset-size6 size3 mtight"><span
 																			class="mord mathnormal mtight">i</span></span></span></span><span
-																class="vlist-s"></span>span></span><span
+																class="vlist-s">​</span></span><span
 															class="vlist-r"><span class="vlist"
 																style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>
 						using Morgan fingerprints with a radius of 2. A higher SDC means the given molecule is more
@@ -966,14 +967,16 @@ model.fit(lipo_dataset.train_dataset[0], lipo_dataset.train_dataset[1])</code></
 											class="base"><span class="strut"
 												style="height:0.43056em;vertical-align:0em;"></span><span
 												class="mord mathnormal">a</span></span></span></span></span><span></span></span>
-						for SDC. All error models are built with a <code>BaseModel</code> and a <code>BaseDataset</code>
+						for SDC. All error models are built with a
+						<pre><code>BaseModel</code></pre> and a
+						<pre><code>BaseDataset</code></pre>
 						corresponding to the model and its training dataset, respectively.
 					</div>
 					<pre class="p-2"><code class="font-code">error_model = oam.SDC()
 error_model.build(model, lipo_dataset)</code></pre>
 					<div class="article-text">If the entire dataset was used to train the model as opposed to only
-						<code>train_dataset</code>, this can be configured by setting
-						<code>use_entire_dataset = True</code> during initialization.
+						<pre><code>train_dataset</code></pre>, this can be configured by setting
+						<pre><code>use_entire_dataset = True</code></pre> during initialization.
 					</div>
 					<pre
 						class="p-2"><code class="font-code">error_model.build(model, lipo_dataset, use_entire_dataset=True)</code></pre>
@@ -1005,10 +1008,12 @@ error_model.build(model, lipo_dataset)</code></pre>
 							curve</strong> is the error model, generated by selecting the best curve among
 						candidate curves fitted against the blue points.
 					</div>
-					<div class="article-text">The <code>.fit()</code> method can also optionally take in arguments for
+					<div class="article-text">The
+						<pre><code>.fit()</code></pre> method can also optionally take in arguments for
 						the error percentile, fitting method, file name to save the plot, and more. For example, if we
 						wish to fit 75th percentile error bars using a rolling quantile method with the graph saved to
-						'error_model_fit.png', we can run the code below.</div>
+						'error_model_fit.png', we can run the code below.
+					</div>
 					<pre class="p-2"><code class="font-code">error_model.fit(lipo_dataset.valid_dataset[0], lipo_dataset.valid_dataset[1]
 	method='roll', quantile=0.75, filename='error_model_fit.png')</code></pre>
 					<figure id="389cd97d-2ba9-4e43-8166-7e227ccf7cc3" class="image"><a
@@ -1022,8 +1027,10 @@ error_model.build(model, lipo_dataset)</code></pre>
 						rolling quantile. </div>
 					<div class="article-text">We can also fit the error model with cross-validation, which is done below
 						and produces the corresponding graph. Since cross-validation requires no extra data,
-						<code>.fit_cv()</code> has no required arguments, though it can optionally take the same keyword
-						arguments as <code>.fit()</code> for customizing the curve-fitting procedure.
+						<pre><code>.fit_cv()</code></pre> has no required arguments, though it can optionally take the
+						same keyword
+						arguments as
+						<pre><code>.fit()</code></pre> for customizing the curve-fitting procedure.
 					</div>
 					<pre class="p-2"><code class="font-code">error_model.fit_cv()
 # cross validating with split=0.05
@@ -1036,15 +1043,17 @@ error_model.build(model, lipo_dataset)</code></pre>
 								style="width:432px"
 								src="Evaluating%20Model%20Uncertainty%20with%20Oloren%20AutoML%20d20b45de029445d188dfb29c2055df68/figure%202.png" /></a>
 					</figure>
-					<div class="article-text">The <code>.fit_cv()</code> method can also take in two option arguments,
-						<code>n_splits=10</code> and <code>test_size_range=(0.05, 0.5)</code>.
+					<div class="article-text">The
+						<pre><code>.fit_cv()</code></pre> method can also take in two option arguments,
+						<pre><code>n_splits=10</code></pre> and
+						<pre><code>test_size_range=(0.05, 0.5)</code></pre>.
 					</div>
 					<a id="#score_basic">
 						<h4 class="font-title text-black text-2xl my-2">Scoring datasets</h4>
 					</a>
 					<div class="article-text">Once an error model is fitted, it is easy to score a dataset. Here we
 						compute the predicted error bars for each prediction in the original dataset's
-						<code>test_dataset</code>.
+						<pre><code>test_dataset</code></pre>.
 					</div>
 					<pre class="p-2"><code class="font-code">error_model.score(lipo_dataset.test_dataset[0])
 # array([1.07448983, 1.15935886, 1.09753033, 1.02649071, 0.99616767,..])</code></pre>
@@ -1062,9 +1071,11 @@ print(sum(in_ci) / len(in_ci))
 						<h3 class="heading">Aggregate Error Models</h3>
 					</a>
 					<div class="article-text">Error models become more powerful when aggregated together. Here, we
-						introduce the <code>BaseAggregateErrorModel</code> class, which in addition to a model and its
+						introduce the
+						<pre><code>BaseAggregateErrorModel</code></pre> class, which in addition to a model and its
 						training data, takes in a list of error models and produces an aggregate score from the outputs
-						of those error models. For this post, we will use the <code>oam.RandomForestErrorModel</code>,
+						of those error models. For this post, we will use the
+						<pre><code>oam.RandomForestErrorModel</code></pre>,
 						which trains a random forest model on the outputs of the inputted error models to predict a
 						score that correlates with residuals. This approach is adopted from <a
 							href="https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.5b00110">https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.5b00110</a>.
@@ -1103,11 +1114,15 @@ rf_error.build(model, lipo_dataset)</code></pre>
 # 3024it [00:03, 775.36it/s]
 # 3024it [00:04, 695.52it/s]
 # 3024it [00:04, 692.61it/s]</code></pre>
-					<div class="article-text">The <code>.train_cv()</code> method can
+					<div class="article-text">The
+						<pre><code>.train_cv()</code></pre> method can
 						take
 						in
 						two
-						option arguments, <code>n_splits=9</code> and <code>test_size_range=(0.1, 0.9)</code>. </div>
+						option arguments,
+						<pre><code>n_splits=9</code></pre> and
+						<pre><code>test_size_range=(0.1, 0.9)</code></pre>.
+					</div>
 					<a id="#fit_agg">
 						<h4 class="font-title text-black text-2xl my-2">Fitting the model</h4>
 					</a>

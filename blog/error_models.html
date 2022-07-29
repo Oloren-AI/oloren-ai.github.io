@@ -1007,8 +1007,8 @@ error_model.build(model, lipo_dataset)</code></pre>
 						validation dataset.</div>
 					<pre class="code-border"><code class="font-code">error_model.fit(lipo_dataset.valid_dataset[0], lipo_dataset.valid_dataset[1])
 # 420it [00:02, 174.60it/s]</code></pre>
-					<img src="images/error_model/figure1.png" alt="Can't render image"
-						class="flex justify-center object-contain">
+					<div class="flex justify-center object-contain"><img src="images/error_model/figure1.png"
+							alt="Can't render image"></div>
 					<div class="article-text">Fitting the error model will generate the above plot of the observed
 						residuals for the external dataset plotted against their SDC score, depicted by the
 						<strong>black points</strong>. In this instance, the fitted error model is a linear model
@@ -1031,8 +1031,8 @@ error_model.build(model, lipo_dataset)</code></pre>
 					</div>
 					<pre class="code-border"><code class="font-code">error_model.fit(lipo_dataset.valid_dataset[0], lipo_dataset.valid_dataset[1]
 	method='roll', quantile=0.75, filename='error_model_fit.png')</code></pre>
-					<img src="images/error_model/figure2.png" alt="Can't render image"
-						class="flex justify-center object-contain">
+					<div class="flex justify-center object-contain"><img src="images/error_model/figure2.png"
+							alt="Can't render image"></div>
 					<div class="article-text">Methods are restricted to 'bin' for equal-width binning, 'qbin' for
 						quantile-based binning, and 'roll' for rolling quantile, and other arguments that can be set
 						are
@@ -1052,8 +1052,8 @@ error_model.build(model, lipo_dataset)</code></pre>
 # ...
 # cross validating with split=0.5
 # 1680it [00:04, 351.05it/s]</code></pre>
-					<img src="images/error_model/figure3.png" alt="Can't render image"
-						class="flex justify-center object-contain">
+					<div class="flex justify-center object-contain"><img src="images/error_model/figure3.png"
+							alt="Can't render image"></div>
 					<div class="article-text">The
 						<code class="font-code">.fit_cv()</code> method can also take in two option arguments, <code
 							class="font-code">n_splits=10</code> and <code
@@ -1091,7 +1091,7 @@ print(sum(in_ci) / len(in_ci))
 						<code class="font-code">oam.RandomForestErrorModel</code>,
 						which trains a random forest model on the outputs of the inputted error models to predict a
 						score that correlates with residuals. This approach is adopted from <a
-							href="https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.5b00110">https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.5b00110</a>.
+							href="https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.5b00110">Sheridan (2015)</a>.
 					</div>
 					<a id="initial_agg">
 						<h4 class="font-title text-black text-2xl my-2">Initialization</h4>
@@ -1144,8 +1144,8 @@ rf_error.build(model, lipo_dataset)</code></pre>
 # 420it [00:09, 45.05it/s]
 # 420it [00:08, 46.92it/s]
 # 420it [00:07, 53.38it/s]</code></pre>
-					<img src="images/error_model/figure4.png" alt="Can't render image"
-						class="flex justify-center object-contain">
+					<div class="flex justify-center object-contain"><img src="images/error_model/figure4.png"
+							alt="Can't render image"></div>
 					<div class="article-text">As opposed to SDC, the curve here has a positive slope, indicating
 						that a
 						greater score outputted by the random forest model corresponds with a greater uncertainty in

@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDD Vault to DataFrame: Python API and tutorial for querying and downloading data </title>
+    <meta name="description" content="This blog post is a tutorial with example code on how to use Python to download
+    data from CDD Vault provided by Collaborative Drug Discovery using token authentification and
+    the requests Python library.">
+
+    <link rel="stylesheet" href="public/styles.css">
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZMJ5EWN4YY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZMJ5EWN4YY');
+    </script>
+</head>
+<body class="bg-white w-screen absolute z-0">
+    <a href="../blog.html" class="link"><div class="bg-gradient-to-r from-blue-500 to-indigo-500 w-screen h-64 mt-0 mx-0 px-4 z-10 absolute">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+            &larr; Back to Oloren Blog Home
+        </button></div></a>
+    <div class="w-screen flex flex-col md:flex-row mt-20">
+        <main class="bg-white p-10 rounded-3xl relative mx-8 md:max-w-[85%] md:mr-0 float-left items-start flex-col z-20">
+            <!-- title area  -->
+            <header class="title-area">
+                <h1 class="font-body font-bold text-5xl text-black my-2">CDD Vault to DataFrame: Python API and tutorial for querying and downloading data</h1>
+                <div class="author-container my-5 flex flex-row content-center">
+                    <img class="self-center object-fill h-10 w-10 rounded-full mr-5" src="images/cdd_import/OAMSquare.jpg" alt="could not render the beautiful face of this article's author :(">
+                    <span class="author-name h-5 font-title text-blue-500 text-l flex justify-center">OAM Communications Team</span>
+                    <span class="date font-bold font-title text-blue-500 text-l mx-2">8/4/22</span>
+                </div>
+                <div class="description font-body text-gray-400 italic">Oftentimes, it is a necessary step to export data out of CDD Vault into Python or otherwise onto a local machine. This can be an annoying task, so we want to help make the process as simple as possible so you can get to your analysis.</div>
+            </header>
+            <div class="article-text">There’s an easy way to do this, which involves first creating a Saved Search that reflects the exact query and format you’d like to export the data as, and then second calling the Saved Search via CDD’s API.</div>
+            <div class="article-text">To use the following code you’ll need three pieces of information: your CDD Vault ID, your CDD API token with read access, and the Saved Search ID.</div>
+            <div class="article-text">The below code creates a function, get_dataset_cdd_saved_search(search_id), which given a Saved Search id, returns a pd.DataFrame with the data.</div>
+            <pre class=""><code class="font-code">import time
+import requests
+import pandas as pd
+from io import StringIO
+
+# Written by OAM Communications Team, Oloren AI
+
+token = None
+vault_id = None
+
+def run_saved_search(search_id):
+    base_url = f"https://app.collaborativedrug.com/api/v1/vaults/{vault_id}/"
+    headers = {'X-CDD-token':f'{token}'}
+    url = base_url + f"searches/{search_id}"
+
+    response = requests.request("GET", url, headers=headers).json()
+    return response["id"]
+
+def check_export_status(export_id):
+    base_url = f"https://app.collaborativedrug.com/api/v1/vaults/{vault_id}/"
+    headers = {'X-CDD-token':f'{token}'}
+    url = base_url + f"export_progress/{export_id}"
+
+    response = requests.request("GET", url, headers=headers).json()
+    return response["status"]
+
+def get_export(export_id):
+    base_url = f"https://app.collaborativedrug.com/api/v1/vaults/{vault_id}/"
+    headers = {'X-CDD-token':f'{token}'}
+    url = base_url + f"exports/{export_id}"
+
+    response = requests.request("GET", url, headers=headers)
+    data_stream = StringIO(response.text)
+    return pd.read_csv(data_stream)
+
+def get_dataset_cdd_saved_search(search_id):
+    export_id = run_saved_search(search_id)
+    i = 0
+    status = "new"
+    while True:
+        print(f"Export status is {status}, checking in {2**i} seconds...")
+        time.sleep(2**i)
+        status = check_export_status(export_id)
+        if status == "finished":
+            print("Export ready!")
+            break
+        i += 1
+    return get_export(export_id)</code></pre>
+        </main>
+        <nav class="invisible md:sticky md:visible px-8 flex flex-col space-y-5 top-1/2 -translate-y-1/2 self-start">
+            <a href="#">
+                <img src="/images/facebook.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/twitter.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/email.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/discord.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/heart.png" alt="" class="max-h-12 object-contain">
+            </a>
+            <a href="#">
+                <img src="/images/comment.png" alt="" class="max-h-12 object-contain">
+            </a>
+        </nav>
+    </div>
+    <!-- <div class="read-more my-10">
+        <h3 class="font-body text-blue-500 text-5xl mx-10">Read more...</h3>
+        <div class="flex flex-row space-x-20 my-10">
+            <div class="article-card w-64">
+                <img src="", alt="">
+                <div class="card-text bg-gray-200">
+                    <span>Visualizing chemical space
+                    <span>By John Smith
+                </div>
+            </div>
+            <div class="article-card w-64">
+                <img src="images/meme.jpeg", alt="">
+                <div class="card-text">
+                    <span>Visualizing chemical space
+                    <span>By John Smith
+                </div>
+            </div>
+            <div class="article-card w-64">
+                <img src="images/dog.jpeg", alt="">
+                <div class="card-text">
+                    <span>Visualizing chemical space
+                    <span>By John Smith
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="comments-section my-10">
+        <h3 class="font-body text-black text-5xl mx-10">Comments</h3>
+        <form class="comments">
+            <div class="comment-profile">
+                <img src="" alt="">
+            </div>
+            <div class="comment-box">
+                <textarea name="comment" id="comment" cols="30" rows="10"></textarea>
+            </div>
+        </form>
+    </div> -->
+</body>
+</html>

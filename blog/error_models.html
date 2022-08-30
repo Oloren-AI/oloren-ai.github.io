@@ -40,7 +40,7 @@
 				<!-- title area  -->
 				<header class="title-area">
 					<h1 class="font-body font-bold text-5xl text-black my-2">Evaluating Model Uncertainty with Oloren
-						AutoML</h1>
+						ChemEngine</h1>
 					<div class="author-container my-5 flex flex-row content-center">
 						<img class="self-center object-fill h-10 w-10 rounded-full mr-5" src="images/alex.JPG"
 							alt="could not render the beautiful face of this article's author :(">
@@ -48,7 +48,7 @@
 						<span class="date font-bold font-title text-blue-500 text-l mx-2">07/28/22</span>
 					</div>
 					<div class="description font-body text-gray-400 italic">This guide walks through creating error
-						models to assess the uncertainty of Oloren AutoML models.</div>
+						models to assess the uncertainty of Oloren ChemEngine models.</div>
 				</header>
 
 				<div class="article font-body my-5">
@@ -658,25 +658,25 @@
 					</a>
 					<div class="article-text">We start by training a model on a dataset. For this post, we will
 						train an
-						<code class="font-code">oam.RandomForestModel</code> on a lipophilicity dataset from <a
+						<code class="font-code">oce.RandomForestModel</code> on a lipophilicity dataset from <a
 							href="https://moleculenet.org/datasets-1">MoleculeNet</a>. The goal of the proceeding
 						error models will be to measure the uncertainty of predictions from this model.
 					</div>
-					<pre class="code-border"><code class="font-code">import olorenautoml as oam
+					<pre class="code-border"><code class="font-code">import olorenchemengine as oce
 import pandas as pd
 import numpy as np
 
-lipo_dataset = oam.DatasetFromCSV('Lipophilicity.csv', structure_col = 'smiles', property_col = 'exp')
-splitter = oam.RandomSplit(split_proportions=[0.8,0.1,0.1])
+lipo_dataset = oce.DatasetFromCSV('Lipophilicity.csv', structure_col = 'smiles', property_col = 'exp')
+splitter = oce.RandomSplit(split_proportions=[0.8,0.1,0.1])
 lipo_dataset = splitter.transform(lipo_dataset)
 
-model = oam.RandomForestModel(oam.OlorenCheckpoint('default'), n_estimators=1000)
+model = oce.RandomForestModel(oce.OlorenCheckpoint('default'), n_estimators=1000)
 model.fit(lipo_dataset.train_dataset[0], lipo_dataset.train_dataset[1])</code></pre>
 					<a id="basic">
 						<h3 class="heading">Basic Error Models</h3>
 					</a>
 					<div class="article-text">To demonstrate a basic error model, we will use the
-						<code class="font-code">oam.SDC</code>
+						<code class="font-code">oce.SDC</code>
 						error model that employs an error metric function called <a
 							href="https://pubs.acs.org/doi/10.1021/acs.jcim.8b00597"><strong>SDC</strong></a>, or <a
 							href="https://pubs.acs.org/doi/10.1021/acs.jcim.8b00597"><strong>sum of
@@ -985,7 +985,7 @@ model.fit(lipo_dataset.train_dataset[0], lipo_dataset.train_dataset[1])</code></
 						dataset,
 						respectively.
 					</div>
-					<pre class="code-border"><code class="font-code">error_model = oam.SDC()
+					<pre class="code-border"><code class="font-code">error_model = oce.SDC()
 error_model.build(model, lipo_dataset)</code></pre>
 					<div class="article-text">If the entire dataset was used to train the model as opposed to only
 						<code class="font-code">train_dataset</code>, this can be configured by setting
@@ -1089,7 +1089,7 @@ print(sum(in_ci) / len(in_ci))
 						training data, takes in a list of error models and produces an aggregate score from the
 						outputs
 						of those error models. For this post, we will use the
-						<code class="font-code">oam.RandomForestErrorModel</code>,
+						<code class="font-code">oce.RandomForestErrorModel</code>,
 						which trains a random forest model on the outputs of the inputted error models to predict a
 						score that correlates with residuals. This approach is adopted from <a
 							href="https://pubs.acs.org/doi/pdf/10.1021/acs.jcim.5b00110">Sheridan (2015)</a>.
@@ -1106,8 +1106,8 @@ print(sum(in_ci) / len(in_ci))
 						Additional
 						parameters
 						for each error model can also be passed in as a dictionary of keyword arguments.</div>
-					<pre class="code-border"><code class="font-code">error_models = [oam.SDC(), oam.wRMSD1(), oam.wRMSD2(), oam.PREDICTED()]
-rf_error = oam.RandomForestErrorModel(error_models)
+					<pre class="code-border"><code class="font-code">error_models = [oce.SDC(), oce.wRMSD1(), oce.wRMSD2(), oce.PREDICTED()]
+rf_error = oce.RandomForestErrorModel(error_models)
 rf_error.build(model, lipo_dataset)</code></pre>
 					<a id="train_agg">
 						<h4 class="font-title text-black text-2xl my-2">Training the aggregate model</h4>

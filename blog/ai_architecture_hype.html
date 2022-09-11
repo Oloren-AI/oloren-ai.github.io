@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="__Description__">
+    <title>Practically Beyond ‘Novel’ Methods</title>
+
+    <link rel="stylesheet" href="public/styles.css">
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZMJ5EWN4YY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZMJ5EWN4YY');
+    </script>
+</head>
+
+<body class="bg-white w-screen absolute z-0">
+    <a href="../blog.html" class="link"><div class="bg-gradient-to-r from-blue-500 to-indigo-500 w-screen h-64 mt-0 mx-0 px-4 z-10 absolute">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+            &larr; Back to Oloren Blog Home
+        </button></div></a>
+    <div class="w-screen flex flex-col md:flex-row mt-20">
+        <main class="bg-white p-10 rounded-3xl relative mx-8 md:max-w-[85%] md:mr-0 float-left items-start flex-col z-20">
+            <!-- title area  -->
+            <header class="title-area">
+                <h1 class="font-body font-bold text-5xl text-black my-2">Practically Beyond ‘Novel’ Methods</h1>
+                <div class="author-container my-5 flex flex-row content-center">
+                    <img class="self-center object-fill h-10 w-10 rounded-full mr-5" src="images/ai_architecture_hype/david_huang.jpg" alt="could not render the beautiful face of this article's author :(">
+                    <span class="author-name h-5 font-title text-blue-500 text-l flex justify-center">David Huang</span>
+                    <span class="date font-bold font-title text-blue-500 text-l mx-2">09/09/2022</span>
+                </div>
+                <div class="description font-body text-gray-400 italic">Simple molecular property predictors often perform better than those with all the bells and whistles.</div>
+                
+            </header>
+            <div class="article font-body my-5">
+                <div class="article-text">We love graph neural networks and deep learning—that’s why we gave a <a href="https://oloren.ai/blog/acs_fall2022.html" class="link">
+                    talk </a> recently on supervised contrastive learning on super-large PubChem-BioAssay dataset. But, when it comes to implementing these ‘novel’ methods into practice things get complicated. There’s a plethora of papers that sound like “AI Deep Learning Transformer Graph Neural Network with State-of-the-Art Quantum Geometric Representations Leveraging Big Federated Data and Provably Powerful Meta-Learning” or something like that, and I don’t even think I got all the buzzwords.</div>
+                <div class="article-text">It’s a confusing landscape of optimizing for new methods (often with their own confusing repositories and documentation) and sticking to the tried-and-true. methods It often feels lose-lose. If you implement the new methods, it takes forever and ever and often at the end of it the new methods don’t even work. If you stick with the tried-and-true methods, the question “what if I implemented the new methods?” looms large.</div>
+                <div class="article-text">That’s the bad news. The good news is that the <b>practical</b> application of AI should be and is a lot simpler than that. Let’s compare some new and old methods.</div>
+                <div class="article-text">We read and really liked this paper on <b>“Geometry-enhanced molecular representation learning for property prediction” (Fang et al.)</b>, but they compared only against other graph neural networks and not “baseline” models like Random Forests and MLPs on chemical descriptors and fingerprints) and ensembled variants thereof. We found that those baselines performed BETTER than the proposed graph neural networks on Tox21 measured by AUC.</div>
+                <div class="article-text">A random forest trained on the RDKit chemical descriptors provided by Descriptastorus (model1) had an AUC <b>0.780</b> vs the best graph neural network with AUC <b>0.781</b>. An ensembled model of gradient-boosted random forests (Descriptastorus’s rdkit2dnormalized and morgan3counts, and Mol2Vec) (model2) having an AUC of <b>0.789</b> performed better than all provided graph neural networks.</div>
+                <pre class="code-border"><code class="font-code"># Model Definitions
+model1 = oce.RandomForestModel(oce.DescriptastorusDescriptor("rdkit2dnormalized"), n_estimators = 1000)
+model2 = oce.BaseBoosting([oce.RandomForestModel(oce.DescriptastorusDescriptor("rdkit2dnormalized"), n_estimators = 1000),
+                         oce.RandomForestModel(oce.DescriptastorusDescriptor("morgan3counts"), n_estimators = 1000),
+                         oce.RandomForestModel(oce.Mol2Vec(), n_estimators = 1000)])
+</code></pre>
+                <div class="article-text">We haven’t done a full study on all the tasks presented and almost certainly there are many situations where GNNs are better (we use GNNs on plenty of situation-dependent occasions). We just wanted to punch-back at the overwhelming buzzword inflation that happens everywhere.</div>
+                <div class="article-text"><b>Bottom Line: The newest shiniest thing isn’t always better. Be skeptical and ask for baselines. Practically, simple is often better.</b></div>
+                <div class="article-text">Lots of disclaimers and qualifications. </div>
+                <div class="article-text">First, we found the geometry-enhance ML to be immensely helpful in both ideas (translating geometry to graph embeddings) and in that they systematically tried lots of graph neural networks. However, they used their own split which means that there is no way of comparing directly to the original publication of the other graph neural networks; furthermore, it was a bit of a hassle to completely recreate their split, which we verified by checking the class ratios—there was a ton of hidden complexity there. </div>
+                <div class="article-text">Second, we find internally that we can ‘beat’ this ensembled random forests baseline by combining even more diverse models—including graph neural networks. </div>
+                <div class="article-text">Third, we have an interest in the framework we did our benchmarking on as we provide it open-sourced at <a href="https://github.com/Oloren-AI/olorenchemengine" class="link">https://github.com/Oloren-AI/olorenchemengine</a>, and we also provide commercial licenses, extensions, and applications thereof.</div>
+                <div class="article-text">Lastly, this isn’t to say we don’t like new AI approaches—we gave a whole presentation at ACS this Fall 2022 on supervised contrastive learning—just that we value practicality and baselines.</div>
+                <div class="article-text">Final notes. This result shouldn’t be surprising: in the original D-MPNN paper they found very little difference between GNNs and RFs/MLPs on Tox21.</div>
+                <code class="font-code">__Inline Code__</code>
+            </div>          
+        </main>
+    </div>
+</body>
+</html>

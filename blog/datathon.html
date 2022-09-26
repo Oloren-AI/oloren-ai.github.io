@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oloren Datathon </title>
+    <meta name="description" content="Introducing the Oloren Datathon, a competition to build the best model with Oloren ChemEngine. Prizes for all!">
+
+    <link rel="stylesheet" href="public/styles.css">
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZMJ5EWN4YY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZMJ5EWN4YY');
+    </script>
+</head>
+<body class="bg-white w-screen absolute z-0">
+    <a href="../blog.html" class="link"><div class="bg-gradient-to-r from-blue-500 to-indigo-500 w-screen h-64 mt-0 mx-0 px-4 z-10 absolute">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+            &larr; Back to Oloren Blog Home
+        </button></div></a>
+    <div class="w-screen flex flex-col md:flex-row mt-20">
+        <main class="bg-white p-10 rounded-3xl relative mx-8 md:max-w-[85%] md:mr-0 float-left items-start flex-col z-20">
+            <!-- title area  -->
+            <header class="title-area">
+                <h1 class="font-body font-bold text-5xl text-black my-2">Oloren Datathon</h1>
+                <div class="author-container my-5 flex flex-row content-center">
+                    <img class="self-center object-fill h-10 w-10 rounded-full mr-5" src="images/cdd_import/OAMSquare.jpg" alt="could not render the beautiful face of this article's author :(">
+                    <span class="author-name h-5 font-title text-blue-500 text-l flex justify-center">Andy Zhu</span>
+                    <span class="date font-bold font-title text-blue-500 text-l mx-2">9/26/22</span>
+                </div>
+                <div class="description font-body text-gray-400 italic">Introducing the Oloren Datathon, a competition to build the best model with Oloren ChemEngine. Prizes for all. Let's achieve state of the art performance.</div>
+            </header>
+
+            <a id="high_level">
+                <h3 class="heading">Introduction</h3>
+            </a>
+            <div class="article-text">Oloren AI is hosting a series of datathons! The goal is to use Oloren ChemEngine (OCE) to create the highest-performing model. Each round, we’ll pick a clean dataset for molecular property prediction and provide training, validation, and test sets for it. Our goal for these datathons is twofold: getting more people to use OCE, and achieving state of the art performance. We’re really interested in seeing what works, what doesn’t, and how we can improve.</div>
+            <div class="article-text">For the first round, the task is predicting hepatocyte clearance. The dataset is provided by AstraZeneca from <a class="link" href="https://www.ebi.ac.uk/chembl/document_report_card/CHEMBL3301361/">this paper</a>. It might look familiar - TDC also uses it as one of their benchmark datasets! We’ve split the dataset into hepatocyte_train, hepatocyte_val, and hepatocyte_test. </div>
+            <div class="article-text">The first datathon will run from 9/26 - 10/7, with a <a class="link" href="https://leaderboardhq.com/cdxxr6zg">public leaderboard here</a>. The prizes for all submissions are down below! </div>
+
+            <a id="high_level">
+                <h3 class="heading">Prizes</h3>
+            </a>
+            <ul class="list-disc list-outside text-black pl-10">
+                <li class="pl-3">Participation: Drop your address in the submission form and we’ll send you a small gift. </li>
+                <li class="pl-3">Better than Us: We spent some time and trained a model on this exact dataset. Do better than us and we’ll send you a copy of our favorite board game. </li>
+                <li class="pl-3">Best: $1000 for first place!</li>
+            </ul>
+            <a id="high_level">
+                <h3 class="heading">Getting Started</h3>
+            </a>
+            <div class="article-text">First, install the OCE package from our GitHub repository <a class="link" href="https://github.com/Oloren-AI/olorenchemengine">Oloren ChemEngine</a>. Once that’s all set, we can get started by importing the datasets. </div>
+            <pre class="code-border"><code class="font-code">
+    import olorenchemengine as oce 
+    import pandas as pd 
+    
+    # importing data
+    df_train = pd.read_csv("https://storage.googleapis.com/oloren-public-data/oloren_datathons/hepatocyte_train.csv")
+    df_val = pd.read_csv("https://storage.googleapis.com/oloren-public-data/oloren_datathons/hepatocyte_valid.csv")
+    df_test = pd.read_csv("https://storage.googleapis.com/oloren-public-data/oloren_datathons/hepatocyte_test.csv")
+            </code></pre>      
+            <div class="article-text">Once all the data is imported, we can do some model building. Below is a basic random forest model.</div>
+            <pre class="code-border"><code class="font-code">
+    model = oce.RandomForestModel(oce.DescriptastorusDescriptor("morgan3counts"), n_estimators=1000)
+            </code></pre>      
+            <div class="article-text">To learn more, we recommend checking out the docs we’ve written up <a class="link" href="https://docs.oloren.ai/">here</a>. Working through the examples is a good way to get started. </div>          
+
+            <a id="high_level">
+                <h3 class="heading">Submission Details</h3>
+            </a>
+
+            <div class="article-text">Models performance will be evaluated on hepatocyte_test on spearman coefficient. Submit your model parameters in this <a class="link" href="https://docs.google.com/forms/d/e/1FAIpQLSdXCvrsQJxBc4pPO0zERW6cVa_LBxSNirrsQ7iqZmv1U-93xw/viewform?usp=send_form">google form</a>. To get parameters, run the following command: </div>
+            <pre class="code-border"><code class="font-code">
+    parameters = oce.parameterize(model)
+            </code></pre>            
+            <div class="article-text">The hyperparameters should be formatted something like this: </div>
+            <pre class="code-border"><code class="font-code">
+    {'BC_class_name': 'RandomForestModel',
+        'args': [{'BC_class_name': 'DescriptastorusDescriptor',
+            'args': ['morgan3counts'],
+            'kwargs': {'log': True, 'scale': None}}],
+        'kwargs': {'n_estimators': 1000,
+            'max_features': 'log2',
+            'max_depth': None,
+            'criterion': 'entropy',
+            'class_weight': None,
+            'bootstrap': True}}{'BC_class_name': 'RandomForestModel',
+        'args': [{'BC_class_name': 'DescriptastorusDescriptor',
+            'args': ['morgan3counts'],
+            'kwargs': {'log': True, 'scale': None}}],
+        'kwargs': {'n_estimators': 1000,
+            'max_features': 'log2',
+            'max_depth': None,
+            'criterion': 'entropy',
+            'class_weight': None,
+            'bootstrap': True}}
+            </code></pre>
+            <div class="article-text">We’ll publish all submissions to the <a class="link" href="https://leaderboardhq.com/cdxxr6zg">public leaderboard here</a>. Once each submission is confirmed, we’ll update it with the tag [verified].</div>            
+            <div class="article-text">(fun fact) Our internal model achieved a spearman coefficient of 0.491 - the metric to beat!</div>            
+
+            <a id="high_level">
+                <h3 class="heading">Other Rules/FAQ</h3>
+            </a>
+            <div class="article-text">How many people can be on a team? </div>            
+            <ul class="list-disc list-outside text-black pl-10">
+                <li class="pl-3">As many as you want! </li>
+            </ul>
+            <div class="article-text">OCE doesn’t have all the functionality I want. How can I use other packages/create other functions in OCE?</div>            
+            <ul class="list-disc list-outside text-black pl-10">
+                <li class="pl-3">Submissions are simply model parameters - feel free to use other packages to help you train/optimize model architectures and parameters! </li>
+                <li class="pl-3">If you’re interested in writing custom OCE functions, make a PR! We’ll do our best to review and accept them quickly.</li>
+            </ul>
+            <div class="article-text">I have more questions. How can I get in touch?</div>            
+            <ul class="list-disc list-outside text-black pl-10">
+                <li class="pl-3">Join our <a class="link" href="https://discord.gg/5dHVNAhk">Discord</a>! We’ll be there to chat about OCE features, potential PRs, competition details, answer questions, and just hang out!</li>
+            </ul>
+
+            <a id="high_level">
+                <h3 class="heading">Contact</h3>
+            </a>
+            <div class="article-text">If you have any questions, feel free to reach out to competition@oloren.ai. If you’re interested in Oloren products for enterprise use, shoot an email to andy@oloren.ai.</div>
+        </nav>
+    </div>
+</body>
+</html>

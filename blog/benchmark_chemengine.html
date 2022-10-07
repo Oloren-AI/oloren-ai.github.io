@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="__Description__">
+    <title>__Title__</title>
+
+    <link rel="stylesheet" href="public/styles.css">
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZMJ5EWN4YY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZMJ5EWN4YY');
+    </script>
+</head>
+
+<body class="bg-white w-screen absolute z-0">
+    <a href="../blog.html" class="link"><div class="bg-gradient-to-r from-blue-500 to-indigo-500 w-screen h-64 mt-0 mx-0 px-4 z-10 absolute">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+            &larr; Back to Oloren Blog Home
+        </button></div></a>
+    <div class="w-screen flex flex-col md:flex-row mt-20">
+        <main class="bg-white p-10 rounded-3xl relative mx-8 md:max-w-[85%] md:mr-0 float-left items-start flex-col z-20">
+            <!-- title area  -->
+            <header class="title-area">
+                <h1 class="font-body font-bold text-5xl text-black my-2">Developing the ‘best’ molecular property predictors</h1>
+                <div class="author-container my-5 flex flex-row content-center">
+                    <img class="self-center object-fill h-10 w-10 rounded-full mr-5" src="images/people/david_huang.jpg" alt="could not render the beautiful face of this article's author :(">
+                    <span class="author-name h-5 font-title text-blue-500 text-l flex justify-center">David Huang</span>
+                    <span class="date font-bold font-title text-blue-500 text-l mx-2">10/07/2022</span>
+                </div>
+                <div class="description font-body text-gray-400 italic"><a href="http://benchmarks.chemengine.org" class="link">benchmarks.chemengine.org</a> provides directly reproducible benchmarks with OCE model parameter strings</div>
+                
+            </header>
+            <div class="article font-body my-5">
+                <a id="#benchmarks"><h3 class="heading">Benchmarking efforts and site</h3></a>
+                <div class="article-text">We recently released a set of benchmarks, <a href="https://github.com/Oloren-AI/OCE-TDC" class="link">topping the leaderboards</a> on Therapeutic Data Commons, and are releasing a website as well: benchmarks.chemengine.org. On that site, we will benchmark models created by Oloren ChemEngine on relevant datasets. We are still in the process of migrating past experiments.</div>
+                <div class="article-text">We are releasing all this—out into the open—because we believe that in Oloren ChemEngine (OCE, <a href="https://github.com/Oloren-AI/olorenchemengine" class="link">https://github.com/Oloren-AI/olorenchemengine</a>) we have the best system for molecular property prediction and we aren’t afraid to back up that claim. We also believe that publishing our benchmark results out there is a great way to push ourselves to improve our models.</div>
+                <a id="#reproducible"><h3 class="heading">Reproducibility of benchmarks</h3></a>
+                <div class="article-text">Before I dive into a longer story on our modeling strategy, I want to emphasize one super cool feature about this benchmarking site: with OCE installed, you can copy-paste the “Model Parameters” JSON dictionary for any model you see on the site, and 100% accurately reproduce that model locally on your own machine. No fussing about, no complex reimplementation and integrations: it’s a game-changer for reproducibility.</div>
+                <div class="article-text">We began our modeling journey with an ambitious project: we’d just seen the publication of an image recognition paper on “Supervised Contrastive Learning”, a way to extract representation from labeled databases, and we wanted to apply it to PubChem BioAssay. So we did, spending months on the process, scaling up infrastructure to handle massive quantities of data to train a new learned molecular representation we call <a href="https://oloren.ai/blog/acs_fall2022.html" class="link">OlorenVec</a>.</div>
+                <div class="article-text">This worked great! But, when it came to integrating OlorenVec into a project with other models, it quickly became clear how fragmented the AI molecular property prediction ecosystem was. After a month or so of stringing together scripts and Jupyter notebooks, we realized we needed a solution. So, we set out to build what we now call Oloren ChemEngine.</div>
+                <a id="#oce"><h3 class="heading">Oloren ChemEngine design</h3></a>
+                <div class="article-text">We had a few key design requirements for this library: (1) we could easily save, load, parameterize and recreate models, and (2) we could easily integrate different modeling solutions together, whether that be ensembling models together, or recombining different molecular representations and learners. And, we built this. We learned later that many pharma companies had similar-ish systems in-house.</div>
+                <div class="article-text">After the framework was created, we shamelessly went hunting to find the best algorithms for property prediction in the literature, and just kept adding those algorithms into OCE! We like to say that we know our models are the best because if they aren’t, we just copy the ones which are better. Of course, we add model ensembling on top and a few other in-house algorithms to catapult our models into being the best.</div>
+                <a id="#questions"><h3 class="heading">Questions for the Future</h3></a>
+                <div class="article-text">We’ve had the opportunity to drill deep into the capabilities of OCE in specific projects, but we haven’t really had the chance to explore the general space of prediction problems. Some specific questions we are interested in include the following.</div>
+                <div class="article-text">Are there specific sets of hyperparameters that work universally well?</div>
+                <div class="article-text">What is the best way to ensemble models?</div>
+                <div class="article-text">What are the best molecular representations?</div>
+                <div class="article-text">Are specific types of models better suited for specific types of datasets?</div>
+                <div class="article-text">How much room is left for algorithmic improvement and how it is just due to “scientific uncertainty”?</div>
+                <a id="#usage"><h3 class="heading">Using <a href="http://benchmarks.chemengine.org">benchmarks.chemengine.org</a></h3></a>
+                <div class="article-text">There are, of course, a whole other set of questions related to practicality and adoption, including research and development into interpretability and uncertainty quantification (a topic for another day). The goal of benchmarks.chemengine.org though is to function both like a recipe book for molecular property prediction and like a boxing ring.</div>
+                <div class="article-text">It’s like a recipe book in that we can copy-paste the best models from the site to use in our own modeling projects. It’s a way to be confident that the models you’re using are the best that can be made. It’s like a boxing ring in that we can directly compare two models directly and reproducibly and find out which is better and over what circumstances. </div>
+            </div>          
+        </main>
+    </div>
+</body>
+</html>
